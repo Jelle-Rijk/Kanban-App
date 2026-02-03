@@ -1,0 +1,10 @@
+/home/Jelle/Projects/learning/kanban/src/main/java/com/jellerijk/projects/learning/tools/kanban/config/GlobalVars.java
+/home/Jelle/Projects/learning/kanban/src/main/java/com/jellerijk/projects/learning/tools/kanban/logging/Logger.java
+/home/Jelle/Projects/learning/kanban/src/main/java/com/jellerijk/projects/learning/tools/kanban/gui/GUI.java
+/home/Jelle/Projects/learning/kanban/src/main/java/com/jellerijk/projects/learning/tools/kanban/persistence/database/installer/DBInstaller.java
+/home/Jelle/Projects/learning/kanban/src/main/java/com/jellerijk/projects/learning/tools/kanban/persistence/database/installer/DBInstallerImpl.java
+/home/Jelle/Projects/learning/kanban/src/main/java/com/jellerijk/projects/learning/tools/kanban/persistence/database/SQLiteConnection.java
+/home/Jelle/Projects/learning/kanban/src/main/java/com/jellerijk/projects/learning/tools/kanban/main/Startup.java
+/home/Jelle/Projects/learning/kanban/src/main/java/com/jellerijk/projects/learning/tools/kanban/persistence/database/DBControllerImpl.java
+/home/Jelle/Projects/learning/kanban/src/main/java/com/jellerijk/projects/learning/tools/kanban/persistence/database/DBController.java
+/home/Jelle/Projects/learning/kanban/src/main/java/com/jellerijk/projects/learning/tools/kanban/persistence/database/SQLiteConnectionImpl.java

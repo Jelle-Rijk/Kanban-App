@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Built-By: Jelle
+Build-Jdk: 21.0.9
+Class-Path: lib/javafx-controls-21.0.6.jar lib/javafx-controls-21.0.6-li
+ nux.jar lib/javafx-graphics-21.0.6.jar lib/javafx-graphics-21.0.6-linux
+ .jar lib/javafx-base-21.0.6.jar lib/javafx-base-21.0.6-linux.jar lib/sq
+ lite-jdbc-3.51.1.0.jar
+Main-Class: com.jellerijk.projects.learning.tools.kanban.main.Startup
+Created-By: Maven Integration for Eclipse
+
