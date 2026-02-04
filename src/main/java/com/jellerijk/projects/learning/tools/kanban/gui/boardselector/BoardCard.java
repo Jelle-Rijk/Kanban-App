@@ -1,11 +1,16 @@
 package com.jellerijk.projects.learning.tools.kanban.gui.boardselector;
 
+import java.util.Optional;
+
 import com.jellerijk.projects.learning.tools.kanban.domain.board.BoardController;
 import com.jellerijk.projects.learning.tools.kanban.logging.Logger;
 import com.jellerijk.projects.learning.tools.kanban.persistence.dto.BoardDTO;
 import com.jellerijk.projects.learning.tools.kanban.utils.PublishedMessageType;
 import com.jellerijk.projects.learning.tools.kanban.utils.Subscriber;
 
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -71,11 +76,17 @@ public class BoardCard extends VBox implements Subscriber {
 		Logger.log("Activated renaming handler.");
 	};
 
-	// TODO: implement deleting
 	private void handleDelete(MouseEvent event) {
 		event.consume();
-		boardController.deleteBoard(boardId);
-		Logger.log("Activated deleting handler.");
+		
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Delete board");
+		alert.setHeaderText(String.format("You are about to delete %s.", boardName));
+		alert.setContentText("Are you sure you want to delete this board?\nThis action cannot be undone.");
+		Optional<ButtonType> result = alert.showAndWait();
+		
+		if (result.isPresent() && result.get() == ButtonType.OK)
+			boardController.deleteBoard(boardId);
 	}
 
 	// TODO: implement selecting
