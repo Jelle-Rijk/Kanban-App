@@ -54,10 +54,7 @@ public class BoardImpl implements Board {
 
 	@Override
 	public void setDescription(String description) {
-		if (description == null || description.isBlank())
-			throw new IllegalArgumentException("Board's description was null or blank.");
 		this.description = description;
-
 	}
 
 }
