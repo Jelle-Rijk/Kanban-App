@@ -64,8 +64,8 @@ public class BoardRepositoryImpl implements BoardRepository {
 		try {
 			Board board = getBoard(id);
 			boards.remove(board);
-			// TODO: delete board from database.
-			Logger.log(String.format("Board %d was removed.", id));
+			String sql = String.format("DELETE FROM Board WHERE BoardId=%d", id);
+			DBController.getInstance().update(sql);
 		} catch (NoSuchElementException nse) {
 			Logger.logError(String.format("Board %d was not found. It cannot be deleted.", id));
 		}
