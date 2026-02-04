@@ -1,0 +1,38 @@
+/*SPECIAL*/
+.root {
+	-fx-font-size: 16px;
+}
+
+/*GENERAL*/
+
+.clickable {
+	-fx-cursor: hand;
+}
+Label.clickable:hover {
+	-fx-underline: true;
+}
+
+/*BOARD CARD*/
+.boardCard {
+	-fx-background-color: #10669d;
+	-fx-padding: 0.5em;
+	-fx-transition: -fx-background-color;
+	-fx-transition-duration: 1000ms;
+}
+
+.boardCard Label {
+	-fx-text-fill: white;
+	-fx-font-size: 0.8em;
+}
+
+.boardCard__header {
+	-fx-font-size: 1.8em;
+}
+
+.boardCard__hoverElement {
+	visibility: hidden;
+	-fx-padding: 0.2em 0 0 0;
+}
+.boardCard:hover .boardCard__hoverElement {
+	visibility: visible;
+}

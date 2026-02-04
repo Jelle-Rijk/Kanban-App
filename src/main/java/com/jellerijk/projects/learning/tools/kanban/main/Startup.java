@@ -2,12 +2,12 @@ package com.jellerijk.projects.learning.tools.kanban.main;
 
 import java.util.Optional;
 
+import com.jellerijk.projects.learning.tools.kanban.gui.boardselector.BoardSelector;
 import com.jellerijk.projects.learning.tools.kanban.logging.Logger;
 import com.jellerijk.projects.learning.tools.kanban.persistence.database.DBController;
 import com.jellerijk.projects.learning.tools.kanban.persistence.database.DBControllerImpl;
 
 import javafx.application.Application;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -24,13 +24,14 @@ public class Startup extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		connectToDatabase();
 
-		Group root = new Group();
-
+		BoardSelector root = new BoardSelector();
+		
 		Scene scene = new Scene(root);
+		scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
 
 		primaryStage.setScene(scene);
 		primaryStage.setTitle("Kanban Board");
-//		primaryStage.show();
+		primaryStage.show();
 //		Platform.exit();
 	}
 
@@ -45,7 +46,7 @@ public class Startup extends Application {
 			alert.setContentText("Would you like to install the database?");
 			Optional<ButtonType> result = alert.showAndWait();
 			if (result.isPresent() && result.get().equals(ButtonType.OK)) {
-					dbc.installDatabase();
+				dbc.installDatabase();
 			}
 		} else {
 			dbc.connect();
