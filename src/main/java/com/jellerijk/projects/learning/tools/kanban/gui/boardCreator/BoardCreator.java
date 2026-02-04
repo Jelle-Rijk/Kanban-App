@@ -63,7 +63,7 @@ public class BoardCreator extends ScrollPane {
 		Label lblDescription = new Label("Description (Optional)");
 		txaDescription = new TextArea();
 		txaDescription.setPromptText("What is this board for?");
-		lblDescriptionError = new Label("Description error");
+		lblDescriptionError = new Label();
 
 		// Footer
 		btnCreate = new Button("Create Board");
