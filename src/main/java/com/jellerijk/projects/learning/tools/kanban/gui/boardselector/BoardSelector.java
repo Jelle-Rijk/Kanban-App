@@ -23,7 +23,6 @@ public class BoardSelector extends AnchorPane implements Subscriber {
 	private final BoardController bc;
 
 	private VBox boardCards;
-	private Button btnAdd;
 
 	public BoardSelector() {
 		bc = BoardController.getInstance();
@@ -73,7 +72,6 @@ public class BoardSelector extends AnchorPane implements Subscriber {
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.setMinWidth(450);
 		stage.setMinHeight(500);
-//		stage.setResizable(false);
 		stage.show();
 	};
 
