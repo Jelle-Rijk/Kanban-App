@@ -63,7 +63,8 @@ public class DBInstallerImpl implements DBInstaller {
 	private void createTables() {
 		// BOARD
 		String sql = "CREATE TABLE IF NOT EXISTS \"Board\" (\n" + "	\"BoardId\"	INTEGER,\n"
-				+ " \"Name\" TEXT NOT NULL,\n" + "	PRIMARY KEY(\"BoardId\" AUTOINCREMENT)\n" + ");";
+				+ " \"Name\" TEXT NOT NULL,\n" + " \"Description\" TEXT, \n"
+				+ "PRIMARY KEY(\"BoardId\" AUTOINCREMENT)\n" + ");";
 		executeSQL(sql);
 
 		// STAGE
