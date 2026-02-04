@@ -118,6 +118,7 @@ public class BoardCreator extends ScrollPane {
 		String description = txaDescription.getText();
 		BoardDTO dto = new BoardDTO(-1, name, description);
 		BoardController.getInstance().addBoard(dto);
+		closeCreator();
 	}
 
 	// TODO: implement closing creator

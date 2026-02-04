@@ -29,14 +29,9 @@ public class BoardSelector extends AnchorPane implements Subscriber {
 		bc = BoardController.getInstance();
 		bc.subscribe(this);
 		buildGUI();
-		bc.addBoard(new BoardDTO(1, "Awesome Board", "This is a super awesome board, I swear."));
-		bc.addBoard(new BoardDTO(2, "Awesome Board", "This is a super awesome board, I swear."));
-		bc.addBoard(new BoardDTO(3, "Awesome Board", "This is a super awesome board, I swear."));
-		bc.addBoard(new BoardDTO(4, "Awesome Board", "This is a super awesome board, I swear."));
 	}
 
 	private void buildGUI() {
-
 		boardCards = new VBox();
 		ScrollPane scrollPane = new ScrollPane(boardCards);
 		scrollPane.setFitToWidth(true);
