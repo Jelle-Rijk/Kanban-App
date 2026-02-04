@@ -1,6 +1,6 @@
 /*SPECIAL*/
 .root {
-	-fx-font-size: 16px;
+	-fx-font-size: 16.0px;
 }
 
 /*GENERAL*/
@@ -17,7 +17,7 @@ Label.clickable:hover {
 	-fx-background-color: #10669d;
 	-fx-padding: 0.5em;
 	-fx-transition: -fx-background-color;
-	-fx-transition-duration: 1000ms;
+	-fx-transition-duration: 1000.0ms;
 }
 
 .boardCard Label {
@@ -31,8 +31,19 @@ Label.clickable:hover {
 
 .boardCard__hoverElement {
 	visibility: hidden;
-	-fx-padding: 0.2em 0 0 0;
+	-fx-padding: 0.2em 0.0 0.0 0.0;
 }
 .boardCard:hover .boardCard__hoverElement {
 	visibility: visible;
+}
+
+/*DIALOG*/
+.dialog__title {
+	-fx-font-size: 2.0em;
+}
+
+.dialog__errormessage {
+	-fx-text-fill: red;
+	-fx-font-size: 0.8em;
+	-fx-font-weight: bold;
 }
