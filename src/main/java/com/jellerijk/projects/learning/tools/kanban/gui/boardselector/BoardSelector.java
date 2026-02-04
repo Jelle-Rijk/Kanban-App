@@ -16,6 +16,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class BoardSelector extends AnchorPane implements Subscriber {
@@ -65,11 +66,19 @@ public class BoardSelector extends AnchorPane implements Subscriber {
 
 	private void openBoardCreator(ActionEvent event) {
 		Logger.log("Opening boardCreator");
+
 		BoardCreator root = new BoardCreator();
 		Scene scene = new Scene(root);
+		scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
+
+		// TODO: make BoardCreator responsive
 		Stage stage = new Stage();
 		stage.setScene(scene);
 		stage.setTitle("Create New Board");
+		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.setMinWidth(450);
+		stage.setMinHeight(500);
+//		stage.setResizable(false);
 		stage.show();
 	};
 
