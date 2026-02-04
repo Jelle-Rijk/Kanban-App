@@ -1,12 +1,10 @@
 package com.jellerijk.projects.learning.tools.kanban.main;
 
-import java.io.IOException;
 import java.util.Optional;
 
 import com.jellerijk.projects.learning.tools.kanban.logging.Logger;
 import com.jellerijk.projects.learning.tools.kanban.persistence.database.DBController;
 import com.jellerijk.projects.learning.tools.kanban.persistence.database.DBControllerImpl;
-import com.jellerijk.projects.learning.tools.kanban.persistence.database.installer.DBInstallerImpl;
 
 import javafx.application.Application;
 import javafx.scene.Group;

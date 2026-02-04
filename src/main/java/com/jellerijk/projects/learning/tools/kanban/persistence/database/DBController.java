@@ -2,6 +2,7 @@ package com.jellerijk.projects.learning.tools.kanban.persistence.database;
 
 import java.io.IOException;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public interface DBController {
 	public static DBController getInstance() {
@@ -22,10 +23,8 @@ public interface DBController {
 
 	/**
 	 * Installs the database if it does not exist yet.
-	 * 
-	 * @throws IOException
 	 */
-	public void installDatabase() throws IOException;
+	public void installDatabase();
 
 	/**
 	 * Queries the database.
@@ -33,6 +32,12 @@ public interface DBController {
 	 * @return The result of the query.
 	 */
 	public ResultSet query(String sql);
+	
+	/**
+	 * Can be used to execute SQL statements on the database. Use this for CUD operations. Use query() for operations that require a ResultSet.
+	 * @param sql
+	 */
+	void update(String sql);
 	
 	
 }
