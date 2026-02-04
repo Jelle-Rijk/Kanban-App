@@ -88,11 +88,12 @@ public class BoardRepositoryImpl implements BoardRepository {
 
 	@Override
 	public void updateBoard(int id, BoardDTO data) {
+		String sql = String.format("UPDATE Board SET name=\"%s\", description=\"%s\" WHERE BoardId=%d", data.name(),
+				data.description(), id);
+		DBController.getInstance().update(sql);
 		Board board = getBoard(id);
 		board.setName(data.name());
 		board.setDescription(data.description());
-		// TODO: update database
-
 	}
 
 }

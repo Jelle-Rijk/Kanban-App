@@ -45,6 +45,7 @@ public class BoardImpl implements Board {
 		if (name == null || name.isBlank())
 			throw new IllegalArgumentException("Board's name was null or blank.");
 		this.name = name;
+		notifySubs();
 	}
 
 	@Override
@@ -55,6 +56,7 @@ public class BoardImpl implements Board {
 	@Override
 	public void setDescription(String description) {
 		this.description = description;
+		notifySubs();
 	}
 
 }

@@ -16,8 +16,6 @@ Label.clickable:hover {
 .boardCard {
 	-fx-background-color: #10669d;
 	-fx-padding: 0.5em;
-	-fx-transition: -fx-background-color;
-	-fx-transition-duration: 1000.0ms;
 }
 
 .boardCard Label {
@@ -25,16 +23,19 @@ Label.clickable:hover {
 	-fx-font-size: 0.8em;
 }
 
-.boardCard__header {
+TextField.boardCard__header {
 	-fx-font-size: 1.8em;
+	-fx-background-color: transparent;
+	-fx-control-inner-background: transparent;
+}
+TextField.boardCard__header:active {
+	-fx-font-size: 1.8em;
+	-fx-background: transparent;
+	-fx-control-inner-background: transparent;
 }
 
 .boardCard__hoverElement {
-	visibility: hidden;
 	-fx-padding: 0.2em 0.0 0.0 0.0;
-}
-.boardCard:hover .boardCard__hoverElement {
-	visibility: visible;
 }
 
 /*DIALOG*/
@@ -46,4 +47,9 @@ Label.clickable:hover {
 	-fx-text-fill: red;
 	-fx-font-size: 0.8em;
 	-fx-font-weight: bold;
+}
+
+.dialog__cancellabel {
+	-fx-font-size: 0.9em;
+	-fx-opacity: 0.7;
 }

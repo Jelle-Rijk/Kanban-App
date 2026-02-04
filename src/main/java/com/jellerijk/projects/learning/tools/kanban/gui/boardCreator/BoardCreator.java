@@ -105,6 +105,7 @@ public class BoardCreator extends ScrollPane {
 		lblDescription.getStyleClass().add("dialog__inputlabel");
 		lblNameError.getStyleClass().add("dialog__errormessage");
 		lblDescriptionError.getStyleClass().add("dialog__errormessage");
+		lblCancel.getStyleClass().addAll("dialog__cancellabel", "clickable");
 
 		setContent(gp);
 		setFitToHeight(true);
@@ -112,7 +113,6 @@ public class BoardCreator extends ScrollPane {
 		setMinWidth(500);
 	}
 
-	// TODO: implement creating board
 	private void createBoard() {
 		String name = txfName.getText();
 		String description = txaDescription.getText();
@@ -121,7 +121,6 @@ public class BoardCreator extends ScrollPane {
 		closeCreator();
 	}
 
-	// TODO: implement closing creator
 	private void closeCreator() {
 		Stage stage = (Stage) this.getScene().getWindow();
 		stage.close();
