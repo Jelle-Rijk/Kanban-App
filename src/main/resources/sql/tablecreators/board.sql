@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS "Board" (
+	"BoardId" INTEGER,
+	"Name" TEXT NOT NULL,
+	"Description" TEXT,
+	PRIMARY KEY("BoardId" AUTOINCREMENT)
+);

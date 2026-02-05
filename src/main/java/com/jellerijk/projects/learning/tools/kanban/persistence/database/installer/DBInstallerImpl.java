@@ -10,6 +10,7 @@ import java.sql.Statement;
 
 import com.jellerijk.projects.learning.tools.kanban.config.GlobalVars;
 import com.jellerijk.projects.learning.tools.kanban.logging.Logger;
+import com.jellerijk.projects.learning.tools.kanban.persistence.database.SQLFileExecuter;
 
 public class DBInstallerImpl implements DBInstaller {
 	private final String dbURL;
@@ -62,25 +63,16 @@ public class DBInstallerImpl implements DBInstaller {
 
 	private void createTables() {
 		// BOARD
-		String sql = "CREATE TABLE IF NOT EXISTS \"Board\" (\n" + "	\"BoardId\"	INTEGER,\n"
-				+ " \"Name\" TEXT NOT NULL,\n" + " \"Description\" TEXT, \n"
-				+ "PRIMARY KEY(\"BoardId\" AUTOINCREMENT)\n" + ");";
-		executeSQL(sql);
-
-		// STAGE
-		sql = "CREATE TABLE IF NOT EXISTS \"Stage\" (\n" + "	\"StageNumber\"	INTEGER,\n" + "	\"BoardId\"	INTEGER,\n"
-				+ "	\"Description\"	TEXT NOT NULL,\n" + "	\"Limit\"	INTEGER,\n"
-				+ "	FOREIGN KEY(\"BoardId\") REFERENCES \"Board\"(\"BoardId\"),\n"
-				+ "	PRIMARY KEY(\"StageNumber\",\"BoardId\")\n" + ");";
-		executeSQL(sql);
-
-		// TASK
-		sql = "CREATE TABLE \"Task\" (\n" + "	\"TaskId\"	INTEGER,\n" + "	\"Description\"	TEXT NOT NULL,\n"
-				+ "	\"Stage\"	INTEGER NOT NULL,\n" + "	\"Board\"	INTEGER NOT NULL,\n"
-				+ "	FOREIGN KEY(\"Stage\") REFERENCES \"Stage\"(\"StageNumber\"),\n"
-				+ "	PRIMARY KEY(\"TaskId\" AUTOINCREMENT),\n"
-				+ "	FOREIGN KEY(\"Board\") REFERENCES \"Board\"(\"BoardId\")\n" + ");";
-		executeSQL(sql);
+		try {
+			SQLFileExecuter fe = new SQLFileExecuter(conn);
+			String directory = "/sql/tablecreators/";
+			for (String fileName : new String[] { "board.sql", "stage.sql", "task.sql" }) {
+				fe.execute(directory + fileName);
+			}
+		} catch (IOException | SQLException e) {
+			Logger.logError(e.getMessage());
+			e.printStackTrace();
+		}
 	}
 
 	private void executeSQL(String sql) {
