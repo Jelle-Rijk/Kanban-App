@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.jellerijk.projects.learning.tools.kanban.persistence.dto.BoardDTO;
 import com.jellerijk.projects.learning.tools.kanban.utils.Subscriber;
 
 public class BoardImpl implements Board {
@@ -45,7 +46,6 @@ public class BoardImpl implements Board {
 		if (name == null || name.isBlank())
 			throw new IllegalArgumentException("Board's name was null or blank.");
 		this.name = name;
-		notifySubs();
 	}
 
 	@Override
@@ -56,6 +56,12 @@ public class BoardImpl implements Board {
 	@Override
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	@Override
+	public void updateData(BoardDTO dto) {
+		setName(dto.name());
+		setDescription(dto.description());
 		notifySubs();
 	}
 

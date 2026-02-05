@@ -67,13 +67,10 @@ public class BoardCard extends VBox implements Subscriber {
 	}
 
 	private void setBoardDescription(String boardDescription) {
-//		if (boardDescription == null || boardDescription.isBlank())
-//			throw new IllegalArgumentException("BoardDescription null or empty");
-		this.boardDescription = boardDescription;
+		this.boardDescription = boardDescription == null ? "" : boardDescription;
 		lblDescription.setText(this.boardDescription);
 	}
 
-	// TODO: implement renaming
 	private void enableEditing() {
 		lblDelete.setVisible(false);
 		setOnMouseEntered(e -> {
@@ -100,8 +97,6 @@ public class BoardCard extends VBox implements Subscriber {
 				lblDelete.setVisible(true);
 			txfName.setText(boardName);
 		});
-
-		Logger.log("Activated renaming handler.");
 	};
 
 	private void disableEditing() {
@@ -149,8 +144,8 @@ public class BoardCard extends VBox implements Subscriber {
 
 	@Override
 	public void update(PublishedMessageType messageType) {
-		// TODO: limit to one update per Board change (it now updates for every attribute)
-		Logger.log(String.format("Updating boardCard with id %d", boardId));
+		// TODO: limit to one update per Board change (it now updates for every
+		// attribute)
 		BoardDTO board = boardController.getBoard(boardId);
 		setBoardName(board.name());
 		setBoardDescription(board.description());
@@ -158,7 +153,6 @@ public class BoardCard extends VBox implements Subscriber {
 
 	private void updateName() {
 		if (!txfName.getText().isBlank()) {
-			Logger.log(String.format("Updating board %d's name to: %s", boardId, txfName.getText()));
 			boardController.updateBoard(boardId, new BoardDTO(boardId, txfName.getText(), boardDescription));
 		}
 		disableEditing();

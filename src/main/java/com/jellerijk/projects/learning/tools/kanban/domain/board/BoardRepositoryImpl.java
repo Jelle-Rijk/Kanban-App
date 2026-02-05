@@ -52,8 +52,6 @@ public class BoardRepositoryImpl implements BoardRepository {
 			int id = lastInsertedId.getInt("seq");
 			Board board = new BoardImpl(id, dto.name(), dto.description());
 			boards.add(board);
-			Logger.log(String.format("Added a %s \"%s\" with id %d.", board.getClass().getSimpleName(), board.getName(),
-					board.getId()));
 		} catch (SQLException ex) {
 			Logger.logError("Could not find last inserted id.");
 		}
@@ -92,8 +90,7 @@ public class BoardRepositoryImpl implements BoardRepository {
 				data.description(), id);
 		DBController.getInstance().update(sql);
 		Board board = getBoard(id);
-		board.setName(data.name());
-		board.setDescription(data.description());
+		board.updateData(data);
 	}
 
 }
