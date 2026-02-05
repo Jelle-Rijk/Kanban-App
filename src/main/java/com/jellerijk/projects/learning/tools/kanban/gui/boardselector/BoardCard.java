@@ -144,8 +144,6 @@ public class BoardCard extends VBox implements Subscriber {
 
 	@Override
 	public void update(PublishedMessageType messageType) {
-		// TODO: limit to one update per Board change (it now updates for every
-		// attribute)
 		BoardDTO board = boardController.getBoard(boardId);
 		setBoardName(board.name());
 		setBoardDescription(board.description());
@@ -159,7 +157,6 @@ public class BoardCard extends VBox implements Subscriber {
 		if (isHover())
 			lblDelete.setVisible(true);
 		txfName.setText(boardName);
-
 	}
 
 }
