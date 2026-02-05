@@ -25,7 +25,7 @@ public class Startup extends Application {
 		connectToDatabase();
 
 		BoardSelector root = new BoardSelector();
-		
+
 		Scene scene = new Scene(root);
 		scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
 
@@ -48,9 +48,8 @@ public class Startup extends Application {
 			if (result.isPresent() && result.get().equals(ButtonType.OK)) {
 				dbc.installDatabase();
 			}
-		} else {
-			dbc.connect();
 		}
+		dbc.connect();
 	}
 
 }
