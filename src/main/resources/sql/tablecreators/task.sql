@@ -2,8 +2,8 @@ CREATE TABLE IF NOT EXISTS "Task" (
 	"TaskId"	INTEGER,
 	"Description"	TEXT NOT NULL,
 	"Stage"	INTEGER NOT NULL,
-	"Board"	INTEGER NOT NULL,
+	"BoardId"	INTEGER NOT NULL,
 	FOREIGN KEY("Stage") REFERENCES "Stage"("StageNumber"),
 	PRIMARY KEY("TaskId" AUTOINCREMENT),
-	FOREIGN KEY("Board") REFERENCES "Board"("BoardId")
+	FOREIGN KEY("BoardId") REFERENCES "Board"("BoardId")
 )
