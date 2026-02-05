@@ -3,6 +3,7 @@ package com.jellerijk.projects.learning.tools.kanban.gui.boardselector;
 import java.util.Optional;
 
 import com.jellerijk.projects.learning.tools.kanban.domain.board.BoardController;
+import com.jellerijk.projects.learning.tools.kanban.gui.board.BoardView;
 import com.jellerijk.projects.learning.tools.kanban.logging.Logger;
 import com.jellerijk.projects.learning.tools.kanban.persistence.dto.BoardDTO;
 import com.jellerijk.projects.learning.tools.kanban.utils.PublishedMessageType;
@@ -16,6 +17,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 public class BoardCard extends VBox implements Subscriber {
 	private final BoardController boardController;
@@ -139,7 +141,10 @@ public class BoardCard extends VBox implements Subscriber {
 	// TODO: implement selecting
 	private void handleSelect(MouseEvent event) {
 		event.consume();
-		Logger.log(String.format("Selected board %d", boardId));
+		BoardView bv = new BoardView(boardId);
+		Stage stage = (Stage) getScene().getWindow();
+		getScene().setRoot(bv);
+		stage.sizeToScene();
 	}
 
 	@Override
