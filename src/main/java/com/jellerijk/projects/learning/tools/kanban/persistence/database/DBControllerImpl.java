@@ -88,14 +88,8 @@ public class DBControllerImpl implements DBController {
 	}
 
 	@Override
-	public PreparedStatement prepareStatement(String sql) {
-		try {
-			return connection.prepareStatement(sql);
-		} catch (SQLException e) {
-			Logger.logError(String.format("Could not prepare statement: %s", sql));
-			e.printStackTrace();
-		}
-		return null;
+	public PreparedStatement prepareStatement(String sql) throws SQLException {
+		return connection.prepareStatement(sql);
 	};
 
 }
