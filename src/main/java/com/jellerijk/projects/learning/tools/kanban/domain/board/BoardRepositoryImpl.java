@@ -1,56 +1,30 @@
 package com.jellerijk.projects.learning.tools.kanban.domain.board;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 import com.jellerijk.projects.learning.tools.kanban.logging.Logger;
 import com.jellerijk.projects.learning.tools.kanban.persistence.database.DBController;
 import com.jellerijk.projects.learning.tools.kanban.persistence.dto.BoardDTO;
-import com.jellerijk.projects.learning.tools.kanban.persistence.inserters.BoardInserter;
+import com.jellerijk.projects.learning.tools.kanban.persistence.loaders.BoardLoader;
 
 public class BoardRepositoryImpl implements BoardRepository {
 	private List<Board> boards;
 
 	public BoardRepositoryImpl() {
-		setBoards(retrieveBoardsFromDatabase());
-
+		Collection<BoardDTO> data = BoardLoader.loadAll();
+		List<Board> convertedData = data.stream()
+				.map(board -> new BoardImpl(board.id(), board.name(), board.description()))
+				.collect(Collectors.toCollection(ArrayList::new));
+		setBoards(convertedData);
 	};
 
-	private List<Board> retrieveBoardsFromDatabase() {
-		List<Board> boards = new ArrayList<Board>();
-		String sql = String.format("SELECT * FROM Board;");
-		ResultSet dbResults = DBController.getInstance().query(sql);
-		try {
-			while (dbResults.next()) {
-				int id = dbResults.getInt("boardId");
-				String name = dbResults.getString("Name");
-				String description = dbResults.getString("Description");
-				Board board = new BoardImpl(id, name, description);
-				boards.add(board);
-			}
-		} catch (SQLException e) {
-			// TODO: Handle exception
-			e.printStackTrace();
-		}
-		return boards;
-	}
-
 	@Override
-	public void addBoard(BoardDTO dto) {
-		try {
-			BoardInserter.insert(dto);
-			Logger.log("Inserted a new Board into the database.");
-			int id = DBController.getInstance().getLastInserted("Board");
-			Board board = new BoardImpl(id, dto.name(), dto.description());
-			boards.add(board);
-		} catch (SQLException ex) {
-			Logger.logError(
-					String.format("Something went wrong while inserting a new Board into the database.%n%s - %s",
-							ex.getClass().getSimpleName(), ex.getMessage()));
-		}
+	public void addBoard(Board board) {
+		boards.add(board);
 	}
 
 	@Override

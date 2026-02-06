@@ -5,7 +5,8 @@ import java.util.List;
 import com.jellerijk.projects.learning.tools.kanban.persistence.dto.BoardDTO;
 
 public interface BoardRepository {
-	public void addBoard(BoardDTO dto);
+	
+	public void addBoard(Board board);
 
 	public void deleteBoard(int id);
 
