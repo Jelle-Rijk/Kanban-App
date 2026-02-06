@@ -1,5 +1,6 @@
 package com.jellerijk.projects.learning.tools.kanban.domain.board;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -28,7 +29,7 @@ public class BoardControllerImpl implements BoardController {
 	}
 
 	@Override
-	public void createBoard(BoardDTO board) {
+	public void createBoard(BoardDTO board) throws SQLException {
 		BoardInserter.insert(board);
 		int id = DBController.getInstance().getLastInserted("Board");
 
