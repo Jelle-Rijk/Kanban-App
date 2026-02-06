@@ -12,11 +12,11 @@ public interface BoardController extends Publisher {
 	};
 
 	/**
-	 * Adds a new Board.
+	 * Creates a new Board.
 	 * 
 	 * @param board
 	 */
-	public void addBoard(BoardDTO board);
+	public void createBoard(BoardDTO board);
 
 	/**
 	 * Gets a Board by its id.

@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.jellerijk.projects.learning.tools.kanban.persistence.database.DBController;
 import com.jellerijk.projects.learning.tools.kanban.persistence.dto.BoardDTO;
+import com.jellerijk.projects.learning.tools.kanban.persistence.inserters.BoardInserter;
 import com.jellerijk.projects.learning.tools.kanban.utils.PublishedMessageType;
 import com.jellerijk.projects.learning.tools.kanban.utils.Subscriber;
 
@@ -26,8 +28,12 @@ public class BoardControllerImpl implements BoardController {
 	}
 
 	@Override
-	public void addBoard(BoardDTO board) {
-		boardRepo.addBoard(board);
+	public void createBoard(BoardDTO board) {
+		BoardInserter.insert(board);
+		int id = DBController.getInstance().getLastInserted("Board");
+
+		Board newBoard = new BoardImpl(id, board.name(), board.description());
+		boardRepo.addBoard(newBoard);
 		notifySubs(PublishedMessageType.REPO_UPDATE);
 	}
 
