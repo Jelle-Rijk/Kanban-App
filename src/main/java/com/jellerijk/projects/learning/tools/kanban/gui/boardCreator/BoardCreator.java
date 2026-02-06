@@ -1,6 +1,9 @@
 package com.jellerijk.projects.learning.tools.kanban.gui.boardCreator;
 
+import java.sql.SQLException;
+
 import com.jellerijk.projects.learning.tools.kanban.domain.board.BoardController;
+import com.jellerijk.projects.learning.tools.kanban.logging.Logger;
 import com.jellerijk.projects.learning.tools.kanban.persistence.dto.BoardDTO;
 
 import javafx.event.Event;
@@ -117,7 +120,12 @@ public class BoardCreator extends ScrollPane {
 		String name = txfName.getText();
 		String description = txaDescription.getText();
 		BoardDTO dto = new BoardDTO(-1, name, description);
-		BoardController.getInstance().createBoard(dto);
+		try {
+			BoardController.getInstance().createBoard(dto);
+		} catch (SQLException e) {
+			// TODO: Handle creation errors for Board properly.
+			Logger.logError("Create Board threw an error.");
+		}
 		closeCreator();
 	}
 
