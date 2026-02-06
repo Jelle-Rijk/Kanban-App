@@ -8,4 +8,7 @@ public record TaskDTO(int id, String description, int boardId, int stageNumber, 
 				task.isCompleted());
 	}
 
+	public static TaskDTO create(int id, String description, int board, int stage, boolean completed) {
+		return new TaskDTO(id, description, board, stage, completed);
+	}
 }
