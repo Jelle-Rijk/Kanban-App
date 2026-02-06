@@ -50,4 +50,12 @@ public interface DBController {
 	 */
 	public PreparedStatement prepareStatement(String sql) throws SQLException;
 
+	/**
+	 * Returns the last inserted autoincrement number for a given table.
+	 * 
+	 * @param tableName
+	 * @return the last autoincrement value in this table
+	 */
+	public int getLastInserted(String tableName) throws SQLException;
+
 }

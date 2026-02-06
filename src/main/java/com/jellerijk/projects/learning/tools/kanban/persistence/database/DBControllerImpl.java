@@ -90,6 +90,14 @@ public class DBControllerImpl implements DBController {
 	@Override
 	public PreparedStatement prepareStatement(String sql) throws SQLException {
 		return connection.prepareStatement(sql);
+	}
+
+	@Override
+	public int getLastInserted(String tableName) throws SQLException {
+		PreparedStatement pstmt = prepareStatement("SELECT seq FROM sqlite_sequence WHERE name=?");
+		pstmt.setString(1, tableName);
+		ResultSet rs = pstmt.executeQuery();
+		return rs.getInt(0);
 	};
 
 }
