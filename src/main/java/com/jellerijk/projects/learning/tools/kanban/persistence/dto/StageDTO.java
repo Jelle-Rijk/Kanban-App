@@ -7,4 +7,8 @@ public record StageDTO(int number, String title, int boardId, String description
 		return new StageDTO(stage.getNumber(), stage.getTitle(), stage.getBoardId(), stage.getDescription(),
 				stage.getLimit());
 	};
+
+	public static StageDTO create(int number, String title, int boardId, String description, int limit) {
+		return new StageDTO(number, title, boardId, description, limit);
+	};
 }
