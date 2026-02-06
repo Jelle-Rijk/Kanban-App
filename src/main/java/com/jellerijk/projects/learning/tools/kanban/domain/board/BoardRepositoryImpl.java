@@ -9,6 +9,7 @@ import java.util.NoSuchElementException;
 import com.jellerijk.projects.learning.tools.kanban.logging.Logger;
 import com.jellerijk.projects.learning.tools.kanban.persistence.database.DBController;
 import com.jellerijk.projects.learning.tools.kanban.persistence.dto.BoardDTO;
+import com.jellerijk.projects.learning.tools.kanban.persistence.inserters.BoardInserter;
 
 public class BoardRepositoryImpl implements BoardRepository {
 	private List<Board> boards;
@@ -39,19 +40,16 @@ public class BoardRepositoryImpl implements BoardRepository {
 
 	@Override
 	public void addBoard(BoardDTO dto) {
-		DBController database = DBController.getInstance();
-
-		String sql = String.format("INSERT INTO Board (Name, Description) VALUES (\"%s\", \"%s\");", dto.name(),
-				dto.description());
-		database.update(sql);
-
-		ResultSet lastInsertedId = database.query("SELECT seq FROM sqlite_sequence WHERE name=\"Board\";");
 		try {
-			int id = lastInsertedId.getInt("seq");
+			BoardInserter.insert(dto);
+			Logger.log("Inserted a new Board into the database.");
+			int id = DBController.getInstance().getLastInserted("Board");
 			Board board = new BoardImpl(id, dto.name(), dto.description());
 			boards.add(board);
 		} catch (SQLException ex) {
-			Logger.logError("Could not find last inserted id.");
+			Logger.logError(
+					String.format("Something went wrong while inserting a new Board into the database.%n%s - %s",
+							ex.getClass().getSimpleName(), ex.getMessage()));
 		}
 	}
 
