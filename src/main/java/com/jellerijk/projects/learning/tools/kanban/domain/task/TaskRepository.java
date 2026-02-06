@@ -31,6 +31,6 @@ public interface TaskRepository {
 	 * @param StageNumber
 	 * @return
 	 */
-	public List<Task> getTasksByStage(int BoardId, int StageNumber);
+	public List<Task> getTasksByStage(int boardId, int stageNumber);
 
 }
