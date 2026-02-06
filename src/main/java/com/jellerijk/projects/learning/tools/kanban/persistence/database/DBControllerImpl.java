@@ -97,7 +97,7 @@ public class DBControllerImpl implements DBController {
 		PreparedStatement pstmt = prepareStatement("SELECT seq FROM sqlite_sequence WHERE name=?");
 		pstmt.setString(1, tableName);
 		ResultSet rs = pstmt.executeQuery();
-		return rs.getInt(0);
+		return rs.getInt(1);
 	};
 
 }
