@@ -1,0 +1,101 @@
+package com.jellerijk.projects.learning.tools.kanban.domain.task;
+
+import java.util.Collection;
+import java.util.List;
+
+import com.jellerijk.projects.learning.tools.kanban.persistence.dto.TaskDTO;
+import com.jellerijk.projects.learning.tools.kanban.utils.PublishedMessageType;
+import com.jellerijk.projects.learning.tools.kanban.utils.Subscriber;
+
+public class TaskImpl implements Task {
+	private List<Subscriber> subscribers;
+
+	private final int id;
+	private String description;
+	private int boardId;
+	private int stageNumber;
+	private boolean completed;
+
+	public TaskImpl(TaskDTO data) {
+		if (data.id() < 0)
+			throw new IllegalArgumentException("Task ID cannot be negative.");
+		id = data.id();
+		updateData(data);
+	}
+
+	@Override
+	public void move(int stageNumber) {
+		setStageNumber(stageNumber);
+		notifySubs(PublishedMessageType.OBJECT_UPDATE);
+	}
+
+	@Override
+	public void updateData(TaskDTO data) {
+		setDescription(data.description());
+		setBoardId(data.boardId());
+		setStageNumber(data.stageNumber());
+		setCompleted(data.completed());
+		notifySubs(PublishedMessageType.OBJECT_UPDATE);
+	}
+
+	@Override
+	public void complete() {
+		setCompleted(true);
+		notifySubs(PublishedMessageType.OBJECT_UPDATE);
+	}
+
+	/* SETTERS */
+	private void setDescription(String description) {
+		if (description == null || description.isBlank())
+			throw new IllegalArgumentException("Task description is required.");
+		this.description = description;
+	}
+
+	private void setBoardId(int boardId) {
+		if (boardId < 0)
+			throw new IllegalArgumentException("BoardId cannot be a negative number.");
+		this.boardId = boardId;
+	}
+
+	private void setStageNumber(int stageNumber) {
+		if (stageNumber < 0)
+			throw new IllegalArgumentException("StageNumber cannot be a negative number.");
+		this.stageNumber = stageNumber;
+	}
+
+	private void setCompleted(boolean completed) {
+		this.completed = completed;
+	}
+
+	/* GETTERS */
+	@Override
+	public int getId() {
+		return id;
+	}
+
+	@Override
+	public String getDescription() {
+		return description;
+	}
+
+	@Override
+	public int getStageNumber() {
+		return stageNumber;
+	}
+
+	@Override
+	public int getBoardId() {
+		return boardId;
+	}
+
+	@Override
+	public boolean isCompleted() {
+		return completed;
+	}
+
+	@Override
+	public Collection<Subscriber> getSubscribers() {
+		return subscribers;
+	}
+
+}
