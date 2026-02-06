@@ -8,15 +8,15 @@ import com.jellerijk.projects.learning.tools.kanban.persistence.database.DBContr
 import com.jellerijk.projects.learning.tools.kanban.persistence.dto.TaskDTO;
 
 public abstract class TaskInserter {
-	private static String sql = "INSERT INTO Task(Description, Stage, Board, Completed) VALUES (?,?,?,?)";
+	private final static String SQL = "INSERT INTO Task(Description, Stage, Board, Completed) VALUES (?,?,?,?)";
 
 	public static void insert(TaskDTO task) throws SQLException {
-		PreparedStatement pstmt = DBController.getInstance().prepareStatement(sql);
+		PreparedStatement pstmt = DBController.getInstance().prepareStatement(SQL);
 		executePreparedStatement(pstmt, task);
 	}
 
 	public static void insert(Collection<TaskDTO> tasks) throws SQLException {
-		PreparedStatement pstmt = DBController.getInstance().prepareStatement(sql);
+		PreparedStatement pstmt = DBController.getInstance().prepareStatement(SQL);
 		for (TaskDTO task : tasks)
 			executePreparedStatement(pstmt, task);
 	}
