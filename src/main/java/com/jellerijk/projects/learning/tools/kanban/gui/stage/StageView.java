@@ -1,6 +1,8 @@
 package com.jellerijk.projects.learning.tools.kanban.gui.stage;
 
 import com.jellerijk.projects.learning.tools.kanban.persistence.dto.StageDTO;
+import com.jellerijk.projects.learning.tools.kanban.utils.PublishedMessageType;
+import com.jellerijk.projects.learning.tools.kanban.utils.Subscriber;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -8,7 +10,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
-public class StageView extends AnchorPane {
+public class StageView extends AnchorPane implements Subscriber {
 	private final static double DEFAULT_WIDTH = 200;
 	private final static double DEFAULT_MAX_HEIGHT = 300;
 	private String title;
@@ -42,10 +44,17 @@ public class StageView extends AnchorPane {
 		scrollPane.setMaxHeight(maxHeight);
 
 		Button btnAdd = new Button("Add task");
+		btnAdd.setPrefWidth(width);
 		AnchorPane.setBottomAnchor(btnAdd, 5.0);
 
 		getChildren().addAll(lblTitle, scrollPane, btnAdd);
 
+	}
+
+	@Override
+	public void update(PublishedMessageType messageType) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

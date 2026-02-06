@@ -138,7 +138,6 @@ public class BoardCard extends VBox implements Subscriber {
 			boardController.deleteBoard(boardId);
 	}
 
-	// TODO: implement selecting
 	private void handleSelect(MouseEvent event) {
 		event.consume();
 		BoardView bv = new BoardView(boardId);

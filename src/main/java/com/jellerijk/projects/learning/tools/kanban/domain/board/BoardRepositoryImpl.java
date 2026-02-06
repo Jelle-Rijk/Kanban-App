@@ -39,8 +39,6 @@ public class BoardRepositoryImpl implements BoardRepository {
 
 	@Override
 	public void addBoard(BoardDTO dto) {
-		// TODO: insert board into database and retrieve its id (incoming DTO has an id
-		// of -1)
 		DBController database = DBController.getInstance();
 
 		String sql = String.format("INSERT INTO Board (Name, Description) VALUES (\"%s\", \"%s\");", dto.name(),
