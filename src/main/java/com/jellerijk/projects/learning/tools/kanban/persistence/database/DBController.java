@@ -1,5 +1,6 @@
 package com.jellerijk.projects.learning.tools.kanban.persistence.database;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 public interface DBController {
@@ -26,16 +27,25 @@ public interface DBController {
 
 	/**
 	 * Queries the database.
+	 * 
 	 * @param sql
 	 * @return The result of the query.
 	 */
 	public ResultSet query(String sql);
-	
+
 	/**
-	 * Can be used to execute SQL statements on the database. Use this for CUD operations. Use query() for operations that require a ResultSet.
+	 * Can be used to execute SQL statements on the database. Use this for CUD
+	 * operations. Use query() for operations that require a ResultSet.
+	 * 
 	 * @param sql
 	 */
-	void update(String sql);
-	
-	
+	public void update(String sql);
+
+	/**
+	 * Returns a PreparedStatement that can be used to Query the database safely.
+	 * @param statement
+	 * @return
+	 */
+	public PreparedStatement prepareStatement(String sql);
+
 }

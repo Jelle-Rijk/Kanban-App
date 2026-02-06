@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -84,6 +85,17 @@ public class DBControllerImpl implements DBController {
 		alert.setContentText(ex.getMessage());
 		ex.printStackTrace();
 		alert.showAndWait();
+	}
+
+	@Override
+	public PreparedStatement prepareStatement(String sql) {
+		try {
+			return connection.prepareStatement(sql);
+		} catch (SQLException e) {
+			Logger.logError(String.format("Could not prepare statement: %s", sql));
+			e.printStackTrace();
+		}
+		return null;
 	};
 
 }
