@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS "Stage" (
 	"BoardId" INTEGER,
 	"Title" TEXT NOT NULL,
 	"Description" TEXT,
-	"Limit" INTEGER,
+	"TaskLimit" INTEGER,
 	PRIMARY KEY("Number","BoardId"),
 	FOREIGN KEY("BoardId") REFERENCES "Board"("BoardId")
 );

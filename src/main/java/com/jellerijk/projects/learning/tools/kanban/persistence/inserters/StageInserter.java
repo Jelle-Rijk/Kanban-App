@@ -4,15 +4,17 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.jellerijk.projects.learning.tools.kanban.logging.Logger;
 import com.jellerijk.projects.learning.tools.kanban.persistence.database.DBController;
 import com.jellerijk.projects.learning.tools.kanban.persistence.dto.StageDTO;
 
 public abstract class StageInserter {
-	private final static String SQL = "INSERT INTO Stage(Number, BoardId, Title, Description, Limit) VALUES (?,?,?,?,?)";
+	private final static String SQL = "INSERT INTO Stage(Number, BoardId, Title, Description, TaskLimit) VALUES (?,?,?,?,?)";
 
 	public static void insert(StageDTO stage) throws SQLException {
 		PreparedStatement pstmt = DBController.getInstance().prepareStatement(SQL);
 		executePreparedStatement(pstmt, stage);
+		Logger.log("Stage inserted.");
 	}
 
 	public static void insert(List<StageDTO> stages) throws SQLException {
