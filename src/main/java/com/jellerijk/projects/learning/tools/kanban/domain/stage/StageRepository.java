@@ -1,0 +1,32 @@
+package com.jellerijk.projects.learning.tools.kanban.domain.stage;
+
+import java.util.List;
+
+public interface StageRepository {
+	/**
+	 * Sets the StageRepository to the supplied list.
+	 * @param stages
+	 */
+	public void setStages(List<Stage> stages);
+
+	/**
+	 * Adds a Stage to the repository.
+	 * @param stage
+	 */
+	public void add(Stage stage);
+
+	/**
+	 * Removes a Stage from the repository.
+	 * @param stageNumber
+	 */
+	public void remove(int boardId, int stageNumber);
+	
+	/**
+	 * Gets the Stage from the repository.
+	 * @param boardId
+	 * @param stageNumber
+	 * @return
+	 */
+	public Stage getStage(int boardId, int stageNumber);
+
+}
