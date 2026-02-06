@@ -38,4 +38,9 @@ public class StageRepositoryImpl implements StageRepository {
 				.findFirst().orElseThrow();
 	}
 
+	@Override
+	public List<Stage> getStages() {
+		return stages;
+	}
+
 }

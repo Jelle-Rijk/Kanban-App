@@ -8,6 +8,12 @@ public interface StageRepository {
 	 * @param stages
 	 */
 	public void setStages(List<Stage> stages);
+	
+	/**
+	 * Returns the Repository's list.
+	 * @return
+	 */
+	public List<Stage> getStages();
 
 	/**
 	 * Adds a Stage to the repository.
