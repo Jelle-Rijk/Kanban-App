@@ -75,13 +75,4 @@ public class DBInstallerImpl implements DBInstaller {
 		}
 	}
 
-	private void executeSQL(String sql) {
-		try {
-			Statement statement = conn.createStatement();
-			statement.execute(sql);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
 }
