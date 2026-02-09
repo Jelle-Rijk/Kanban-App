@@ -1,6 +1,8 @@
 package com.jellerijk.projects.learning.tools.kanban.domain.stage;
 
-public interface Stage {
+import com.jellerijk.projects.learning.tools.kanban.utils.Publisher;
+
+public interface Stage extends Publisher {
 	public int getNumber();
 
 	public String getTitle();

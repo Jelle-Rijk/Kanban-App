@@ -1,11 +1,17 @@
 package com.jellerijk.projects.learning.tools.kanban.domain.stage;
 
 import java.sql.PreparedStatement;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import com.jellerijk.projects.learning.tools.kanban.logging.Logger;
 import com.jellerijk.projects.learning.tools.kanban.persistence.database.DBController;
+import com.jellerijk.projects.learning.tools.kanban.utils.Subscriber;
 
 public class StageImpl implements Stage {
+	private final List<Subscriber> subs;
+
 	private int number;
 	private int boardId;
 	private String title;
@@ -18,6 +24,7 @@ public class StageImpl implements Stage {
 		setTitle(title);
 		setDescription(description);
 		setLimit(limit);
+		this.subs = new ArrayList<Subscriber>();
 	}
 
 	@Override
@@ -89,7 +96,13 @@ public class StageImpl implements Stage {
 		} catch (Exception e) {
 			Logger.logError(String.format("Encountered an error while trying to rename the stage: %s", e.getMessage()));
 		}
+		notifySubs();
 
+	}
+
+	@Override
+	public Collection<Subscriber> getSubscribers() {
+		return subs;
 	}
 
 }
