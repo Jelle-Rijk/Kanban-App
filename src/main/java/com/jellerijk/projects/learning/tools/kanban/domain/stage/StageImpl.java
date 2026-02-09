@@ -1,5 +1,10 @@
 package com.jellerijk.projects.learning.tools.kanban.domain.stage;
 
+import java.sql.PreparedStatement;
+
+import com.jellerijk.projects.learning.tools.kanban.logging.Logger;
+import com.jellerijk.projects.learning.tools.kanban.persistence.database.DBController;
+
 public class StageImpl implements Stage {
 	private int number;
 	private int boardId;
@@ -66,6 +71,22 @@ public class StageImpl implements Stage {
 		if (number < 0)
 			throw new IllegalArgumentException("Stage task limit must not be negative.");
 		this.limit = limit;
+	}
+
+	@Override
+	public void rename(String title) {
+		try {
+			setTitle(title);
+			String sql = "UPDATE Stage SET title = ? WHERE Number = ? AND BoardId = ?";
+			PreparedStatement stmt = DBController.getInstance().prepareStatement(sql);
+			stmt.setString(1, title);
+			stmt.setInt(2, number);
+			stmt.setInt(3, boardId);
+		} catch (Exception e) {
+			Logger.logError("Encountered an error while trying to rename the stage.");
+			e.printStackTrace();
+		}
+
 	}
 
 }
