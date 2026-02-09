@@ -13,11 +13,13 @@ import com.jellerijk.projects.learning.tools.kanban.persistence.dto.StageDTO;
 import com.jellerijk.projects.learning.tools.kanban.utils.PublishedMessageType;
 import com.jellerijk.projects.learning.tools.kanban.utils.Subscriber;
 
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 
 public class BoardView extends ScrollPane implements Subscriber {
 
@@ -37,7 +39,9 @@ public class BoardView extends ScrollPane implements Subscriber {
 		BorderPane bp = new BorderPane();
 		setContent(bp);
 
-		bp.setTop(new Label(board.name()));
+		Label boardName = new Label(board.name());
+		boardName.getStyleClass().add("h1");
+		bp.setTop(boardName);
 
 		stages = new HBox();
 		stages.setSpacing(10);
@@ -47,18 +51,21 @@ public class BoardView extends ScrollPane implements Subscriber {
 		createTestButton(bp);
 
 		this.setVbarPolicy(ScrollBarPolicy.NEVER);
+		this.setMinWidth(400);
 		this.setMaxWidth(600);
 	}
 
 	private void createTestButton(BorderPane bp) {
 		Button testAdd = new Button("TEST - ADD STAGE");
-		Button testRmv = new Button("TEST - REMOVE STAGE");
-		HBox buttons = new HBox(testAdd, testRmv);
+		HBox buttons = new HBox(testAdd);
+		BorderPane.setAlignment(buttons, Pos.CENTER);
+		HBox.setHgrow(testAdd, Priority.ALWAYS);
 
 		testAdd.setOnAction(e -> {
 			StageDTO dto = StageDTO.create(sc.countStages(), String.format("Stage %d", sc.countStages()), board.id(),
 					"This is a stage", 5);
 			try {
+				Logger.log(String.format("Creating stage number %d", dto.number()));
 				sc.createStage(dto);
 				Logger.log("Created a new stage.");
 			} catch (SQLException ex) {

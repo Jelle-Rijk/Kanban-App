@@ -66,7 +66,7 @@ public class StageHeader extends HBox {
 
 		txfTitle.setEditable(true);
 		txfTitle.setFocusTraversable(true);
-
+		txfTitle.requestFocus();
 	}
 
 	public void lock() {

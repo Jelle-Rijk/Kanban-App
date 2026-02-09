@@ -17,6 +17,10 @@ TextField.transparent {
 	-fx-control-inner-background: transparent;
 }
 
+.h1 {
+	-fx-font-size: 2.0em;
+}
+
 /*BOARD CARD*/
 .boardCard {
 	-fx-background-color: #10669d;
@@ -57,7 +61,7 @@ TextField.boardCard__header:active {
 
 /*STAGEVIEW */
 .stageheader__editicon {
-	-fx-font-size: 20px;
+	-fx-font-size: 20.0px;
 }
 
 .stageheader__title {
