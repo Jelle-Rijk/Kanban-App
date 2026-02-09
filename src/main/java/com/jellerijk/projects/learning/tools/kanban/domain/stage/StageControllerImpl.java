@@ -3,6 +3,7 @@ package com.jellerijk.projects.learning.tools.kanban.domain.stage;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -56,6 +57,12 @@ public class StageControllerImpl implements StageController {
 		Stage stage = stageRepo.getStage(boardId, stageNumber);
 		stageRepo.remove(stage);
 		stage.delete();
+
+		// Renumber stages
+		List<Stage> stages = stageRepo.getStages().stream().sorted(Comparator.comparing(Stage::getNumber))
+				.collect(Collectors.toCollection(ArrayList::new));
+		for (int i = 0; i < stages.size(); i++)
+			stages.get(i).changeNumber(i);
 
 		notifySubs();
 	}
