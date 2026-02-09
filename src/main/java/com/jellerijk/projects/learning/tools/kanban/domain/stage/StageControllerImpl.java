@@ -53,7 +53,10 @@ public class StageControllerImpl implements StageController {
 
 	@Override
 	public void deleteStage(int stageNumber) {
-		stageRepo.remove(boardId, stageNumber);
+		Stage stage = stageRepo.getStage(boardId, stageNumber);
+		stageRepo.remove(stage);
+		stage.delete();
+
 		notifySubs();
 	}
 

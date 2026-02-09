@@ -27,8 +27,7 @@ public class StageRepositoryImpl implements StageRepository {
 	}
 
 	@Override
-	public void remove(int boardId, int stageNumber) {
-		Stage stage = getStage(boardId, stageNumber);
+	public void remove(Stage stage) {
 		stages.remove(stage);
 	}
 

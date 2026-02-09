@@ -105,4 +105,10 @@ public class StageImpl implements Stage {
 		return subs;
 	}
 
+	@Override
+	public void delete() {
+		String sql = String.format("DELETE FROM Stage WHERE BoardId = %d AND Number = %d", boardId, number);
+		DBController.getInstance().update(sql);
+	}
+
 }

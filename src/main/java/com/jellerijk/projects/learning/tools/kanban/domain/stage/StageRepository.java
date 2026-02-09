@@ -25,7 +25,7 @@ public interface StageRepository {
 	 * Removes a Stage from the repository.
 	 * @param stageNumber
 	 */
-	public void remove(int boardId, int stageNumber);
+	public void remove(Stage stage);
 	
 	/**
 	 * Gets the Stage from the repository.
