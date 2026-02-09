@@ -75,6 +75,9 @@ public class StageImpl implements Stage {
 
 	@Override
 	public void rename(String title) {
+		if (this.title.equals(title))
+			return;
+		
 		try {
 			setTitle(title);
 			String sql = "UPDATE Stage SET title = ? WHERE Number = ? AND BoardId = ?";
