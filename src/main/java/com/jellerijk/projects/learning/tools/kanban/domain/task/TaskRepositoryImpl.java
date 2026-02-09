@@ -1,14 +1,8 @@
 package com.jellerijk.projects.learning.tools.kanban.domain.task;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import com.jellerijk.projects.learning.tools.kanban.logging.Logger;
-import com.jellerijk.projects.learning.tools.kanban.persistence.database.DBController;
 
 public class TaskRepositoryImpl implements TaskRepository {
 	private List<Task> tasks;
