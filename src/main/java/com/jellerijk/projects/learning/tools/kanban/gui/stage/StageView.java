@@ -26,7 +26,6 @@ public class StageView extends VBox implements Subscriber {
 		this.boardId = stage.boardId();
 		this.stageNumber = stage.number();
 
-		Logger.log(String.format("Subscribing to stage %d", stageNumber));
 		sc.subscribeToStage(this, stageNumber);
 
 		buildGUI();

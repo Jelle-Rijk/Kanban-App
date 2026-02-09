@@ -74,7 +74,6 @@ public class BoardView extends ScrollPane implements Subscriber {
 	public void update(PublishedMessageType messageType) {
 		stages.getChildren().clear();
 		List<StageDTO> stageList = sc.getStages();
-		Logger.log(String.format("Building %d StageViews", sc.getStages().size()));
 		for (StageDTO stage : stageList) {
 			stages.getChildren().add(new StageView(stage, sc));
 		}
