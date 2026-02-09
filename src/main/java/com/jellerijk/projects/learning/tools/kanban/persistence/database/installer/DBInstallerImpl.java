@@ -6,7 +6,6 @@ import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 import com.jellerijk.projects.learning.tools.kanban.config.GlobalVars;
 import com.jellerijk.projects.learning.tools.kanban.logging.Logger;
