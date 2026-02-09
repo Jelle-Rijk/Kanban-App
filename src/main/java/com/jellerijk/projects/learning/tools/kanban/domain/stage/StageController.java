@@ -36,6 +36,13 @@ public interface StageController extends Publisher {
 	public List<StageDTO> getStages();
 	
 	/**
+	 * Returns the Stage's data.
+	 * @param stageNumber
+	 * @return
+	 */
+	public StageDTO getStage(int stageNumber);
+	
+	/**
 	 * Renames the chosen stage.
 	 * @param stageNumber - The stage to rename.
 	 * @param title - The new stage title.

@@ -64,6 +64,11 @@ public class StageControllerImpl implements StageController {
 	}
 
 	@Override
+	public StageDTO getStage(int stageNumber) {
+		return StageDTO.convert(stageRepo.getStage(boardId, stageNumber));
+	}
+
+	@Override
 	public Collection<Subscriber> getSubscribers() {
 		return subs;
 	}
