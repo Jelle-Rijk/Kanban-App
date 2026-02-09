@@ -30,13 +30,9 @@ TextField.transparent {
 
 TextField.boardCard__header {
 	-fx-font-size: 1.8em;
-	-fx-background-color: transparent;
-	-fx-control-inner-background: transparent;
 }
 TextField.boardCard__header:active {
 	-fx-font-size: 1.8em;
-	-fx-background: transparent;
-	-fx-control-inner-background: transparent;
 }
 
 .boardCard__hoverElement {

@@ -51,7 +51,7 @@ public class BoardCard extends VBox implements Subscriber {
 
 		// CSS
 		this.getStyleClass().add("boardCard");
-		txfName.getStyleClass().add("boardCard__header");
+		txfName.getStyleClass().addAll("boardCard__header", "transparent");
 		lblDelete.getStyleClass().addAll("boardCard__hoverElement", "clickable");
 		lblRename.getStyleClass().addAll("boardCard__hoverElement", "clickable");
 
