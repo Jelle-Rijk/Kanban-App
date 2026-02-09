@@ -79,4 +79,15 @@ public class StageControllerImpl implements StageController {
 		stage.rename(title);
 	}
 
+	@Override
+	public void subscribeToStage(Subscriber sub, int stageNumber) {
+		Stage stage = stageRepo.getStage(boardId, stageNumber);
+		stage.subscribe(sub);
+	}
+
+	@Override
+	public int countStages() {
+		return stageRepo.getStages().size();
+	}
+
 }
