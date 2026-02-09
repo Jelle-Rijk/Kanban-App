@@ -60,6 +60,8 @@ public class StageImpl implements Stage {
 	private void setTitle(String title) {
 		if (title == null || title.isBlank())
 			throw new IllegalArgumentException("Stage title cannot be empty.");
+		if (this.title != null && this.title.equals(title))
+			throw new IllegalArgumentException("New title was the same as old title.");
 		this.title = title;
 	}
 
@@ -75,9 +77,6 @@ public class StageImpl implements Stage {
 
 	@Override
 	public void rename(String title) {
-		if (this.title.equals(title))
-			return;
-		
 		try {
 			setTitle(title);
 			String sql = "UPDATE Stage SET title = ? WHERE Number = ? AND BoardId = ?";
@@ -85,9 +84,10 @@ public class StageImpl implements Stage {
 			stmt.setString(1, title);
 			stmt.setInt(2, number);
 			stmt.setInt(3, boardId);
+			stmt.execute();
+			Logger.log("Trying to rename Stage.");
 		} catch (Exception e) {
-			Logger.logError("Encountered an error while trying to rename the stage.");
-			e.printStackTrace();
+			Logger.logError(String.format("Encountered an error while trying to rename the stage: %s", e.getMessage()));
 		}
 
 	}
