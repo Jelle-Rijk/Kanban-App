@@ -1,7 +1,6 @@
 package com.jellerijk.projects.learning.tools.kanban.gui.stage;
 
 import com.jellerijk.projects.learning.tools.kanban.domain.stage.StageController;
-import com.jellerijk.projects.learning.tools.kanban.logging.Logger;
 import com.jellerijk.projects.learning.tools.kanban.persistence.dto.StageDTO;
 import com.jellerijk.projects.learning.tools.kanban.utils.PublishedMessageType;
 import com.jellerijk.projects.learning.tools.kanban.utils.Subscriber;
@@ -66,6 +65,10 @@ public class StageView extends VBox implements Subscriber {
 	public void handleRename(String title) {
 		setTitle(title);
 		sc.renameStage(stageNumber, title);
+	}
+
+	public void handleDelete() {
+		sc.deleteStage(stageNumber);
 	}
 
 	@Override

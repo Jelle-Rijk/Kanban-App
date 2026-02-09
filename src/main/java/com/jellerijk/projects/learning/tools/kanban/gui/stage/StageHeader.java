@@ -1,5 +1,10 @@
 package com.jellerijk.projects.learning.tools.kanban.gui.stage;
 
+import java.util.Optional;
+
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -12,6 +17,7 @@ public class StageHeader extends HBox {
 
 	private TextField txfTitle;
 	private Label lblEdit;
+	private Label lblDelete;
 
 	public StageHeader(StageView parent) {
 		this.parent = parent;
@@ -22,21 +28,28 @@ public class StageHeader extends HBox {
 		// CONTROLS
 		txfTitle = new TextField();
 		lblEdit = new Label();
+		lblDelete = new Label("🗑️");
 
 		// LISTENERS
-		lblEdit.setOnMouseClicked(e -> unlock());
 		txfTitle.setOnAction(e -> handleRename());
-		lock();
+		lblDelete.setOnMouseClicked(e -> handleDelete());
+		setOnMouseEntered(e -> showIcons(true));
+		setOnMouseExited(e -> showIcons(false));
 
 		// STYLING
 		txfTitle.getStyleClass().addAll("transparent", "stageheader__title");
 		lblEdit.getStyleClass().add("stageheader__editicon");
+		lblDelete.getStyleClass().add("stageheader__editicon");
 
 		// LAYOUT
 		HBox.setHgrow(txfTitle, Priority.SOMETIMES);
 		this.setSpacing(3);
 
-		getChildren().addAll(txfTitle, lblEdit);
+		getChildren().addAll(txfTitle, lblEdit, lblDelete);
+
+		// INITIAL STATE
+		lock();
+		showIcons(false);
 	}
 
 	public void setTitle(String title) {
@@ -65,6 +78,11 @@ public class StageHeader extends HBox {
 		txfTitle.setFocusTraversable(false);
 	}
 
+	private void showIcons(boolean visible) {
+		lblEdit.setVisible(visible);
+		lblDelete.setVisible(visible);
+	}
+
 	// HANDLERS
 	private void handleRename() {
 		lock();
@@ -74,5 +92,18 @@ public class StageHeader extends HBox {
 	private void cancel(String oldTitle) {
 		lock();
 		setTitle(oldTitle);
+	}
+
+	private void handleDelete() {
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Delete stage");
+		alert.setHeaderText(String.format("Deleting %s", txfTitle.getText()));
+		alert.setContentText("This action cannot be undone.\nAre you sure you want to do this?");
+
+		Optional<ButtonType> response = alert.showAndWait();
+
+		if (response.isPresent() && response.get() == ButtonType.OK) {
+			parent.handleDelete();
+		}
 	}
 }
