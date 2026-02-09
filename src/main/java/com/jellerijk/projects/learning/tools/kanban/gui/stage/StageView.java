@@ -1,60 +1,77 @@
 package com.jellerijk.projects.learning.tools.kanban.gui.stage;
 
+import com.jellerijk.projects.learning.tools.kanban.domain.stage.StageController;
+import com.jellerijk.projects.learning.tools.kanban.logging.Logger;
 import com.jellerijk.projects.learning.tools.kanban.persistence.dto.StageDTO;
 import com.jellerijk.projects.learning.tools.kanban.utils.PublishedMessageType;
 import com.jellerijk.projects.learning.tools.kanban.utils.Subscriber;
 
+import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
-public class StageView extends AnchorPane implements Subscriber {
-	private final static double DEFAULT_WIDTH = 200;
-	private final static double DEFAULT_MAX_HEIGHT = 300;
+public class StageView extends VBox implements Subscriber {
+	private final StageController sc;
+	private final int boardId;
+	private int stageNumber;
+
 	private String title;
-	private VBox taskList;
-	private double width;
-	private double maxHeight;
 
-	public StageView(StageDTO stage, double width, double maxHeight) {
-		this.width = width;
-		this.maxHeight = maxHeight;
-		title = stage.title();
+	private StageHeader header;
+
+	public StageView(StageDTO stage, StageController sc) {
+		this.sc = sc;
+		this.boardId = stage.boardId();
+		this.stageNumber = stage.number();
+
+		Logger.log(String.format("Subscribing to stage %d", stageNumber));
+		sc.subscribeToStage(this, stageNumber);
+
 		buildGUI();
+		update();
 	}
 
-	public StageView(StageDTO stage) {
-		this(stage, DEFAULT_WIDTH, DEFAULT_MAX_HEIGHT);
-	}
-
+//	BUILD GUI
 	private void buildGUI() {
-		Label lblTitle = new Label(title);
-		AnchorPane.setTopAnchor(lblTitle, 5.0);
-		AnchorPane.setLeftAnchor(lblTitle, 5.0);
+		header = new StageHeader(this);
+		ListView<String> taskList = new ListView<String>();
+		ScrollPane sp = new ScrollPane();
+		sp.setContent(taskList);
+		Node footer = buildFooter();
 
-		ScrollPane scrollPane = new ScrollPane();
-		AnchorPane.setTopAnchor(scrollPane, 30.0);
-		AnchorPane.setBottomAnchor(scrollPane, 50.0);
-		scrollPane.setContent(taskList);
-		scrollPane.setMinWidth(width);
-		scrollPane.setFitToHeight(true);
-		scrollPane.setPrefHeight(Double.MAX_VALUE);
-		scrollPane.setMaxHeight(maxHeight);
+		getChildren().addAll(header, sp, footer);
 
-		Button btnAdd = new Button("Add task");
-		btnAdd.setPrefWidth(width);
-		AnchorPane.setBottomAnchor(btnAdd, 5.0);
+	};
 
-		getChildren().addAll(lblTitle, scrollPane, btnAdd);
+	// TODO: design footer
+	private Node buildFooter() {
+		return new Button("ADD TASK");
+	}
 
+//	GUI SETTERS
+
+	public void setTitle(String title) {
+		this.title = title;
+		header.setTitle(title);
+	}
+
+	private void setStageNumber(int stageNumber) {
+		if (stageNumber < 0)
+			throw new IllegalArgumentException("StageView cannot set the stage number. Needs to be positive.");
+		this.stageNumber = stageNumber;
+	}
+
+//	CONTROLLER INTERACTION
+	public void handleRename(String title) {
+		setTitle(title);
+		sc.renameStage(stageNumber, title);
 	}
 
 	@Override
 	public void update(PublishedMessageType messageType) {
-		// TODO Auto-generated method stub
-		
+		StageDTO data = sc.getStage(stageNumber);
+		setTitle(data.title());
 	}
-
 }

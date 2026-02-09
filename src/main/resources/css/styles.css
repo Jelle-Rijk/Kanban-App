@@ -12,6 +12,11 @@ Label.clickable:hover {
 	-fx-underline: true;
 }
 
+TextField.transparent {
+	-fx-background-color: transparent;
+	-fx-control-inner-background: transparent;
+}
+
 /*BOARD CARD*/
 .boardCard {
 	-fx-background-color: #10669d;
@@ -52,4 +57,13 @@ TextField.boardCard__header:active {
 .dialog__cancellabel {
 	-fx-font-size: 0.9em;
 	-fx-opacity: 0.7;
+}
+
+/*STAGEVIEW */
+.stageheader__editicon {
+	-fx-font-size: 20px;
+}
+
+.stageheader__title {
+	-fx-text-fill: black;
 }
