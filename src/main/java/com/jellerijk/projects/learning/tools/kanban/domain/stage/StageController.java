@@ -4,8 +4,9 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.jellerijk.projects.learning.tools.kanban.persistence.dto.StageDTO;
+import com.jellerijk.projects.learning.tools.kanban.utils.Publisher;
 
-public interface StageController {
+public interface StageController extends Publisher {
 	/**
 	 * Returns the id of the Board this StageController belongs to.
 	 * 
@@ -29,8 +30,16 @@ public interface StageController {
 
 	/**
 	 * Returns all stages managed by this StageController.
+	 * 
 	 * @return
 	 */
 	public List<StageDTO> getStages();
+	
+	/**
+	 * Renames the chosen stage.
+	 * @param stageNumber - The stage to rename.
+	 * @param title - The new stage title.
+	 */
+	public void renameStage(int stageNumber, String title);
 
 }
