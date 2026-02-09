@@ -12,7 +12,7 @@ import com.jellerijk.projects.learning.tools.kanban.persistence.dto.StageDTO;
 
 public abstract class StageLoader {
 	public static Collection<StageDTO> loadByBoard(int boardId) throws SQLException {
-		PreparedStatement pstmt = DBController.getInstance().prepareStatement("SELECT * FROM Stage WHERE Board = ?");
+		PreparedStatement pstmt = DBController.getInstance().prepareStatement("SELECT * FROM Stage WHERE BoardId = ?");
 		pstmt.setInt(1, boardId);
 		ResultSet results = pstmt.executeQuery();
 		return convertResultSet(results);
@@ -31,7 +31,7 @@ public abstract class StageLoader {
 				int number = results.getInt("Number");
 				String title = results.getString("Title");
 				String description = results.getString("Description");
-				int limit = results.getInt("Limit");
+				int limit = results.getInt("TaskLimit");
 
 				StageDTO stage = StageDTO.create(number, title, board, description, limit);
 				stages.add(stage);
