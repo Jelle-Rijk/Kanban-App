@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import com.jellerijk.projects.learning.tools.kanban.domain.board.BoardController;
 import com.jellerijk.projects.learning.tools.kanban.gui.board.BoardView;
-import com.jellerijk.projects.learning.tools.kanban.logging.Logger;
 import com.jellerijk.projects.learning.tools.kanban.persistence.dto.BoardDTO;
 import com.jellerijk.projects.learning.tools.kanban.utils.PublishedMessageType;
 import com.jellerijk.projects.learning.tools.kanban.utils.Subscriber;

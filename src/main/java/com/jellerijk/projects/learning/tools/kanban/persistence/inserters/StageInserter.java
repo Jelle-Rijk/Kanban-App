@@ -14,7 +14,6 @@ public abstract class StageInserter {
 	public static void insert(StageDTO stage) throws SQLException {
 		PreparedStatement pstmt = DBController.getInstance().prepareStatement(SQL);
 		executePreparedStatement(pstmt, stage);
-		Logger.log("Stage inserted.");
 	}
 
 	public static void insert(List<StageDTO> stages) throws SQLException {

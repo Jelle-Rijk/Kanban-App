@@ -13,16 +13,12 @@ import javafx.scene.layout.VBox;
 
 public class StageView extends VBox implements Subscriber {
 	private final StageController sc;
-	private final int boardId;
 	private int stageNumber;
-
-	private String title;
 
 	private StageHeader header;
 
 	public StageView(StageDTO stage, StageController sc) {
 		this.sc = sc;
-		this.boardId = stage.boardId();
 		this.stageNumber = stage.number();
 
 		sc.subscribeToStage(this, stageNumber);
@@ -51,15 +47,14 @@ public class StageView extends VBox implements Subscriber {
 //	GUI SETTERS
 
 	public void setTitle(String title) {
-		this.title = title;
 		header.setTitle(title);
 	}
 
-	private void setStageNumber(int stageNumber) {
-		if (stageNumber < 0)
-			throw new IllegalArgumentException("StageView cannot set the stage number. Needs to be positive.");
-		this.stageNumber = stageNumber;
-	}
+//	private void setStageNumber(int stageNumber) {
+//		if (stageNumber < 0)
+//			throw new IllegalArgumentException("StageView cannot set the stage number. Needs to be positive.");
+//		this.stageNumber = stageNumber;
+//	}
 
 //	CONTROLLER INTERACTION
 	public void handleRename(String title) {
