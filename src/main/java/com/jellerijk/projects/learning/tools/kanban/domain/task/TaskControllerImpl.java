@@ -24,14 +24,16 @@ public class TaskControllerImpl implements TaskController {
 	}
 
 	@Override
-	public void createTask(TaskDTO data) {
+	public int createTask(TaskDTO data) {
 		try {
 			TaskInserter.insert(data);
 			int id = DBController.getInstance().getLastInserted("Task");
 			addTask(TaskLoader.get(id));
+			return id;
 		} catch (SQLException ex) {
 			Logger.logError(ex);
 		}
+		throw new IllegalArgumentException("Something went wrong while creating the new task.");
 	}
 
 	@Override

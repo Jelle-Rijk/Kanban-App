@@ -9,8 +9,9 @@ public interface TaskController {
 	 * Creates a new task.
 	 * 
 	 * @param data
+	 * @return The id of the newly created task.
 	 */
-	public void createTask(TaskDTO data);
+	public int createTask(TaskDTO data);
 
 	/**
 	 * Moves the task from its current stage to stageNumber.
