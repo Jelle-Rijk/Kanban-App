@@ -6,6 +6,8 @@ import java.util.List;
 import com.jellerijk.projects.learning.tools.kanban.domain.board.BoardController;
 import com.jellerijk.projects.learning.tools.kanban.domain.stage.StageController;
 import com.jellerijk.projects.learning.tools.kanban.domain.stage.StageControllerImpl;
+import com.jellerijk.projects.learning.tools.kanban.domain.task.TaskController;
+import com.jellerijk.projects.learning.tools.kanban.domain.task.TaskControllerImpl;
 import com.jellerijk.projects.learning.tools.kanban.logging.Logger;
 import com.jellerijk.projects.learning.tools.kanban.persistence.dto.BoardDTO;
 import com.jellerijk.projects.learning.tools.kanban.persistence.dto.StageDTO;
@@ -22,14 +24,16 @@ import javafx.scene.layout.Priority;
 
 public class BoardView extends ScrollPane implements Subscriber {
 
-	HBox stages;
-	BoardDTO board;
-	StageController sc;
-	Button testAdd;
+	private HBox stages;
+	private BoardDTO board;
+	private final StageController sc;
+	private final TaskController tc;
+	private Button testAdd;
 
 	public BoardView(int boardId) {
 		board = BoardController.getInstance().getBoard(boardId);
 		sc = new StageControllerImpl(boardId);
+		tc = new TaskControllerImpl(boardId);
 		sc.subscribe(this);
 		buildGUI();
 		update();
@@ -82,7 +86,7 @@ public class BoardView extends ScrollPane implements Subscriber {
 		stages.getChildren().clear();
 		List<StageDTO> stageList = sc.getStages();
 		for (StageDTO stage : stageList) {
-			stages.getChildren().add(new StageView(stage, sc));
+			stages.getChildren().add(new StageView(stage, sc, tc));
 		}
 		stages.getChildren().add(testAdd);
 	}

@@ -1,26 +1,29 @@
 package com.jellerijk.projects.learning.tools.kanban.gui.board;
 
 import com.jellerijk.projects.learning.tools.kanban.domain.stage.StageController;
-import com.jellerijk.projects.learning.tools.kanban.gui.task.TaskCard;
+import com.jellerijk.projects.learning.tools.kanban.domain.task.TaskController;
 import com.jellerijk.projects.learning.tools.kanban.persistence.dto.StageDTO;
 import com.jellerijk.projects.learning.tools.kanban.utils.PublishedMessageType;
 import com.jellerijk.projects.learning.tools.kanban.utils.Subscriber;
 
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 
 public class StageView extends VBox implements Subscriber {
 	private final StageController sc;
+	private final TaskController tc;
 	private int stageNumber;
 
 	private StageHeader header;
+	private ScrollPane spTasks;
+	private VBox taskList;
 	private Button btnAddTask;
 
-	public StageView(StageDTO stage, StageController sc) {
+	public StageView(StageDTO stage, StageController sc, TaskController tc) {
 		this.sc = sc;
+		this.tc = tc;
 		this.stageNumber = stage.number();
 
 		sc.subscribeToStage(this, stageNumber);
@@ -32,12 +35,13 @@ public class StageView extends VBox implements Subscriber {
 //	BUILD GUI
 	private void buildGUI() {
 		header = new StageHeader(this);
-		ListView<String> taskList = new ListView<String>();
-		ScrollPane sp = new ScrollPane();
-		sp.setContent(taskList);
+		taskList = new VBox();
+		spTasks = new ScrollPane();
+		spTasks.setContent(taskList);
+		spTasks.setMaxHeight(400);
 		Node footer = buildFooter();
 
-		getChildren().addAll(header, sp, footer);
+		getChildren().addAll(header, spTasks, footer);
 
 	};
 
@@ -62,8 +66,9 @@ public class StageView extends VBox implements Subscriber {
 
 //	CONTROLLER INTERACTION
 	private void handleAddTask() {
-		TaskCard card = new TaskCard();
-		
+		//TODO add auto-scrolling
+		TaskCard card = new TaskCard(tc, stageNumber);
+		taskList.getChildren().add(card);
 	}
 
 	public void handleRename(String title) {
