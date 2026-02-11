@@ -23,6 +23,7 @@ public interface TaskRepository {
 	 * 
 	 * @return
 	 */
+
 	public List<Task> getTasks();
 
 	/**
@@ -33,4 +34,9 @@ public interface TaskRepository {
 	 */
 	public List<Task> getTasksByStage(int boardId, int stageNumber);
 
+	/**
+	 * Removes the task with the supplied ID.
+	 * @param id
+	 */
+	public void remove(int id);
 }

@@ -8,6 +8,13 @@ public class TaskRepositoryImpl implements TaskRepository {
 	private List<Task> tasks;
 
 	public TaskRepositoryImpl() {
+		this(new ArrayList<Task>());
+	}
+
+	public TaskRepositoryImpl(List<Task> tasks) {
+		if (tasks == null)
+			throw new IllegalArgumentException("Tasks repository cannot be null");
+		this.tasks = tasks;
 	}
 
 	@Override
@@ -31,6 +38,10 @@ public class TaskRepositoryImpl implements TaskRepository {
 				.collect(Collectors.toCollection(ArrayList<Task>::new));
 	}
 
-
+	@Override
+	public void remove(int id) {
+		Task task = getTask(id);
+		tasks.remove(task);
+	}
 
 }

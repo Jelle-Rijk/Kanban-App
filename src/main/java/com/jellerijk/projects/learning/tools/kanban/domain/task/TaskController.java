@@ -46,10 +46,9 @@ public interface TaskController {
 	public TaskDTO getTask(int id);
 
 	/**
-	 * Gets all tasks for a given BoardId and StageNumber.
-	 * @param boardId
+	 * Gets all tasks for a given StageNumber.
 	 * @param stageNumber
 	 * @return
 	 */
-	public List<TaskDTO> getTasks(int boardId, int stageNumber);
+	public List<TaskDTO> getTasksForStage(int stageNumber);
 }
