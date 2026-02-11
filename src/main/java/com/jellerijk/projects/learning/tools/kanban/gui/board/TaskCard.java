@@ -73,6 +73,7 @@ public class TaskCard extends HBox implements Subscriber {
 
 	private void setTaskId(int taskId) {
 		this.taskId = taskId;
+		tc.subscribeToTask(this, taskId);
 	}
 
 //	EVENT HANDLERS
@@ -107,5 +108,7 @@ public class TaskCard extends HBox implements Subscriber {
 	@Override
 	public void update(PublishedMessageType messageType) {
 		TaskDTO data = tc.getTask(taskId);
+		
+		setDescription(data.description());
 	}
 }
