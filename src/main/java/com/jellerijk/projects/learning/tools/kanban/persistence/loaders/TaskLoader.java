@@ -27,7 +27,7 @@ public abstract class TaskLoader {
 		}
 		return new ArrayList<TaskDTO>();
 	}
-	
+
 	public static List<TaskDTO> loadTasksForBoard(int boardId) {
 		try {
 			PreparedStatement stmt = DBController.getInstance()
@@ -60,7 +60,7 @@ public abstract class TaskLoader {
 			while (results.next()) {
 				int taskId = results.getInt("TaskId");
 				String description = results.getString("Description");
-				int boardId = results.getInt("Board");
+				int boardId = results.getInt("BoardId");
 				int stageNumber = results.getInt("Stage");
 
 				TaskDTO task = TaskDTO.create(taskId, description, boardId, stageNumber, false);
