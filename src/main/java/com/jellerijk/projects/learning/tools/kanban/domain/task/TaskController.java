@@ -3,8 +3,9 @@ package com.jellerijk.projects.learning.tools.kanban.domain.task;
 import java.util.List;
 
 import com.jellerijk.projects.learning.tools.kanban.persistence.dto.TaskDTO;
+import com.jellerijk.projects.learning.tools.kanban.utils.Publisher;
 
-public interface TaskController {
+public interface TaskController extends Publisher {
 	/**
 	 * Creates a new task.
 	 * 
@@ -15,6 +16,7 @@ public interface TaskController {
 
 	/**
 	 * Moves the task from its current stage to stageNumber.
+	 * 
 	 * @param id
 	 * @param stageNumber
 	 */
@@ -22,6 +24,7 @@ public interface TaskController {
 
 	/**
 	 * Updates a task with new data.
+	 * 
 	 * @param id
 	 * @param data
 	 */
@@ -29,18 +32,21 @@ public interface TaskController {
 
 	/**
 	 * Deletes a task.
+	 * 
 	 * @param id
 	 */
 	public void deleteTask(int id);
 
 	/**
 	 * Completes the task.
+	 * 
 	 * @param id
 	 */
 	public void completeTask(int id);
 
 	/**
 	 * Gets the task by its id.
+	 * 
 	 * @param id
 	 * @return
 	 */
@@ -48,8 +54,17 @@ public interface TaskController {
 
 	/**
 	 * Gets all tasks for a given StageNumber.
+	 * 
 	 * @param stageNumber
 	 * @return
 	 */
 	public List<TaskDTO> getTasksForStage(int stageNumber);
+
+	/**
+	 * Returns all taskIds belonging to the given stageNumber;
+	 * 
+	 * @param stageNumber
+	 * @return
+	 */
+	public List<Integer> getTaskIds(int stageNumber);
 }

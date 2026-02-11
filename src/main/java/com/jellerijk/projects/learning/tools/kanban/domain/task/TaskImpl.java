@@ -20,59 +20,43 @@ public class TaskImpl implements Task {
 	private int stageNumber;
 	private boolean completed;
 
-	private static PreparedStatement updateStatement;
-
 	public TaskImpl(TaskDTO data) {
-		if (data.id() < 0)
+		this(data.id(), data.description(), data.boardId(), data.stageNumber(), data.completed());
+	}
+
+	public TaskImpl(int id, String description, int boardId, int stageNumber, boolean completed) {
+		if (id < 0)
 			throw new IllegalArgumentException("Task ID cannot be negative.");
-		id = data.id();
-		updateData(data);
+		this.id = id;
+		setDescription(description);
+		setBoardId(boardId);
+		setStageNumber(stageNumber);
+		setCompleted(completed);
 	}
 
 	@Override
 	public void move(int stageNumber) {
-		try {
-			setStageNumber(stageNumber);
-			notifySubs(PublishedMessageType.OBJECT_UPDATE);
-		} catch (SQLException ex) {
-			Logger.logError(ex);
-		}
-	}
-
-	@Override
-	public void updateData(TaskDTO data) {
-		try {
-			setDescription(data.description());
-			setBoardId(data.boardId());
-			setStageNumber(data.stageNumber());
-			setCompleted(data.completed());
-		} catch (SQLException ex) {
-			Logger.logError(ex);
-		}
+		setStageNumber(stageNumber);
 		notifySubs(PublishedMessageType.OBJECT_UPDATE);
 	}
 
 	@Override
 	public void complete() {
-		try {
-			setCompleted(true);			
-			notifySubs(PublishedMessageType.OBJECT_UPDATE);
-		} catch (SQLException ex) {
-			Logger.logError(ex);
-		}
+		setCompleted(true);
+		notifySubs(PublishedMessageType.OBJECT_UPDATE);
 	}
 
 	/* DATABASE */
 	private void updateDatabase(String column, String value) throws SQLException {
-		PreparedStatement stmt = getUpdateStatement();
-		stmt.setString(2, value);
-		updateDatabase(stmt, column);
+		PreparedStatement stmt = prepareStatement(column);
+		stmt.setString(1, value);
+		updateDatabase(stmt);
 	}
 
 	private void updateDatabase(String column, int value) throws SQLException {
-		PreparedStatement stmt = getUpdateStatement();
-		updateStatement.setInt(2, value);
-		updateDatabase(stmt, column);
+		PreparedStatement stmt = prepareStatement(column);
+		stmt.setInt(1, value);
+		updateDatabase(stmt);
 	}
 
 	/**
@@ -81,44 +65,63 @@ public class TaskImpl implements Task {
 	 * @param column
 	 * @throws SQLException
 	 */
-	private void updateDatabase(PreparedStatement stmt, String column) throws SQLException {
-		stmt.setString(1, column);
-		stmt.setInt(3, id);
+	private void updateDatabase(PreparedStatement stmt) throws SQLException {
+		stmt.setInt(2, id);
 		stmt.execute();
+		stmt.close();
 	};
 
-	private PreparedStatement getUpdateStatement() throws SQLException {
-		if (updateStatement == null)
-			updateStatement = DBController.getInstance().prepareStatement("UPDATE Task SET ? = ? WHERE TaskId = ?");
-		return updateStatement;
+	private PreparedStatement prepareStatement(String column) throws SQLException {
+		String sql = String.format("UPDATE Task SET %s = ? WHERE TaskId = ?", column);
+		return DBController.getInstance().prepareStatement(sql);
 	}
 
 	/* SETTERS */
-	private void setDescription(String description) throws SQLException {
+	private void setDescription(String description) {
 		if (description == null || description.isBlank())
 			throw new IllegalArgumentException("Task description is required.");
-		updateDatabase("Description", description);
-		this.description = description;
+		try {
+			updateDatabase("Description", description);
+			this.description = description;
+		} catch (SQLException ex) {
+			Logger.logError("Something went wrong while setting task description.");
+			Logger.logError(ex);
+		}
 
 	}
 
-	private void setBoardId(int boardId) throws SQLException {
+	private void setBoardId(int boardId) {
 		if (boardId < 0)
 			throw new IllegalArgumentException("BoardId cannot be a negative number.");
-		updateDatabase("BoardId", boardId);
-		this.boardId = boardId;
+		try {
+			updateDatabase("BoardId", boardId);
+			this.boardId = boardId;
+		} catch (SQLException ex) {
+			Logger.logError("Something went wrong while setting task board.");
+			Logger.logError(ex);
+		}
 	}
 
-	private void setStageNumber(int stageNumber) throws SQLException {
+	private void setStageNumber(int stageNumber) {
 		if (stageNumber < 0)
 			throw new IllegalArgumentException("StageNumber cannot be a negative number.");
-		updateDatabase("Stage", stageNumber);
-		this.stageNumber = stageNumber;
+		try {
+			updateDatabase("Stage", stageNumber);
+			this.stageNumber = stageNumber;
+		} catch (SQLException ex) {
+			Logger.logError("Something went wrong while setting task stage.");
+			Logger.logError(ex);
+		}
 	}
 
-	private void setCompleted(boolean completed) throws SQLException {
-		updateDatabase("Completed", completed ? 1 : 0);
-		this.completed = completed;
+	private void setCompleted(boolean completed) {
+		try {
+			updateDatabase("Completed", completed ? 1 : 0);
+			this.completed = completed;
+		} catch (SQLException ex) {
+			Logger.logError("Something went wrong while setting task completion.");
+			Logger.logError(ex);
+		}
 	}
 
 	/* GETTERS */

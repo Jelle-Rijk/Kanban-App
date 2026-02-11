@@ -31,7 +31,7 @@ public abstract class TaskLoader {
 	public static List<TaskDTO> loadTasksForBoard(int boardId) {
 		try {
 			PreparedStatement stmt = DBController.getInstance()
-					.prepareStatement("SELECT * FROM Task WHERE boardId = ?");
+					.prepareStatement("SELECT * FROM Task WHERE BoardId = ?");
 			stmt.setInt(1, boardId);
 			ResultSet result = stmt.executeQuery();
 			return convertResultSet(result);

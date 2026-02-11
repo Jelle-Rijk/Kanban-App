@@ -1,6 +1,5 @@
 package com.jellerijk.projects.learning.tools.kanban.domain.task;
 
-import com.jellerijk.projects.learning.tools.kanban.persistence.dto.TaskDTO;
 import com.jellerijk.projects.learning.tools.kanban.utils.Publisher;
 
 public interface Task extends Publisher {
@@ -45,13 +44,6 @@ public interface Task extends Publisher {
 	 * @param stageNumber - Number of the stage to move this task to.
 	 */
 	public void move(int stageNumber);
-
-	/**
-	 * Updates the Task based on the inserted TaskDTO.
-	 * 
-	 * @param data
-	 */
-	public void updateData(TaskDTO data);
 
 	/**
 	 * Marks the task as completed.

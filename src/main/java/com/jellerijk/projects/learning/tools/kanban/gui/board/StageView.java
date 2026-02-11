@@ -1,5 +1,7 @@
 package com.jellerijk.projects.learning.tools.kanban.gui.board;
 
+import java.util.List;
+
 import com.jellerijk.projects.learning.tools.kanban.domain.stage.StageController;
 import com.jellerijk.projects.learning.tools.kanban.domain.task.TaskController;
 import com.jellerijk.projects.learning.tools.kanban.persistence.dto.StageDTO;
@@ -24,12 +26,14 @@ public class StageView extends VBox implements Subscriber {
 	public StageView(StageDTO stage, StageController sc, TaskController tc) {
 		this.sc = sc;
 		this.tc = tc;
+		tc.subscribe(this);
 		this.stageNumber = stage.number();
 
 		sc.subscribeToStage(this, stageNumber);
 
 		buildGUI();
-		update();
+		updateStageData();
+		updateTaskList();
 	}
 
 //	BUILD GUI
@@ -66,7 +70,7 @@ public class StageView extends VBox implements Subscriber {
 
 //	CONTROLLER INTERACTION
 	private void handleAddTask() {
-		//TODO add auto-scrolling
+		// TODO add auto-scrolling
 		TaskCard card = new TaskCard(tc, stageNumber);
 		taskList.getChildren().add(card);
 	}
@@ -80,9 +84,25 @@ public class StageView extends VBox implements Subscriber {
 		sc.deleteStage(stageNumber);
 	}
 
-	@Override
-	public void update(PublishedMessageType messageType) {
+	private void updateTaskList() {
+		taskList.getChildren().clear();
+		List<Integer> tasks = tc.getTaskIds(stageNumber);
+		for (int taskId : tasks) {
+			taskList.getChildren().add(new TaskCard(tc, stageNumber, taskId));
+		}
+	}
+
+	private void updateStageData() {
 		StageDTO data = sc.getStage(stageNumber);
 		setTitle(data.title());
+	}
+
+	@Override
+	public void update(PublishedMessageType messageType) {
+		if (messageType == PublishedMessageType.REPO_UPDATE) {
+			updateTaskList();
+		} else {
+			updateStageData();
+		}
 	}
 }
