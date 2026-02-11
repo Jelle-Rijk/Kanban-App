@@ -1,6 +1,7 @@
-package com.jellerijk.projects.learning.tools.kanban.gui.stage;
+package com.jellerijk.projects.learning.tools.kanban.gui.board;
 
 import com.jellerijk.projects.learning.tools.kanban.domain.stage.StageController;
+import com.jellerijk.projects.learning.tools.kanban.gui.task.TaskCard;
 import com.jellerijk.projects.learning.tools.kanban.persistence.dto.StageDTO;
 import com.jellerijk.projects.learning.tools.kanban.utils.PublishedMessageType;
 import com.jellerijk.projects.learning.tools.kanban.utils.Subscriber;
@@ -16,6 +17,7 @@ public class StageView extends VBox implements Subscriber {
 	private int stageNumber;
 
 	private StageHeader header;
+	private Button btnAddTask;
 
 	public StageView(StageDTO stage, StageController sc) {
 		this.sc = sc;
@@ -41,7 +43,9 @@ public class StageView extends VBox implements Subscriber {
 
 	// TODO: design footer
 	private Node buildFooter() {
-		return new Button("ADD TASK");
+		btnAddTask = new Button("Add task");
+		btnAddTask.setOnAction(e -> handleAddTask());
+		return btnAddTask;
 	}
 
 //	GUI SETTERS
@@ -57,6 +61,11 @@ public class StageView extends VBox implements Subscriber {
 //	}
 
 //	CONTROLLER INTERACTION
+	private void handleAddTask() {
+		TaskCard card = new TaskCard();
+		
+	}
+
 	public void handleRename(String title) {
 		setTitle(title);
 		sc.renameStage(stageNumber, title);

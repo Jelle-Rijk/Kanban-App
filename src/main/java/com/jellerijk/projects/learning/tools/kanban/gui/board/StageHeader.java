@@ -1,4 +1,4 @@
-package com.jellerijk.projects.learning.tools.kanban.gui.stage;
+package com.jellerijk.projects.learning.tools.kanban.gui.board;
 
 import java.util.Optional;
 

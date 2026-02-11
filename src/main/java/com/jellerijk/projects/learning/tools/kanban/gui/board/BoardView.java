@@ -6,7 +6,6 @@ import java.util.List;
 import com.jellerijk.projects.learning.tools.kanban.domain.board.BoardController;
 import com.jellerijk.projects.learning.tools.kanban.domain.stage.StageController;
 import com.jellerijk.projects.learning.tools.kanban.domain.stage.StageControllerImpl;
-import com.jellerijk.projects.learning.tools.kanban.gui.stage.StageView;
 import com.jellerijk.projects.learning.tools.kanban.logging.Logger;
 import com.jellerijk.projects.learning.tools.kanban.persistence.dto.BoardDTO;
 import com.jellerijk.projects.learning.tools.kanban.persistence.dto.StageDTO;
