@@ -28,6 +28,12 @@ public abstract class TaskLoader {
 		return new ArrayList<TaskDTO>();
 	}
 
+	public static TaskDTO get(int id) throws SQLException {
+		PreparedStatement stmt = DBController.getInstance().prepareStatement("SELECT * FROM Task WHERE TaskId = ?");
+		stmt.setInt(1, id);
+		ResultSet result = stmt.executeQuery();
+		return convertResultSet(result).getFirst();
+	}
 
 	public static Collection<TaskDTO> loadAll() {
 		ResultSet results = DBController.getInstance().query("SELECT * FROM Task");
@@ -46,6 +52,7 @@ public abstract class TaskLoader {
 				TaskDTO task = TaskDTO.create(taskId, description, boardId, stageNumber, false);
 				tasks.add(task);
 			}
+			results.close();
 		} catch (SQLException e) {
 			Logger.logError("Something went wrong while trying to convert ResultSet to Tasks.");
 			e.printStackTrace();
