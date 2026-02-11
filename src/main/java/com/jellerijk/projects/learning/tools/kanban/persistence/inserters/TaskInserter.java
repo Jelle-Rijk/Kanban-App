@@ -13,12 +13,14 @@ public abstract class TaskInserter {
 	public static void insert(TaskDTO task) throws SQLException {
 		PreparedStatement pstmt = DBController.getInstance().prepareStatement(SQL);
 		executePreparedStatement(pstmt, task);
+		pstmt.close();
 	}
 
 	public static void insert(Collection<TaskDTO> tasks) throws SQLException {
 		PreparedStatement pstmt = DBController.getInstance().prepareStatement(SQL);
 		for (TaskDTO task : tasks)
 			executePreparedStatement(pstmt, task);
+		pstmt.close();
 	}
 
 	private static void executePreparedStatement(PreparedStatement pstmt, TaskDTO task) throws SQLException {
