@@ -4,12 +4,28 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 public abstract class Logger {
+	/**
+	 * Logs the message as an info message.
+	 * @param message
+	 */
 	public static void log(String message) {
 		writeLog("info", message);
 	}
 
+	/**
+	 * Logs the supplied message as an error.
+	 * @param message
+	 */
 	public static void logError(String message) {
 		writeLog("error", message);
+	}
+
+	/**
+	 * Takes in an exception and logs its type and message as an error.
+	 * @param ex
+	 */
+	public static void logError(Exception ex) {
+		logError(String.format("(%s) %s", ex.getClass().getSimpleName(), ex.getMessage()));
 	}
 
 	private static void writeLog(String type, String message) {
