@@ -26,6 +26,7 @@ public class BoardView extends ScrollPane implements Subscriber {
 	HBox stages;
 	BoardDTO board;
 	StageController sc;
+	Button testAdd;
 
 	public BoardView(int boardId) {
 		board = BoardController.getInstance().getBoard(boardId);
@@ -56,7 +57,7 @@ public class BoardView extends ScrollPane implements Subscriber {
 	}
 
 	private void createTestButton(BorderPane bp) {
-		Button testAdd = new Button("TEST - ADD STAGE");
+		testAdd = new Button("TEST - ADD STAGE");
 		HBox buttons = new HBox(testAdd);
 		BorderPane.setAlignment(buttons, Pos.CENTER);
 		HBox.setHgrow(testAdd, Priority.ALWAYS);
@@ -84,5 +85,6 @@ public class BoardView extends ScrollPane implements Subscriber {
 		for (StageDTO stage : stageList) {
 			stages.getChildren().add(new StageView(stage, sc));
 		}
+		stages.getChildren().add(testAdd);
 	}
 }
