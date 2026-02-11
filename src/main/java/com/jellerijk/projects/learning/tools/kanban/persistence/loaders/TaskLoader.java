@@ -27,6 +27,20 @@ public abstract class TaskLoader {
 		}
 		return new ArrayList<TaskDTO>();
 	}
+	
+	public static List<TaskDTO> loadTasksForBoard(int boardId) {
+		try {
+			PreparedStatement stmt = DBController.getInstance()
+					.prepareStatement("SELECT * FROM Task WHERE boardId = ?");
+			stmt.setInt(1, boardId);
+			ResultSet result = stmt.executeQuery();
+			return convertResultSet(result);
+		} catch (SQLException sqlEx) {
+			Logger.logError("Encountered an error while loading tasks for board from the database.");
+			Logger.logError(sqlEx.getMessage());
+		}
+		return new ArrayList<TaskDTO>();
+	}
 
 	public static TaskDTO get(int id) throws SQLException {
 		PreparedStatement stmt = DBController.getInstance().prepareStatement("SELECT * FROM Task WHERE TaskId = ?");
