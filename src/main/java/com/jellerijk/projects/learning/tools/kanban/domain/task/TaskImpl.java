@@ -2,6 +2,7 @@ package com.jellerijk.projects.learning.tools.kanban.domain.task;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -28,6 +29,7 @@ public class TaskImpl implements Task {
 		if (id < 0)
 			throw new IllegalArgumentException("Task ID cannot be negative.");
 		this.id = id;
+		this.subscribers = new ArrayList<Subscriber>();
 		setDescription(description);
 		setBoardId(boardId);
 		setStageNumber(stageNumber);

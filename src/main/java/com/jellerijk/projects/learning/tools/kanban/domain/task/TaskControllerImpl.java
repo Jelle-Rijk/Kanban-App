@@ -103,4 +103,10 @@ public class TaskControllerImpl implements TaskController {
 		return subs;
 	}
 
+	@Override
+	public void subscribeToTask(Subscriber sub, int id) {
+		Task task = taskRepo.getTask(id);
+		task.subscribe(sub);
+	}
+
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.jellerijk.projects.learning.tools.kanban.persistence.dto.TaskDTO;
 import com.jellerijk.projects.learning.tools.kanban.utils.Publisher;
+import com.jellerijk.projects.learning.tools.kanban.utils.Subscriber;
 
 public interface TaskController extends Publisher {
 	/**
@@ -67,4 +68,11 @@ public interface TaskController extends Publisher {
 	 * @return
 	 */
 	public List<Integer> getTaskIds(int stageNumber);
+
+	/**
+	 * Subscribes sub to the specified task.
+	 * @param sub
+	 * @param id
+	 */
+	public void subscribeToTask(Subscriber sub, int id);
 }
