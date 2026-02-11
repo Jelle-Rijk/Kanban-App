@@ -1,4 +1,4 @@
-package com.jellerijk.projects.learning.tools.kanban.gui.boardCreator;
+package com.jellerijk.projects.learning.tools.kanban.gui.boardselector;
 
 import java.sql.SQLException;
 
