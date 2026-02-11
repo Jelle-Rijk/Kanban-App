@@ -1,6 +1,7 @@
 package com.jellerijk.projects.learning.tools.kanban.domain.stage;
 
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -109,6 +110,23 @@ public class StageImpl implements Stage {
 	public void delete() {
 		String sql = String.format("DELETE FROM Stage WHERE BoardId = %d AND Number = %d", boardId, number);
 		DBController.getInstance().update(sql);
+	}
+
+	@Override
+	public void changeNumber(int stageNumber) {
+		String sql = "UPDATE Stage SET Number = ? WHERE BoardId = ? AND Number = ?";
+		PreparedStatement stmt;
+		try {
+			stmt = DBController.getInstance().prepareStatement(sql);
+			stmt.setInt(1, stageNumber);
+			stmt.setInt(2, boardId);
+			stmt.setInt(3, number);
+			setNumber(stageNumber);
+			stmt.execute();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }
