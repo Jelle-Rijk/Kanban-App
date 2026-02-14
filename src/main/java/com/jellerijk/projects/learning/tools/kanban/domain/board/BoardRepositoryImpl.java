@@ -1,30 +1,34 @@
 package com.jellerijk.projects.learning.tools.kanban.domain.board;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
 
+import com.jellerijk.projects.learning.tools.kanban.exceptions.DatabaseInsertException;
 import com.jellerijk.projects.learning.tools.kanban.logging.Logger;
 import com.jellerijk.projects.learning.tools.kanban.persistence.database.DBController;
 import com.jellerijk.projects.learning.tools.kanban.persistence.dto.BoardDTO;
-import com.jellerijk.projects.learning.tools.kanban.persistence.loaders.BoardLoader;
+import com.jellerijk.projects.learning.tools.kanban.persistence.mappers.BoardMapper;
 
 public class BoardRepositoryImpl implements BoardRepository {
 	private List<Board> boards;
+	private BoardMapper mapper;
 
 	public BoardRepositoryImpl() {
-		Collection<BoardDTO> data = BoardLoader.loadAll();
-		List<Board> convertedData = data.stream()
-				.map(board -> new BoardImpl(board.id(), board.name(), board.description()))
-				.collect(Collectors.toCollection(ArrayList::new));
-		setBoards(convertedData);
+		mapper = new BoardMapper();
+		setBoards((ArrayList<Board>) mapper.getAll());
 	};
 
 	@Override
 	public void addBoard(Board board) {
-		boards.add(board);
+		try {
+			mapper.insert(board);
+			int id = mapper.getLastInsertedId();
+			board.setId(id);
+			boards.add(board);
+		} catch (Exception ex) {
+			Logger.logError(ex);
+		}
 	}
 
 	@Override
