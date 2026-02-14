@@ -11,15 +11,19 @@ public interface Mapper<T> {
 	 *         datatype.
 	 */
 	public Collection<T> getAll();
-	
+
 	/**
 	 * Maps object to a corresponding Database entry.
+	 * 
 	 * @param object
+	 * @return Returns the object's autoincrement id or -1 if the object's table is
+	 *         not auto-incremented.
 	 */
-	public void insert(T object);
-	
+	public int insert(T object);
+
 	/**
 	 * Removes the entry associated to this object from the database.
+	 * 
 	 * @param object
 	 */
 	public void delete(T object);
