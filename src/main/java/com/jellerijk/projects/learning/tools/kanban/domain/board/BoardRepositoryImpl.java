@@ -35,9 +35,8 @@ public class BoardRepositoryImpl implements BoardRepository {
 	public void deleteBoard(int id) {
 		try {
 			Board board = getBoard(id);
+			mapper.delete(board);
 			boards.remove(board);
-			String sql = String.format("DELETE FROM Board WHERE BoardId=%d", id);
-			DBController.getInstance().update(sql);
 		} catch (NoSuchElementException nse) {
 			Logger.logError(String.format("Board %d was not found. It cannot be deleted.", id));
 		}
