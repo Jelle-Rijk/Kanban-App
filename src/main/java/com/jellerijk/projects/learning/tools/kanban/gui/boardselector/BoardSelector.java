@@ -3,7 +3,6 @@ package com.jellerijk.projects.learning.tools.kanban.gui.boardselector;
 import java.util.List;
 
 import com.jellerijk.projects.learning.tools.kanban.domain.board.BoardController;
-import com.jellerijk.projects.learning.tools.kanban.gui.boardCreator.BoardCreator;
 import com.jellerijk.projects.learning.tools.kanban.logging.Logger;
 import com.jellerijk.projects.learning.tools.kanban.persistence.dto.BoardDTO;
 import com.jellerijk.projects.learning.tools.kanban.utils.PublishedMessageType;
