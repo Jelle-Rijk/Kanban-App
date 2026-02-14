@@ -67,10 +67,11 @@ public class BoardMapper implements Mapper<Board> {
 	 */
 	public int getLastInsertedId() throws SQLException {
 		try (PreparedStatement query = conn.prepareStatement("SELECT seq FROM sqlite_sequence WHERE name = ?")) {
+			query.setString(1, TABLE);
 			ResultSet results = query.executeQuery();
 			if (!results.next())
 				throw new SQLException();
-			return results.getInt(1);
+			return results.getInt("seq");
 		} catch (SQLException e) {
 			Logger.logError("Encountered an exception while retrieving last inserted Board Id.");
 			throw new SQLException();
