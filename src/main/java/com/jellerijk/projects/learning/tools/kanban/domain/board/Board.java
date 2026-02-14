@@ -11,6 +11,12 @@ public interface Board extends Publisher {
 	 * @return
 	 */
 	public int getId();
+	
+	/**
+	 * Sets the Board's id.
+	 * @param id
+	 */
+	public void setId(int id);
 
 	/**
 	 * Returns the Board's name.
