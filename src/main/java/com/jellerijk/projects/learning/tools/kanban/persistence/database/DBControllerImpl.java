@@ -98,6 +98,11 @@ public class DBControllerImpl implements DBController {
 		pstmt.setString(1, tableName);
 		ResultSet rs = pstmt.executeQuery();
 		return rs.getInt(1);
+	}
+
+	@Override
+	public Connection getConnection() {
+		return connection;
 	};
 
 }

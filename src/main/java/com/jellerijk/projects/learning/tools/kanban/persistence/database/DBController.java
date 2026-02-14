@@ -1,5 +1,6 @@
 package com.jellerijk.projects.learning.tools.kanban.persistence.database;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,6 +16,12 @@ public interface DBController {
 	 * @return
 	 */
 	public boolean verify();
+	
+	/**
+	 * Returns the connection to the database.
+	 * @return Connection object to connect to the database.
+	 */
+	public Connection getConnection();
 
 	/**
 	 * Connects to the SQLite database
