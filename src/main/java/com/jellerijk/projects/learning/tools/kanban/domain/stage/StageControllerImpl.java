@@ -7,10 +7,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.jellerijk.projects.learning.tools.kanban.logging.Logger;
 import com.jellerijk.projects.learning.tools.kanban.persistence.dto.StageDTO;
-import com.jellerijk.projects.learning.tools.kanban.persistence.inserters.StageInserter;
-import com.jellerijk.projects.learning.tools.kanban.persistence.loaders.StageLoader;
 import com.jellerijk.projects.learning.tools.kanban.utils.Subscriber;
 
 public class StageControllerImpl implements StageController {
@@ -23,20 +20,7 @@ public class StageControllerImpl implements StageController {
 			throw new IllegalArgumentException(String.format("Supplied boardId for StageController was %d", boardId));
 		this.boardId = boardId;
 		this.subs = new ArrayList<Subscriber>();
-		stageRepo = new StageRepositoryImpl(initStageRepoList());
-	}
-
-	private List<Stage> initStageRepoList() {
-		List<Stage> stages = new ArrayList<Stage>();
-		try {
-			Collection<StageDTO> stageDTOs = StageLoader.loadByBoard(boardId);
-			stageDTOs.forEach(dto -> stages
-					.add(new StageImpl(dto.number(), dto.boardId(), dto.title(), dto.description(), dto.limit())));
-		} catch (SQLException e) {
-			Logger.logError(String.format("An error occurred while retrieving the Stages for board %d", boardId));
-			e.printStackTrace();
-		}
-		return stages;
+		stageRepo = new StageRepositoryImpl();
 	}
 
 	@Override
@@ -46,7 +30,6 @@ public class StageControllerImpl implements StageController {
 
 	@Override
 	public void createStage(StageDTO data) throws SQLException {
-		StageInserter.insert(data);
 		Stage stage = new StageImpl(data.number(), data.boardId(), data.title(), data.description(), data.limit());
 		stageRepo.add(stage);
 		notifySubs();
@@ -56,13 +39,12 @@ public class StageControllerImpl implements StageController {
 	public void deleteStage(int stageNumber) {
 		Stage stage = stageRepo.getStage(boardId, stageNumber);
 		stageRepo.remove(stage);
-		stage.delete();
 
 		// Renumber stages
 		List<Stage> stages = stageRepo.getStages().stream().sorted(Comparator.comparing(Stage::getNumber))
 				.collect(Collectors.toCollection(ArrayList::new));
 		for (int i = 0; i < stages.size(); i++)
-			stages.get(i).changeNumber(i);
+			stages.get(i).setNumber(i);
 
 		notifySubs();
 	}
@@ -83,10 +65,12 @@ public class StageControllerImpl implements StageController {
 		return subs;
 	}
 
+	// TODO: Reimplement
 	@Override
 	public void renameStage(int stageNumber, String title) {
-		Stage stage = stageRepo.getStage(boardId, stageNumber);
-		stage.rename(title);
+		throw new UnsupportedOperationException();
+//		Stage stage = stageRepo.getStage(boardId, stageNumber);
+//		stage.rename(title);
 	}
 
 	@Override
