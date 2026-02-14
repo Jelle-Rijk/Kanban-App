@@ -31,6 +31,7 @@ public class TaskControllerImpl implements TaskController {
 	@Override
 	public int createTask(TaskDTO data) {
 		try {
+			data = TaskDTO.create(-1, data.description(), boardId, data.stageNumber(), false);
 			TaskInserter.insert(data);
 			int id = DBController.getInstance().getLastInserted("Task");
 			addTask(TaskLoader.get(id));

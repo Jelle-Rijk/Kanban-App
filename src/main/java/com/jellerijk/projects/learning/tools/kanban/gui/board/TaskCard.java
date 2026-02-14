@@ -6,6 +6,9 @@ import com.jellerijk.projects.learning.tools.kanban.persistence.dto.TaskDTO;
 import com.jellerijk.projects.learning.tools.kanban.utils.PublishedMessageType;
 import com.jellerijk.projects.learning.tools.kanban.utils.Subscriber;
 
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -83,6 +86,18 @@ public class TaskCard extends HBox implements Subscriber {
 
 	private void handleCreateTask() {
 		Logger.logDebug(this, "Creating Task");
+		try {
+			String name = txfDescription.getText();
+			taskId = tc.createTask(TaskDTO.create(-1, name, -1, currentStage, false));
+		} catch (Exception ex) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Encountered an error");
+			alert.setHeaderText(ex.getClass().getSimpleName());
+			alert.setContentText(ex.getMessage());
+			alert.showAndWait();
+			Platform.runLater(() -> txfDescription.requestFocus());
+		}
+
 	}
 
 	private void handleMoveStage(int newStage) {
@@ -90,10 +105,19 @@ public class TaskCard extends HBox implements Subscriber {
 	}
 
 	private void lock() {
-		Logger.logDebug(this, "Locking task");
+		txfDescription.setEditable(false);
 	}
 
 	private void unlock() {
+		txfDescription.setEditable(true);
+		Platform.runLater(() -> txfDescription.requestFocus());
+
+		txfDescription.setOnAction((event) -> {
+			if (state == GUICardState.CREATING)
+				handleCreateTask();
+			else
+				handleChangeName();
+		});
 		Logger.logDebug(this, "Unlocking task");
 	}
 
@@ -108,7 +132,7 @@ public class TaskCard extends HBox implements Subscriber {
 	@Override
 	public void update(PublishedMessageType messageType) {
 		TaskDTO data = tc.getTask(taskId);
-		
+
 		setDescription(data.description());
 	}
 }
