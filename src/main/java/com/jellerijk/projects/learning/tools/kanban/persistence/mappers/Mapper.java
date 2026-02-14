@@ -17,5 +17,11 @@ public interface Mapper<T> {
 	 * @param object
 	 */
 	public void insert(T object);
+	
+	/**
+	 * Removes the entry associated to this object from the database.
+	 * @param object
+	 */
+	public void delete(T object);
 
 }
