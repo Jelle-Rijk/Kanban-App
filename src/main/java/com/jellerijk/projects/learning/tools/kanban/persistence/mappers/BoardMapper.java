@@ -48,6 +48,7 @@ public class BoardMapper implements Mapper<Board> {
 				lastInsertedId = keys.getInt(1);
 			Logger.log("Inserted a Board into the database.");
 		} catch (SQLException e) {
+			e.printStackTrace();
 			throw new DatabaseInsertException("Failed to insert Board", e);
 		}
 		return lastInsertedId;
