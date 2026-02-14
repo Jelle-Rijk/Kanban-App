@@ -14,20 +14,16 @@ public interface Stage extends Publisher {
 	public int getLimit();
 
 	/**
-	 * Change this Stage's number.
+	 * Changes this Stage's number.
+	 * 
 	 * @param stageNumber
 	 */
-	public void changeNumber(int stageNumber);
+	public void setNumber(int number);
 
 	/**
-	 * Updates this Stage's name.
+	 * Sets this Stage's title.
 	 * 
 	 * @param title
 	 */
-	public void rename(String title);
-
-	/**
-	 * Deletes this Stage from the database.
-	 */
-	public void delete();
+	public void setTitle(String title);
 }

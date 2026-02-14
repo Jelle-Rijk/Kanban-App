@@ -1,15 +1,12 @@
 package com.jellerijk.projects.learning.tools.kanban.domain.stage;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.jellerijk.projects.learning.tools.kanban.logging.Logger;
-import com.jellerijk.projects.learning.tools.kanban.persistence.database.DBController;
 import com.jellerijk.projects.learning.tools.kanban.utils.Subscriber;
 
+// TODO: Change rename, delete and changeNumber methods
 public class StageImpl implements Stage {
 	private final List<Subscriber> subs;
 
@@ -59,13 +56,15 @@ public class StageImpl implements Stage {
 		this.boardId = boardId;
 	}
 
-	private void setNumber(int number) {
+	@Override
+	public final void setNumber(int number) {
 		if (number < 0)
 			throw new IllegalArgumentException("Stage number must not be negative.");
 		this.number = number;
 	}
 
-	private void setTitle(String title) {
+	@Override
+	public final void setTitle(String title) {
 		if (title == null || title.isBlank())
 			throw new IllegalArgumentException("Stage title cannot be empty.");
 		if (this.title != null && this.title.equals(title))
@@ -83,21 +82,21 @@ public class StageImpl implements Stage {
 		this.limit = limit;
 	}
 
-	@Override
 	public void rename(String title) {
-		try {
-			setTitle(title);
-			String sql = "UPDATE Stage SET title = ? WHERE Number = ? AND BoardId = ?";
-			PreparedStatement stmt = DBController.getInstance().prepareStatement(sql);
-			stmt.setString(1, title);
-			stmt.setInt(2, number);
-			stmt.setInt(3, boardId);
-			stmt.execute();
-			Logger.log("Trying to rename Stage.");
-		} catch (Exception e) {
-			Logger.logError(String.format("Encountered an error while trying to rename the stage: %s", e.getMessage()));
-		}
-		notifySubs();
+		throw new UnsupportedOperationException();
+//		try {
+//			setTitle(title);
+//			String sql = "UPDATE Stage SET title = ? WHERE Number = ? AND BoardId = ?";
+//			PreparedStatement stmt = DBController.getInstance().prepareStatement(sql);
+//			stmt.setString(1, title);
+//			stmt.setInt(2, number);
+//			stmt.setInt(3, boardId);
+//			stmt.execute();
+//			Logger.log("Trying to rename Stage.");
+//		} catch (Exception e) {
+//			Logger.logError(String.format("Encountered an error while trying to rename the stage: %s", e.getMessage()));
+//		}
+//		notifySubs();
 
 	}
 
@@ -106,27 +105,27 @@ public class StageImpl implements Stage {
 		return subs;
 	}
 
-	@Override
 	public void delete() {
-		String sql = String.format("DELETE FROM Stage WHERE BoardId = %d AND Number = %d", boardId, number);
-		DBController.getInstance().update(sql);
+		throw new UnsupportedOperationException();
+//		String sql = String.format("DELETE FROM Stage WHERE BoardId = %d AND Number = %d", boardId, number);
+//		DBController.getInstance().update(sql);
 	}
-
-	@Override
+	
 	public void changeNumber(int stageNumber) {
-		String sql = "UPDATE Stage SET Number = ? WHERE BoardId = ? AND Number = ?";
-		PreparedStatement stmt;
-		try {
-			stmt = DBController.getInstance().prepareStatement(sql);
-			stmt.setInt(1, stageNumber);
-			stmt.setInt(2, boardId);
-			stmt.setInt(3, number);
-			setNumber(stageNumber);
-			stmt.execute();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		throw new UnsupportedOperationException();
+//		String sql = "UPDATE Stage SET Number = ? WHERE BoardId = ? AND Number = ?";
+//		PreparedStatement stmt;
+//		try {
+//			stmt = DBController.getInstance().prepareStatement(sql);
+//			stmt.setInt(1, stageNumber);
+//			stmt.setInt(2, boardId);
+//			stmt.setInt(3, number);
+//			setNumber(stageNumber);
+//			stmt.execute();
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 
 }
