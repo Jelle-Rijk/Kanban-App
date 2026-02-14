@@ -1,6 +1,5 @@
 package com.jellerijk.projects.learning.tools.kanban.domain.board;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import com.jellerijk.projects.learning.tools.kanban.persistence.dto.BoardDTO;
@@ -13,11 +12,12 @@ public interface BoardController extends Publisher {
 	};
 
 	/**
-	 * Creates a new Board.
+	 * Creates a new Board with the supplied name and description.
 	 * 
-	 * @param board
+	 * @param name
+	 * @param description
 	 */
-	public void createBoard(BoardDTO board) throws SQLException;
+	public void createBoard(String name, String description);
 
 	/**
 	 * Gets a Board by its id.
