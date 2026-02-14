@@ -23,7 +23,10 @@ public class BoardMapper implements Mapper<Board> {
 
 	private final static String INSERT_BOARD = String.format("INSERT INTO %s (%s, %s) VALUES (?,?)", TABLE, COL_NAME,
 			COL_DESCRIPTION);
+
 	private final static String QUERY_ALL = String.format("SELECT * FROM %s", TABLE);
+
+	private final static String DELETE_BOARD = String.format("DELETE FROM %s WHERE %s = ?", TABLE, COL_ID);
 
 	public BoardMapper() {
 		conn = DBController.getInstance().getConnection();
@@ -90,6 +93,17 @@ public class BoardMapper implements Mapper<Board> {
 			boards.add(board);
 		}
 		return boards;
+	}
+
+	// DELETE
+	@Override
+	public void delete(Board board) {
+		try (PreparedStatement query = conn.prepareStatement(DELETE_BOARD)) {
+			query.setInt(1, board.getId());
+		} catch (SQLException e) {
+			Logger.logError("Something went wrong while deleting Board from database.");
+			e.printStackTrace();
+		}
 	}
 
 }
