@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import com.jellerijk.projects.learning.tools.kanban.exceptions.DatabaseInsertException;
 import com.jellerijk.projects.learning.tools.kanban.logging.Logger;
-import com.jellerijk.projects.learning.tools.kanban.persistence.database.DBController;
 import com.jellerijk.projects.learning.tools.kanban.persistence.dto.BoardDTO;
 import com.jellerijk.projects.learning.tools.kanban.persistence.mappers.BoardMapper;
 
@@ -22,8 +20,7 @@ public class BoardRepositoryImpl implements BoardRepository {
 	@Override
 	public void addBoard(Board board) {
 		try {
-			mapper.insert(board);
-			int id = mapper.getLastInsertedId();
+			int id = mapper.insert(board);
 			board.setId(id);
 			boards.add(board);
 		} catch (Exception ex) {
@@ -59,11 +56,8 @@ public class BoardRepositoryImpl implements BoardRepository {
 
 	@Override
 	public void updateBoard(int id, BoardDTO data) {
-		String sql = String.format("UPDATE Board SET name=\"%s\", description=\"%s\" WHERE BoardId=%d", data.name(),
-				data.description(), id);
-		DBController.getInstance().update(sql);
-		Board board = getBoard(id);
-		board.updateData(data);
+		// TODO: reimplement board updates.
+		throw new UnsupportedOperationException();
 	}
 
 }
