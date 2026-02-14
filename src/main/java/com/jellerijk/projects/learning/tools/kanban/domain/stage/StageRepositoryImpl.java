@@ -3,16 +3,17 @@ package com.jellerijk.projects.learning.tools.kanban.domain.stage;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.jellerijk.projects.learning.tools.kanban.logging.Logger;
+import com.jellerijk.projects.learning.tools.kanban.persistence.mappers.StageMapper;
+
 public class StageRepositoryImpl implements StageRepository {
+	private StageMapper mapper;
 	private List<Stage> stages;
 
-	public StageRepositoryImpl(List<Stage> stages) {
-		setStages(stages);
-	};
-
 	public StageRepositoryImpl() {
-		this(new ArrayList<Stage>());
-	}
+		mapper = new StageMapper();
+		setStages((ArrayList<Stage>) mapper.getAll());
+	};
 
 	@Override
 	public void setStages(List<Stage> stages) {
@@ -23,12 +24,24 @@ public class StageRepositoryImpl implements StageRepository {
 
 	@Override
 	public void add(Stage stage) {
-		stages.add(stage);
+		try {
+			mapper.insert(stage);
+			stages.add(stage);
+		} catch (Exception ex) {
+			Logger.logError("An exception occured while adding a new Stage.");
+			Logger.logError(ex);
+		}
 	}
 
 	@Override
 	public void remove(Stage stage) {
-		stages.remove(stage);
+		try {
+			mapper.delete(stage);
+			stages.remove(stage);
+		} catch (Exception ex) {
+			Logger.logError("Error occured while removing stage.");
+			Logger.logError(ex);
+		}
 	}
 
 	@Override
