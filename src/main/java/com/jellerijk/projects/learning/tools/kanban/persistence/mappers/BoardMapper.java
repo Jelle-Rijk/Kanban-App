@@ -100,6 +100,8 @@ public class BoardMapper implements Mapper<Board> {
 	public void delete(Board board) {
 		try (PreparedStatement query = conn.prepareStatement(DELETE_BOARD)) {
 			query.setInt(1, board.getId());
+			query.execute();
+			Logger.log(String.format("Removed board %d from database", board.getId()));
 		} catch (SQLException e) {
 			Logger.logError("Something went wrong while deleting Board from database.");
 			e.printStackTrace();
