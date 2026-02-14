@@ -4,86 +4,74 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import com.jellerijk.projects.learning.tools.kanban.domain.board.Board;
 import com.jellerijk.projects.learning.tools.kanban.domain.board.BoardImpl;
 import com.jellerijk.projects.learning.tools.kanban.exceptions.DatabaseInsertException;
+import com.jellerijk.projects.learning.tools.kanban.exceptions.DatabaseReadException;
 import com.jellerijk.projects.learning.tools.kanban.logging.Logger;
 import com.jellerijk.projects.learning.tools.kanban.persistence.database.DBController;
 
 public class BoardMapper implements Mapper<Board> {
-	private Connection conn;
+	private DBController dbc;
 
-	private final static String TABLE = "Board";
-	private final static String COL_ID = "BoardId";
-	private final static String COL_NAME = "Name";
-	private final static String COL_DESCRIPTION = "Description";
+	private static final String TABLE = "Board";
+	private static final String COL_ID = "BoardId";
+	private static final String COL_NAME = "Name";
+	private static final String COL_DESCRIPTION = "Description";
 
-	private final static String INSERT_BOARD = String.format("INSERT INTO %s (%s, %s) VALUES (?,?)", TABLE, COL_NAME,
+	private static final String INSERT_BOARD = String.format("INSERT INTO %s (%s, %s) VALUES (?,?)", TABLE, COL_NAME,
 			COL_DESCRIPTION);
 
-	private final static String QUERY_ALL = String.format("SELECT * FROM %s", TABLE);
+	private static final String QUERY_ALL = String.format("SELECT * FROM %s", TABLE);
 
-	private final static String DELETE_BOARD = String.format("DELETE FROM %s WHERE %s = ?", TABLE, COL_ID);
+	private static final String DELETE_BOARD = String.format("DELETE FROM %s WHERE %s = ?", TABLE, COL_ID);
 
 	public BoardMapper() {
-		conn = DBController.getInstance().getConnection();
+		dbc = DBController.getInstance();
 	}
 
 //	CREATE
 	@Override
-	public void insert(Board board) throws DatabaseInsertException {
-		try (PreparedStatement query = conn.prepareStatement(INSERT_BOARD)) {
+	public int insert(Board board) throws DatabaseInsertException {
+		int lastInsertedId = -1;
+		try (Connection conn = dbc.getConnection();
+				PreparedStatement query = conn.prepareStatement(INSERT_BOARD, Statement.RETURN_GENERATED_KEYS)) {
 			query.setString(1, board.getName());
 			query.setString(2, board.getDescription());
-			query.execute();
+			query.executeUpdate();
+			ResultSet keys = query.getGeneratedKeys();
+			if (keys.next())
+				lastInsertedId = keys.getInt(1);
 			Logger.log("Inserted a Board into the database.");
 		} catch (SQLException e) {
-			Logger.logError("Something went wrong while inserting a Board");
-			throw new DatabaseInsertException();
+			throw new DatabaseInsertException("Failed to insert Board", e);
 		}
+		return lastInsertedId;
 	}
 
 //	READ
 	@Override
 	public Collection<Board> getAll() {
-		Collection<Board> boards = new ArrayList<Board>();
-		try (PreparedStatement query = conn.prepareStatement(QUERY_ALL)) {
+		Collection<Board> boards = new ArrayList<>();
+		try (Connection conn = dbc.getConnection(); PreparedStatement query = conn.prepareStatement(QUERY_ALL)) {
 			ResultSet results = query.executeQuery();
 			boards = mapResults(results);
 			Logger.log(String.format("Loaded %d Board records.", boards.size()));
+			return boards;
 		} catch (SQLException e) {
 			Logger.logError("Something went wrong while retrieving all Boards from database.");
 			Logger.logError(e);
-			e.printStackTrace();
 		}
-		return boards;
-	}
-
-	/**
-	 * Gets the last inserted Board's id.
-	 * 
-	 * @return Id of the last inserted Board.
-	 * @throws SQLException - If the ID was not found.
-	 */
-	public int getLastInsertedId() throws SQLException {
-		try (PreparedStatement query = conn.prepareStatement("SELECT seq FROM sqlite_sequence WHERE name = ?")) {
-			query.setString(1, TABLE);
-			ResultSet results = query.executeQuery();
-			if (!results.next())
-				throw new SQLException();
-			return results.getInt("seq");
-		} catch (SQLException e) {
-			Logger.logError("Encountered an exception while retrieving last inserted Board Id.");
-			throw new SQLException();
-		}
+		throw new DatabaseReadException();
 	}
 
 	// HELPER METHODS
 	private Collection<Board> mapResults(ResultSet results) throws SQLException {
-		Collection<Board> boards = new ArrayList<Board>();
+		Collection<Board> boards = new ArrayList<>();
 		while (results.next()) {
 			int id = results.getInt(COL_ID);
 			String name = results.getString(COL_NAME);
@@ -98,13 +86,15 @@ public class BoardMapper implements Mapper<Board> {
 	// DELETE
 	@Override
 	public void delete(Board board) {
-		try (PreparedStatement query = conn.prepareStatement(DELETE_BOARD)) {
+		try (Connection conn = dbc.getConnection(); PreparedStatement query = conn.prepareStatement(DELETE_BOARD)) {
 			query.setInt(1, board.getId());
-			query.execute();
-			Logger.log(String.format("Removed board %d from database", board.getId()));
+			int rows = query.executeUpdate();
+			String log = rows == 0 ? String.format("No board found with id %d", board.getId())
+					: String.format("Removed board %d from database", board.getId());
+			Logger.log(log);
 		} catch (SQLException e) {
 			Logger.logError("Something went wrong while deleting Board from database.");
-			e.printStackTrace();
+			Logger.logError(e);
 		}
 	}
 
