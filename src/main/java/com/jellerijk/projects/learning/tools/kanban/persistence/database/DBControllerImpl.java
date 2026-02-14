@@ -4,26 +4,22 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 import com.jellerijk.projects.learning.tools.kanban.config.GlobalVars;
 import com.jellerijk.projects.learning.tools.kanban.logging.Logger;
 import com.jellerijk.projects.learning.tools.kanban.persistence.database.installer.DBInstaller;
 import com.jellerijk.projects.learning.tools.kanban.persistence.database.installer.DBInstallerImpl;
 
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-
 public class DBControllerImpl implements DBController {
 	private static DBController instance;
 	private final String databaseLocation;
-	private Connection connection;
+	private final String databaseURL;
 
 	private DBControllerImpl() {
-		databaseLocation = GlobalVars.DB_PATH;
+		this.databaseLocation = GlobalVars.DB_PATH;
+		this.databaseURL = String.format("jdbc:sqlite:%s", databaseLocation);
 	}
 
 	public static DBController getInstance() {
@@ -38,71 +34,26 @@ public class DBControllerImpl implements DBController {
 	}
 
 	@Override
-	public void connect() {
-		SQLiteConnection sqlConn = new SQLiteConnectionImpl(databaseLocation);
-		connection = sqlConn.getConnection();
-		Logger.log(String.format("Connection %s", connection == null ? "failed" : "succeeded"));
-	}
-
-	@Override
-	public void installDatabase() {
+	public void installDatabase() throws IOException {
 		DBInstaller installer = new DBInstallerImpl(databaseLocation);
 		try {
 			installer.buildDatabase();
 		} catch (IOException e) {
-			handleDatabaseException(e);
+			throw new IOException("Something went wrong while installing the database.", e);
 		}
-		;
 		Logger.log("Succesfully installed the database.");
 	}
 
-	// TODO: Convert to Optional<ResultSet>
 	@Override
-	public ResultSet query(String sql) {
+	public Connection getConnection() throws SQLException {
 		try {
-			Statement stmt = connection.createStatement();
-			return stmt.executeQuery(sql);
-		} catch (SQLException e) {
-			handleDatabaseException(e);
+			Class.forName("org.sqlite.JDBC");
+		} catch (ClassNotFoundException e) {
+			Logger.logError("Made a mistake in the forName declaration within getConnection in DBControllerImpl");
 		}
-		throw new IllegalArgumentException("Could not query the database.");
-	}
+		Connection conn = DriverManager.getConnection(databaseURL);
+		return conn;
 
-	@Override
-	public void update(String sql) {
-		try {
-			Statement stmt = connection.createStatement();
-			stmt.executeUpdate(sql);
-		} catch (SQLException e) {
-			handleDatabaseException(e);
-		}
-	}
-
-	private void handleDatabaseException(Exception ex) {
-		Alert alert = new Alert(AlertType.ERROR);
-		alert.setTitle("Database Exception");
-		alert.setHeaderText(String.format("%s thrown", ex.getClass().getSimpleName()));
-		alert.setContentText(ex.getMessage());
-		ex.printStackTrace();
-		alert.showAndWait();
-	}
-
-	@Override
-	public PreparedStatement prepareStatement(String sql) throws SQLException {
-		return connection.prepareStatement(sql);
-	}
-
-	@Override
-	public int getLastInserted(String tableName) throws SQLException {
-		PreparedStatement pstmt = prepareStatement("SELECT seq FROM sqlite_sequence WHERE name=?");
-		pstmt.setString(1, tableName);
-		ResultSet rs = pstmt.executeQuery();
-		return rs.getInt(1);
-	}
-
-	@Override
-	public Connection getConnection() {
-		return connection;
 	};
 
 }
