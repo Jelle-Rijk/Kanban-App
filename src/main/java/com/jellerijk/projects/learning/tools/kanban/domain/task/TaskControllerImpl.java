@@ -22,9 +22,9 @@ public class TaskControllerImpl implements TaskController {
 	}
 
 	@Override
-	public int createTask(TaskDTO data) {
+	public int createTask(String description, int board, int stageNumber) {
 		try {
-			Task task = new TaskImpl(data.description(), boardId, data.stageNumber(), false);
+			Task task = new TaskImpl(description, board, stageNumber, false);
 			int id = taskRepo.addTask(task);
 			notifySubs(PublishedMessageType.REPO_UPDATE);
 			return id;
