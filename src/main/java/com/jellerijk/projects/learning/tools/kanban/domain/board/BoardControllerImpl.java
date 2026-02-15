@@ -1,6 +1,5 @@
 package com.jellerijk.projects.learning.tools.kanban.domain.board;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
