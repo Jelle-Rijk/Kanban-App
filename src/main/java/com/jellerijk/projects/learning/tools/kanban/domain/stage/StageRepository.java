@@ -21,8 +21,9 @@ public interface StageRepository {
 	 * Adds a Stage to the repository.
 	 * 
 	 * @param stage
+	 * @return int - id of the added stage.
 	 */
-	public void add(Stage stage);
+	public int add(Stage stage);
 
 	/**
 	 * Removes a Stage from the repository.
@@ -38,7 +39,7 @@ public interface StageRepository {
 	 * @param stageNumber
 	 * @return
 	 */
-	public Stage getStage(int stageNumber, int boardId);
+	public Stage getStage(int id);
 
 	/**
 	 * Rename the chosen stage.
@@ -48,6 +49,15 @@ public interface StageRepository {
 	 * @param name
 	 * @return
 	 */
-	public void rename(int stageNumber, int boardId, String name);
+	public void rename(int id, String name);
+
+	/**
+	 * Changes the stageNumber for the given stage.
+	 * 
+	 * @param oldStageNumber
+	 * @param boardId
+	 * @param newStageNumber
+	 */
+	public void changeStageNumber(int id, int newStageNumber);
 
 }

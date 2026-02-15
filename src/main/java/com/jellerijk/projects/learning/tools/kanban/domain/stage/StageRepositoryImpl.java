@@ -3,6 +3,8 @@ package com.jellerijk.projects.learning.tools.kanban.domain.stage;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.jellerijk.projects.learning.tools.kanban.exceptions.DatabaseInsertException;
+import com.jellerijk.projects.learning.tools.kanban.exceptions.DatabaseUpdateException;
 import com.jellerijk.projects.learning.tools.kanban.logging.Logger;
 import com.jellerijk.projects.learning.tools.kanban.persistence.mappers.StageMapper;
 
@@ -23,13 +25,13 @@ public class StageRepositoryImpl implements StageRepository {
 	}
 
 	@Override
-	public void add(Stage stage) {
+	public int add(Stage stage) {
 		try {
-			mapper.insert(stage);
+			int id = mapper.insert(stage);
 			stages.add(stage);
+			return id;
 		} catch (Exception ex) {
-			Logger.logError("An exception occured while adding a new Stage.");
-			Logger.logError(ex);
+			throw new DatabaseInsertException("An exception occured while adding a new Stage.", ex);
 		}
 	}
 
@@ -39,15 +41,13 @@ public class StageRepositoryImpl implements StageRepository {
 			mapper.delete(stage);
 			stages.remove(stage);
 		} catch (Exception ex) {
-			Logger.logError("Error occured while removing stage.");
-			Logger.logError(ex);
+			throw new DatabaseUpdateException("An exception occured while deleting a Stage", ex);
 		}
 	}
 
 	@Override
-	public Stage getStage(int stageNumber, int boardId) {
-		return stages.stream().filter(stage -> stage.getBoardId() == boardId && stage.getNumber() == stageNumber)
-				.findFirst().orElseThrow();
+	public Stage getStage(int id) {
+		return stages.stream().filter(stage -> stage.getId() == id).findFirst().orElseThrow();
 	}
 
 	@Override
@@ -56,15 +56,19 @@ public class StageRepositoryImpl implements StageRepository {
 	}
 
 	@Override
-	public void rename(int stageNumber, int boardId, String name) {
+	public void rename(int id, String name) {
 		try {
-			Stage stage = getStage(stageNumber, boardId);
+			Stage stage = getStage(id);
 			mapper.updateTitle(stage, name);
 			stage.setTitle(name);
 		} catch (Exception ex) {
 			Logger.logError(ex);
 		}
+	}
 
+	@Override
+	public void changeStageNumber(int id, int newStageNumber) {
+		throw new UnsupportedOperationException();
 	}
 
 }
