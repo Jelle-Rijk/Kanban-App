@@ -11,21 +11,21 @@ import com.jellerijk.projects.learning.tools.kanban.persistence.dto.StageDTO;
 import com.jellerijk.projects.learning.tools.kanban.utils.Subscriber;
 
 public class StageControllerImpl implements StageController {
-	private final int boardId;
+	private static StageController instance;
+
 	private final StageRepository stageRepo;
 	private List<Subscriber> subs;
 
-	public StageControllerImpl(int boardId) {
-		if (boardId < 0)
-			throw new IllegalArgumentException(String.format("Supplied boardId for StageController was %d", boardId));
-		this.boardId = boardId;
+	private StageControllerImpl() {
 		this.subs = new ArrayList<Subscriber>();
 		stageRepo = new StageRepositoryImpl();
 	}
 
-	@Override
-	public int getBoardId() {
-		return boardId;
+	public static StageController getInstance() {
+		if (instance == null)
+			instance = new StageControllerImpl();
+		return instance;
+
 	}
 
 	@Override
@@ -36,7 +36,7 @@ public class StageControllerImpl implements StageController {
 	}
 
 	@Override
-	public void deleteStage(int stageNumber) {
+	public void deleteStage(int stageNumber, int boardId) {
 		Stage stage = stageRepo.getStage(boardId, stageNumber);
 		stageRepo.remove(stage);
 
@@ -56,7 +56,7 @@ public class StageControllerImpl implements StageController {
 	}
 
 	@Override
-	public StageDTO getStage(int stageNumber) {
+	public StageDTO getStage(int stageNumber, int boardId) {
 		return StageDTO.convert(stageRepo.getStage(boardId, stageNumber));
 	}
 
@@ -67,20 +67,20 @@ public class StageControllerImpl implements StageController {
 
 	// TODO: Reimplement
 	@Override
-	public void renameStage(int stageNumber, String title) {
+	public void renameStage(int stageNumber, int boardId, String title) {
 		throw new UnsupportedOperationException();
 //		Stage stage = stageRepo.getStage(boardId, stageNumber);
 //		stage.rename(title);
 	}
 
 	@Override
-	public void subscribeToStage(Subscriber sub, int stageNumber) {
+	public void subscribeToStage(Subscriber sub, int stageNumber, int boardId) {
 		Stage stage = stageRepo.getStage(boardId, stageNumber);
 		stage.subscribe(sub);
 	}
 
 	@Override
-	public int countStages() {
+	public int countStages(int boardId) {
 		return stageRepo.getStages().size();
 	}
 

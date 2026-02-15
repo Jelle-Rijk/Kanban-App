@@ -8,12 +8,9 @@ import com.jellerijk.projects.learning.tools.kanban.utils.Publisher;
 import com.jellerijk.projects.learning.tools.kanban.utils.Subscriber;
 
 public interface StageController extends Publisher {
-	/**
-	 * Returns the id of the Board this StageController belongs to.
-	 * 
-	 * @return
-	 */
-	public int getBoardId();
+	public static StageController getInstance() {
+		return StageControllerImpl.getInstance();
+	}
 
 	/**
 	 * Creates a new stage.
@@ -26,8 +23,9 @@ public interface StageController extends Publisher {
 	 * Deletes the stage from the Board.
 	 * 
 	 * @param stageNumber
+	 * @param boardId
 	 */
-	public void deleteStage(int stageNumber);
+	public void deleteStage(int number, int boardId);
 
 	/**
 	 * Returns all stages managed by this StageController.
@@ -42,7 +40,7 @@ public interface StageController extends Publisher {
 	 * @param stageNumber
 	 * @return
 	 */
-	public StageDTO getStage(int stageNumber);
+	public StageDTO getStage(int stageNumber, int boardId);
 
 	/**
 	 * Renames the chosen stage.
@@ -52,13 +50,14 @@ public interface StageController extends Publisher {
 	 */
 
 	/**
-	 * Returns the number of stages in this StageController's repository.
+	 * Returns the number of stages belonging to the supplied board.
 	 * 
-	 * @return
+	 * @param boardId - the id of the board of which to count the stages.
+	 * @return number of stages
 	 */
-	public int countStages();
+	public int countStages(int boardId);
 
-	public void renameStage(int stageNumber, String title);
+	public void renameStage(int stageNumber, int boardId, String title);
 
 	/**
 	 * Subscribes to the specified Stage.
@@ -66,6 +65,6 @@ public interface StageController extends Publisher {
 	 * @param sub
 	 * @param stageNumber
 	 */
-	public void subscribeToStage(Subscriber sub, int stageNumber);
+	public void subscribeToStage(Subscriber sub, int stageNumber, int boardId);
 
 }
