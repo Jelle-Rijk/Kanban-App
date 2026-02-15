@@ -20,6 +20,7 @@ public class StageMapper implements Mapper<Stage> {
 	private DBController dbc;
 
 	private static final String TABLE = "Stage";
+	private static final String COL_ID = "StageId";
 	private static final String COL_NUMBER = "Number";
 	private static final String COL_BOARD = "BoardId";
 	private static final String COL_TITLE = "Title";
@@ -30,24 +31,26 @@ public class StageMapper implements Mapper<Stage> {
 		this.dbc = DBController.getInstance();
 	}
 
-	private static final String INSERT_STAGE = String.format("INSERT INTO %s (%s, %s, %s, %s, %s) VALUES (?,?,?,?,?)",
-			TABLE, COL_NUMBER, COL_BOARD, COL_TITLE, COL_DESCRIPTION, COL_TASKLIMIT);
+	private static final String INSERT_STAGE = String.format("INSERT INTO %s (%s, %s, %s) VALUES (?,?,?)", TABLE,
+			COL_NUMBER, COL_BOARD, COL_TITLE);
 
 	@Override
 	public int insert(Stage stage) {
+		int lastInsertedId = -1;
 		try (Connection conn = dbc.getConnection(); PreparedStatement query = conn.prepareStatement(INSERT_STAGE)) {
 			query.setInt(1, stage.getNumber());
 			query.setInt(2, stage.getBoardId());
 			query.setString(3, stage.getTitle());
-			query.setString(4, stage.getDescription());
-			query.setInt(5, stage.getLimit());
 			query.executeUpdate();
+			ResultSet keys = query.getGeneratedKeys();
+			if (keys.next())
+				lastInsertedId = keys.getInt(1);
 			Logger.log("Inserted a Stage into the database.");
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseInsertException("Failed to insert Stage", e);
 		}
-		return -1;
+		return lastInsertedId;
 	}
 
 	private static final String QUERY_ALL = String.format("SELECT * FROM %s", TABLE);
@@ -83,14 +86,13 @@ public class StageMapper implements Mapper<Stage> {
 	}
 
 	// UPDATE
-	private static final String UPDATE_TITLE = String.format("UPDATE %s SET %s = ? WHERE %s = ? AND %s = ?", TABLE,
-			COL_TITLE, COL_NUMBER, COL_BOARD);
+	private static final String UPDATE_TITLE = String.format("UPDATE %s SET %s = ? WHERE %s = ?", TABLE, COL_TITLE,
+			COL_ID);
 
 	public void updateTitle(Stage stage, String newTitle) {
 		try (Connection conn = dbc.getConnection(); PreparedStatement query = conn.prepareStatement(UPDATE_TITLE)) {
 			query.setString(1, newTitle);
-			query.setInt(2, stage.getNumber());
-			query.setInt(3, stage.getBoardId());
+			query.setInt(2, stage.getId());
 			query.executeUpdate();
 			Logger.log("Stage name updated.");
 		} catch (SQLException e) {
@@ -99,14 +101,12 @@ public class StageMapper implements Mapper<Stage> {
 	}
 
 	// DELETE
-	private static final String DELETE_STAGE = String.format("DELETE FROM %s WHERE %s = ? AND %s = ?", TABLE,
-			COL_NUMBER, COL_BOARD);
+	private static final String DELETE_STAGE = String.format("DELETE FROM %s WHERE %s = ?", TABLE, COL_ID);
 
 	@Override
 	public void delete(Stage stage) {
 		try (Connection conn = dbc.getConnection(); PreparedStatement query = conn.prepareStatement(DELETE_STAGE)) {
-			query.setInt(1, stage.getNumber());
-			query.setInt(2, stage.getBoardId());
+			query.setInt(1, stage.getId());
 			int rows = query.executeUpdate();
 			String log = rows == 0
 					? String.format("No stage found with number %d on board %d", stage.getNumber(), stage.getBoardId())
