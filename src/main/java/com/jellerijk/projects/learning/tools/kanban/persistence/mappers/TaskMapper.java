@@ -26,7 +26,7 @@ public class TaskMapper implements Mapper<Task> {
 	private static final String COL_COMPLETED = "Completed";
 
 	private static final String INSERT_TASK = String.format("INSERT INTO %s (%s, %s, %s, %s) VALUES (?,?,?,?)",
-			COL_DESCRIPTION, COL_STAGE, COL_BOARD, COL_COMPLETED);
+			TABLE, COL_DESCRIPTION, COL_STAGE, COL_BOARD, COL_COMPLETED);
 	private static final String QUERY_ALL = String.format("SELECT * FROM %s", TABLE);
 	private static final String DELETE_TASK = String.format("DELETE FROM %s WHERE %s = ?", TABLE, COL_ID);
 
