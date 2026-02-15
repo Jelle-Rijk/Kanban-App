@@ -49,7 +49,6 @@ public class TaskMapper implements Mapper<Task> {
 			ResultSet keys = query.getGeneratedKeys();
 			if (keys.next())
 				lastInsertedId = keys.getInt(1);
-			Logger.log("Inserted a Task into the database.");
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseInsertException("Failed to insert Task", e);
@@ -63,7 +62,6 @@ public class TaskMapper implements Mapper<Task> {
 		try (Connection conn = dbc.getConnection(); PreparedStatement query = conn.prepareStatement(QUERY_ALL)) {
 			ResultSet results = query.executeQuery();
 			tasks = mapResults(results);
-			Logger.log(String.format("Loaded %d Task records.", tasks.size()));
 			return tasks;
 		} catch (SQLException e) {
 			Logger.logError("Something went wrong while retrieving all Boards from database.");

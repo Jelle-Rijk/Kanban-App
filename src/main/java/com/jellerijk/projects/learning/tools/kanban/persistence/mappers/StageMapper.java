@@ -45,7 +45,6 @@ public class StageMapper implements Mapper<Stage> {
 			ResultSet keys = query.getGeneratedKeys();
 			if (keys.next())
 				lastInsertedId = keys.getInt(1);
-			Logger.log("Inserted a Stage into the database.");
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseInsertException("Failed to insert Stage", e);
@@ -61,7 +60,6 @@ public class StageMapper implements Mapper<Stage> {
 		try (Connection conn = dbc.getConnection(); PreparedStatement query = conn.prepareStatement(QUERY_ALL)) {
 			ResultSet results = query.executeQuery();
 			stages = mapResults(results);
-			Logger.log(String.format("Loaded %d Stage records.", stages.size()));
 			return stages;
 		} catch (SQLException e) {
 			Logger.logError("Something went wrong while retrieving all Stages from database.");

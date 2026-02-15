@@ -46,7 +46,6 @@ public class BoardMapper implements Mapper<Board> {
 			ResultSet keys = query.getGeneratedKeys();
 			if (keys.next())
 				lastInsertedId = keys.getInt(1);
-			Logger.log("Inserted a Board into the database.");
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseInsertException("Failed to insert Board", e);
@@ -61,7 +60,6 @@ public class BoardMapper implements Mapper<Board> {
 		try (Connection conn = dbc.getConnection(); PreparedStatement query = conn.prepareStatement(QUERY_ALL)) {
 			ResultSet results = query.executeQuery();
 			boards = mapResults(results);
-			Logger.log(String.format("Loaded %d Board records.", boards.size()));
 			return boards;
 		} catch (SQLException e) {
 			Logger.logError("Something went wrong while retrieving all Boards from database.");
