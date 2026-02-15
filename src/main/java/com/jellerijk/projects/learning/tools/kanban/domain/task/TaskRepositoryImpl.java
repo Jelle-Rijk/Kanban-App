@@ -4,22 +4,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.jellerijk.projects.learning.tools.kanban.exceptions.DatabaseInsertException;
+import com.jellerijk.projects.learning.tools.kanban.logging.Logger;
+import com.jellerijk.projects.learning.tools.kanban.persistence.mappers.TaskMapper;
+
 public class TaskRepositoryImpl implements TaskRepository {
 	private List<Task> tasks;
+	private TaskMapper mapper;
 
 	public TaskRepositoryImpl() {
-		this(new ArrayList<Task>());
-	}
-
-	public TaskRepositoryImpl(List<Task> tasks) {
-		if (tasks == null)
-			throw new IllegalArgumentException("Tasks repository cannot be null");
-		this.tasks = tasks;
+		mapper = new TaskMapper();
+		tasks = (ArrayList<Task>) mapper.getAll();
 	}
 
 	@Override
 	public void addTask(Task task) {
-		tasks.add(task);
+		try {
+			mapper.insert(task);
+			tasks.add(task);
+		} catch (DatabaseInsertException ex) {
+			Logger.logError("Could not add task");
+			Logger.logError(ex);
+		}
 	}
 
 	@Override
@@ -40,8 +46,14 @@ public class TaskRepositoryImpl implements TaskRepository {
 
 	@Override
 	public void remove(int id) {
-		Task task = getTask(id);
-		tasks.remove(task);
+		try {
+			Task task = getTask(id);
+			mapper.delete(task);
+			tasks.remove(task);
+		} catch (Exception ex) {
+			Logger.logError(String.format("Something went wrong while removing task.", id));
+			Logger.logError(ex);
+		}
 	}
 
 }
