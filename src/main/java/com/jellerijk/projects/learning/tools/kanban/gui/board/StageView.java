@@ -5,6 +5,7 @@ import java.util.List;
 import com.jellerijk.projects.learning.tools.kanban.domain.stage.StageController;
 import com.jellerijk.projects.learning.tools.kanban.domain.task.TaskController;
 import com.jellerijk.projects.learning.tools.kanban.persistence.dto.StageDTO;
+import com.jellerijk.projects.learning.tools.kanban.persistence.dto.TaskDTO;
 import com.jellerijk.projects.learning.tools.kanban.utils.PublishedMessageType;
 import com.jellerijk.projects.learning.tools.kanban.utils.Subscriber;
 
@@ -30,7 +31,7 @@ public class StageView extends VBox implements Subscriber {
 		this.tc = tc;
 		tc.subscribe(this);
 
-		sc.subscribeToStage(this, data.number());
+		sc.subscribeToStage(this, data.number(), data.boardId());
 
 		buildGUI();
 		updateStageData();
@@ -78,23 +79,23 @@ public class StageView extends VBox implements Subscriber {
 
 	public void handleRename(String title) {
 		setTitle(title);
-		sc.renameStage(data.number(), title);
+		sc.renameStage(data.number(), data.boardId(), title);
 	}
 
 	public void handleDelete() {
-		sc.deleteStage(data.number());
+		sc.deleteStage(data.number(), data.boardId());
 	}
 
 	private void updateTaskList() {
 		taskList.getChildren().clear();
-		List<Integer> tasks = tc.getTaskIds(data.number());
-		for (int taskId : tasks) {
-			taskList.getChildren().add(new TaskCard(tc, taskId, data));
+		List<TaskDTO> tasks = tc.getTasksForStage(data.number(), data.boardId());
+		for (TaskDTO task : tasks) {
+			taskList.getChildren().add(new TaskCard(tc, task.id(), data));
 		}
 	}
 
 	private void updateStageData() {
-		data = sc.getStage(data.number());
+		data = sc.getStage(data.number(), data.boardId());
 		setTitle(data.title());
 	}
 
