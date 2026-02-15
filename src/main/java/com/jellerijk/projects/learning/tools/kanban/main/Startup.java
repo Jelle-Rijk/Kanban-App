@@ -1,5 +1,6 @@
 package com.jellerijk.projects.learning.tools.kanban.main;
 
+import java.io.IOException;
 import java.util.Optional;
 
 import com.jellerijk.projects.learning.tools.kanban.gui.boardselector.BoardSelector;
@@ -8,6 +9,7 @@ import com.jellerijk.projects.learning.tools.kanban.persistence.database.DBContr
 import com.jellerijk.projects.learning.tools.kanban.persistence.database.DBControllerImpl;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -22,7 +24,7 @@ public class Startup extends Application {
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		connectToDatabase();
+		verifyDatabase();
 
 		BoardSelector root = new BoardSelector();
 
@@ -35,7 +37,7 @@ public class Startup extends Application {
 //		Platform.exit();
 	}
 
-	public void connectToDatabase() {
+	public void verifyDatabase() {
 		DBController dbc = DBControllerImpl.getInstance();
 		if (!dbc.verify()) {
 			String error = "Database not found";
@@ -46,10 +48,17 @@ public class Startup extends Application {
 			alert.setContentText("Would you like to install the database?");
 			Optional<ButtonType> result = alert.showAndWait();
 			if (result.isPresent() && result.get().equals(ButtonType.OK)) {
-				dbc.installDatabase();
+				try {
+					dbc.installDatabase();
+				} catch (IOException e) {
+					Logger.logError(e);
+				}
 			}
 		}
-		dbc.connect();
+		if (!dbc.verify()) {
+			Logger.logError("Database was not installed correctly.");
+			Platform.exit();
+		}
 	}
 
 }
