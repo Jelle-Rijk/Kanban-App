@@ -45,7 +45,7 @@ public class StageRepositoryImpl implements StageRepository {
 	}
 
 	@Override
-	public Stage getStage(int boardId, int stageNumber) {
+	public Stage getStage(int stageNumber, int boardId) {
 		return stages.stream().filter(stage -> stage.getBoardId() == boardId && stage.getNumber() == stageNumber)
 				.findFirst().orElseThrow();
 	}
@@ -53,6 +53,18 @@ public class StageRepositoryImpl implements StageRepository {
 	@Override
 	public List<Stage> getStages() {
 		return stages;
+	}
+
+	@Override
+	public void rename(int stageNumber, int boardId, String name) {
+		try {
+			Stage stage = getStage(stageNumber, boardId);
+			mapper.updateTitle(stage, name);
+			stage.setTitle(name);
+		} catch (Exception ex) {
+			Logger.logError(ex);
+		}
+
 	}
 
 }

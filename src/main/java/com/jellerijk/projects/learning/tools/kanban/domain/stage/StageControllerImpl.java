@@ -57,7 +57,7 @@ public class StageControllerImpl implements StageController {
 
 	@Override
 	public StageDTO getStage(int stageNumber, int boardId) {
-		return StageDTO.convert(stageRepo.getStage(boardId, stageNumber));
+		return StageDTO.convert(stageRepo.getStage(stageNumber, boardId));
 	}
 
 	@Override
@@ -65,17 +65,14 @@ public class StageControllerImpl implements StageController {
 		return subs;
 	}
 
-	// TODO: Reimplement
 	@Override
 	public void renameStage(int stageNumber, int boardId, String title) {
-		throw new UnsupportedOperationException();
-//		Stage stage = stageRepo.getStage(boardId, stageNumber);
-//		stage.rename(title);
+		stageRepo.rename(stageNumber, boardId, title);
 	}
 
 	@Override
 	public void subscribeToStage(Subscriber sub, int stageNumber, int boardId) {
-		Stage stage = stageRepo.getStage(boardId, stageNumber);
+		Stage stage = stageRepo.getStage(stageNumber, boardId);
 		stage.subscribe(sub);
 	}
 

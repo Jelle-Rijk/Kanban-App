@@ -109,12 +109,6 @@ public class StageImpl implements Stage {
 		return subs;
 	}
 
-	public void delete() {
-		throw new UnsupportedOperationException();
-//		String sql = String.format("DELETE FROM Stage WHERE BoardId = %d AND Number = %d", boardId, number);
-//		DBController.getInstance().update(sql);
-	}
-
 	public void changeNumber(int stageNumber) {
 		throw new UnsupportedOperationException();
 //		String sql = "UPDATE Stage SET Number = ? WHERE BoardId = ? AND Number = ?";

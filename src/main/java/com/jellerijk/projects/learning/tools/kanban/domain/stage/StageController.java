@@ -57,6 +57,12 @@ public interface StageController extends Publisher {
 	 */
 	public int countStages(int boardId);
 
+	/**
+	 * Renames the supplied Stage.
+	 * @param stageNumber
+	 * @param boardId
+	 * @param title
+	 */
 	public void renameStage(int stageNumber, int boardId, String title);
 
 	/**

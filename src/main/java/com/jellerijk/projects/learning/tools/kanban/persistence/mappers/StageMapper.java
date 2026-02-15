@@ -12,6 +12,7 @@ import com.jellerijk.projects.learning.tools.kanban.domain.stage.Stage;
 import com.jellerijk.projects.learning.tools.kanban.domain.stage.StageImpl;
 import com.jellerijk.projects.learning.tools.kanban.exceptions.DatabaseInsertException;
 import com.jellerijk.projects.learning.tools.kanban.exceptions.DatabaseReadException;
+import com.jellerijk.projects.learning.tools.kanban.exceptions.DatabaseUpdateException;
 import com.jellerijk.projects.learning.tools.kanban.logging.Logger;
 import com.jellerijk.projects.learning.tools.kanban.persistence.database.DBController;
 
@@ -25,16 +26,12 @@ public class StageMapper implements Mapper<Stage> {
 	private static final String COL_DESCRIPTION = "Description";
 	private static final String COL_TASKLIMIT = "TaskLimit";
 
-	private static final String INSERT_STAGE = String.format("INSERT INTO %s (%s, %s, %s, %s, %s) VALUES (?,?,?,?,?)",
-			TABLE, COL_NUMBER, COL_BOARD, COL_TITLE, COL_DESCRIPTION, COL_TASKLIMIT);
-	private static final String QUERY_ALL = String.format("SELECT * FROM %s", TABLE);
-
-	private static final String DELETE_STAGE = String.format("DELETE FROM %s WHERE %s = ? AND %s = ?", TABLE,
-			COL_NUMBER, COL_BOARD);
-
 	public StageMapper() {
 		this.dbc = DBController.getInstance();
 	}
+
+	private static final String INSERT_STAGE = String.format("INSERT INTO %s (%s, %s, %s, %s, %s) VALUES (?,?,?,?,?)",
+			TABLE, COL_NUMBER, COL_BOARD, COL_TITLE, COL_DESCRIPTION, COL_TASKLIMIT);
 
 	@Override
 	public int insert(Stage stage) {
@@ -52,6 +49,8 @@ public class StageMapper implements Mapper<Stage> {
 		}
 		return -1;
 	}
+
+	private static final String QUERY_ALL = String.format("SELECT * FROM %s", TABLE);
 
 	@Override
 	public Collection<Stage> getAll() {
@@ -82,6 +81,26 @@ public class StageMapper implements Mapper<Stage> {
 		}
 		return stages;
 	}
+
+	// UPDATE
+	private static final String UPDATE_TITLE = String.format("UPDATE %s SET %s = ? WHERE %s = ? AND %s = ?", TABLE,
+			COL_TITLE, COL_NUMBER, COL_BOARD);
+
+	public void updateTitle(Stage stage, String newTitle) {
+		try (Connection conn = dbc.getConnection(); PreparedStatement query = conn.prepareStatement(UPDATE_TITLE)) {
+			query.setString(1, newTitle);
+			query.setInt(2, stage.getNumber());
+			query.setInt(3, stage.getBoardId());
+			query.executeUpdate();
+			Logger.log("Stage name updated.");
+		} catch (SQLException e) {
+			throw new DatabaseUpdateException("Something went wrong while updating a Stage title", e);
+		}
+	}
+
+	// DELETE
+	private static final String DELETE_STAGE = String.format("DELETE FROM %s WHERE %s = ? AND %s = ?", TABLE,
+			COL_NUMBER, COL_BOARD);
 
 	@Override
 	public void delete(Stage stage) {
