@@ -16,20 +16,21 @@ import javafx.scene.layout.VBox;
 public class StageView extends VBox implements Subscriber {
 	private final StageController sc;
 	private final TaskController tc;
-	private int stageNumber;
+
+	private StageDTO data;
 
 	private StageHeader header;
 	private ScrollPane spTasks;
 	private VBox taskList;
 	private Button btnAddTask;
 
-	public StageView(StageDTO stage, StageController sc, TaskController tc) {
+	public StageView(StageDTO data, StageController sc, TaskController tc) {
+		this.data = data;
 		this.sc = sc;
 		this.tc = tc;
 		tc.subscribe(this);
-		this.stageNumber = stage.number();
 
-		sc.subscribeToStage(this, stageNumber);
+		sc.subscribeToStage(this, data.number());
 
 		buildGUI();
 		updateStageData();
@@ -42,6 +43,7 @@ public class StageView extends VBox implements Subscriber {
 		taskList = new VBox();
 		spTasks = new ScrollPane();
 		spTasks.setContent(taskList);
+		spTasks.setPrefHeight(400);
 		spTasks.setMaxHeight(400);
 		Node footer = buildFooter();
 
@@ -70,30 +72,29 @@ public class StageView extends VBox implements Subscriber {
 
 //	CONTROLLER INTERACTION
 	private void handleAddTask() {
-		// TODO add auto-scrolling
-		TaskCard card = new TaskCard(tc, stageNumber);
+		TaskCard card = new TaskCard(tc, data);
 		taskList.getChildren().add(card);
 	}
 
 	public void handleRename(String title) {
 		setTitle(title);
-		sc.renameStage(stageNumber, title);
+		sc.renameStage(data.number(), title);
 	}
 
 	public void handleDelete() {
-		sc.deleteStage(stageNumber);
+		sc.deleteStage(data.number());
 	}
 
 	private void updateTaskList() {
 		taskList.getChildren().clear();
-		List<Integer> tasks = tc.getTaskIds(stageNumber);
+		List<Integer> tasks = tc.getTaskIds(data.number());
 		for (int taskId : tasks) {
-			taskList.getChildren().add(new TaskCard(tc, stageNumber, taskId));
+			taskList.getChildren().add(new TaskCard(tc, taskId, data));
 		}
 	}
 
 	private void updateStageData() {
-		StageDTO data = sc.getStage(stageNumber);
+		data = sc.getStage(data.number());
 		setTitle(data.title());
 	}
 

@@ -28,7 +28,7 @@ public class Startup extends Application {
 
 		BoardSelector root = new BoardSelector();
 
-		Scene scene = new Scene(root);
+		Scene scene = new Scene(root, 1200, 600);
 		scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
 
 		primaryStage.setScene(scene);

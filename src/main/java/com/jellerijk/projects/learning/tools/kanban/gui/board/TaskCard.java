@@ -2,137 +2,117 @@ package com.jellerijk.projects.learning.tools.kanban.gui.board;
 
 import com.jellerijk.projects.learning.tools.kanban.domain.task.TaskController;
 import com.jellerijk.projects.learning.tools.kanban.logging.Logger;
+import com.jellerijk.projects.learning.tools.kanban.persistence.dto.StageDTO;
 import com.jellerijk.projects.learning.tools.kanban.persistence.dto.TaskDTO;
-import com.jellerijk.projects.learning.tools.kanban.utils.PublishedMessageType;
-import com.jellerijk.projects.learning.tools.kanban.utils.Subscriber;
 
 import javafx.application.Platform;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 
-public class TaskCard extends HBox implements Subscriber {
+public class TaskCard extends VBox {
 	private final TaskController tc;
-
-	private GUICardState state;
 	private int taskId;
-	private int currentStage;
+	private StageDTO stageData;
+
+	private State currState;
 
 	private TextField txfDescription;
-	private Button btnPrevStage;
-	private Button btnNextStage;
+	private Label editIcon;
 
-	/**
-	 * Adds an empty TaskCard that needs to be filled in.
-	 * 
-	 * @param tc
-	 */
-	public TaskCard(TaskController tc, int currentStage) {
-		this(tc, currentStage, -1, GUICardState.CREATING);
+	public TaskCard(TaskController tc, StageDTO stageData) {
+		this(tc, -1, stageData);
 	}
 
-	public TaskCard(TaskController tc, int currentStage, int taskId) {
-		this(tc, currentStage, taskId, GUICardState.DEFAULT);
-	}
-
-	public TaskCard(TaskController tc, int currentStage, int taskId, GUICardState state) {
-		setState(state);
+	public TaskCard(TaskController tc, int taskId, StageDTO stageData) {
+		this.taskId = taskId;
+		this.stageData = stageData;
 		this.tc = tc;
-		this.currentStage = currentStage;
 		buildGUI();
-		if (this.state == GUICardState.CREATING)
-			unlock();
-		else {
-			setTaskId(taskId);
-			lock();
-			update();
-		}
-	}
-
-//	BUILD GUI
-	private void buildGUI() {
-		txfDescription = new TextField();
-		btnPrevStage = new Button();
-		btnNextStage = new Button();
-
-		btnPrevStage.setOnAction(e -> handleMoveStage(currentStage - 1));
-		btnNextStage.setOnAction(e -> handleMoveStage(currentStage + 1));
-
-		getChildren().addAll(btnPrevStage, txfDescription, btnNextStage);
-	}
-
-//	SETTERS - GETTERS
-	private void setDescription(String description) {
-		if (description == null || description.isBlank())
-			throw new IllegalArgumentException("Task description was blank.");
-		txfDescription.setText(description);
+		switchToState(taskId == -1 ? State.CREATING : State.LOCKED);
 	};
 
-	private String getDescription() {
-		return txfDescription.getText();
+	private void buildGUI() {
+		// CREATE COMPONENTS
+		txfDescription = new TextField();
+		editIcon = new Label("🖊️");
+
+		// SET LISTENERS
+		txfDescription.setOnMouseClicked(event -> handleDescriptionClick(event));
+		this.setOnMouseEntered(e -> showEditIcon(true));
+		this.setOnMouseExited(e -> showEditIcon(false));
+
+		// STYLING
+		txfDescription.getStyleClass().add("transparent");
 	}
 
-	private void setTaskId(int taskId) {
-		this.taskId = taskId;
-		tc.subscribeToTask(this, taskId);
-	}
+	private void makeDescriptionEditable(boolean editable) {
+		txfDescription.setEditable(editable);
+		txfDescription.setFocusTraversable(editable);
+		if (editable)
+			Platform.runLater(() -> txfDescription.requestFocus());
+	};
 
-//	EVENT HANDLERS
-	private void handleChangeName() {
-		Logger.logDebug(this, "Changing task name.");
+	private void showEditIcon(boolean show) {
+		editIcon.setVisible(show);
+	};
+
+	// EVENT HANDLERS
+	private void handleDescriptionClick(MouseEvent event) {
+		if (currState != State.LOCKED || event.getClickCount() < 2)
+			return;
+		switchToState(State.EDITING);
 	}
 
 	private void handleCreateTask() {
-		Logger.logDebug(this, "Creating Task");
+		String description = txfDescription.getText();
 		try {
-			String name = txfDescription.getText();
-			taskId = tc.createTask(TaskDTO.create(-1, name, -1, currentStage, false));
+			this.taskId = tc.createTask(description, stageData.boardId(), stageData.number());
+			switchToState(State.LOCKED);
 		} catch (Exception ex) {
-			Alert alert = new Alert(AlertType.ERROR);
-			alert.setTitle("Encountered an error");
-			alert.setHeaderText(ex.getClass().getSimpleName());
-			alert.setContentText(ex.getMessage());
-			alert.showAndWait();
-			Platform.runLater(() -> txfDescription.requestFocus());
+			ex.printStackTrace();
 		}
-
 	}
 
-	private void handleMoveStage(int newStage) {
-		Logger.logDebug(this, String.format("Trying to move to stage %d", newStage));
+	private void handleRenameTask() {
+		Logger.logDebug("Rename task");
 	}
 
-	private void lock() {
-		txfDescription.setEditable(false);
+	// STATE
+
+	private void setCurrState(State currState) {
+		if (currState == null)
+			throw new IllegalArgumentException("Passed null to currState");
+		this.currState = currState;
 	}
 
-	private void unlock() {
-		txfDescription.setEditable(true);
-		Platform.runLater(() -> txfDescription.requestFocus());
-
-		txfDescription.setOnAction((event) -> {
-			if (state == GUICardState.CREATING)
-				handleCreateTask();
-			else
-				handleChangeName();
-		});
-		Logger.logDebug(this, "Unlocking task");
+	private void switchToState(State state) {
+		setCurrState(state);
+		switch (currState) {
+		case State.LOCKED -> initLockedState();
+		case State.CREATING -> initCreatingState();
+		case State.EDITING -> initEditingState();
+		}
 	}
 
-	public void setState(GUICardState state) {
-		if (state == null)
-			throw new IllegalArgumentException("TaskCard state cannot be null");
-		this.state = state;
+	private void initLockedState() {
+		makeDescriptionEditable(false);
+		TaskDTO data = tc.getTask(this.taskId);
+		txfDescription.setText(data.description());
 	}
 
-//	UPDATES
+	private void initCreatingState() {
+		makeDescriptionEditable(true);
+		txfDescription.setOnAction((evt) -> handleCreateTask());
+	}
 
-	@Override
-	public void update(PublishedMessageType messageType) {
-		TaskDTO data = tc.getTask(taskId);
+	private void initEditingState() {
+		makeDescriptionEditable(true);
+		txfDescription.setOnAction((evt) -> handleRenameTask());
+	}
 
-		setDescription(data.description());
+	private enum State {
+		LOCKED, CREATING, EDITING
 	}
 }
