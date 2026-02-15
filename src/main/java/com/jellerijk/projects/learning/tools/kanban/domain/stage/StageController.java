@@ -25,7 +25,7 @@ public interface StageController extends Publisher {
 	 * @param stageNumber
 	 * @param boardId
 	 */
-	public void deleteStage(int number, int boardId);
+	public void deleteStage(int id);
 
 	/**
 	 * Returns all stages managed by this StageController.
@@ -40,7 +40,7 @@ public interface StageController extends Publisher {
 	 * @param stageNumber
 	 * @return
 	 */
-	public StageDTO getStage(int stageNumber, int boardId);
+	public StageDTO getStage(int id);
 
 	/**
 	 * Renames the chosen stage.
@@ -59,11 +59,12 @@ public interface StageController extends Publisher {
 
 	/**
 	 * Renames the supplied Stage.
+	 * 
 	 * @param stageNumber
 	 * @param boardId
 	 * @param title
 	 */
-	public void renameStage(int stageNumber, int boardId, String title);
+	public void renameStage(int id, String title);
 
 	/**
 	 * Subscribes to the specified Stage.
@@ -71,6 +72,6 @@ public interface StageController extends Publisher {
 	 * @param sub
 	 * @param stageNumber
 	 */
-	public void subscribeToStage(Subscriber sub, int stageNumber, int boardId);
+	public void subscribeToStage(Subscriber sub, int id);
 
 }

@@ -36,8 +36,8 @@ public class StageControllerImpl implements StageController {
 	}
 
 	@Override
-	public void deleteStage(int stageNumber, int boardId) {
-		Stage stage = stageRepo.getStage(boardId, stageNumber);
+	public void deleteStage(int id) {
+		Stage stage = stageRepo.getStage(id);
 		stageRepo.remove(stage);
 
 		// Renumber stages
@@ -56,8 +56,8 @@ public class StageControllerImpl implements StageController {
 	}
 
 	@Override
-	public StageDTO getStage(int stageNumber, int boardId) {
-		return StageDTO.convert(stageRepo.getStage(stageNumber, boardId));
+	public StageDTO getStage(int id) {
+		return StageDTO.convert(stageRepo.getStage(id));
 	}
 
 	@Override
@@ -66,13 +66,13 @@ public class StageControllerImpl implements StageController {
 	}
 
 	@Override
-	public void renameStage(int stageNumber, int boardId, String title) {
-		stageRepo.rename(stageNumber, boardId, title);
+	public void renameStage(int id, String title) {
+		stageRepo.rename(id, title);
 	}
 
 	@Override
-	public void subscribeToStage(Subscriber sub, int stageNumber, int boardId) {
-		Stage stage = stageRepo.getStage(stageNumber, boardId);
+	public void subscribeToStage(Subscriber sub, int id) {
+		Stage stage = stageRepo.getStage(id);
 		stage.subscribe(sub);
 	}
 
