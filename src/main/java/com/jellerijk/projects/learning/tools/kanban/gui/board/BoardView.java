@@ -5,9 +5,7 @@ import java.util.List;
 
 import com.jellerijk.projects.learning.tools.kanban.domain.board.BoardController;
 import com.jellerijk.projects.learning.tools.kanban.domain.stage.StageController;
-import com.jellerijk.projects.learning.tools.kanban.domain.stage.StageControllerImpl;
 import com.jellerijk.projects.learning.tools.kanban.domain.task.TaskController;
-import com.jellerijk.projects.learning.tools.kanban.domain.task.TaskControllerImpl;
 import com.jellerijk.projects.learning.tools.kanban.logging.Logger;
 import com.jellerijk.projects.learning.tools.kanban.persistence.dto.BoardDTO;
 import com.jellerijk.projects.learning.tools.kanban.persistence.dto.StageDTO;
@@ -37,8 +35,8 @@ public class BoardView extends ScrollPane implements Subscriber {
 
 	public BoardView(int boardId) {
 		board = BoardController.getInstance().getBoard(boardId);
-		sc = new StageControllerImpl(boardId);
-		tc = new TaskControllerImpl(boardId);
+		sc = StageController.getInstance();
+		tc = TaskController.getInstance();
 		sc.subscribe(this);
 		buildGUI();
 		update();
@@ -114,7 +112,7 @@ public class BoardView extends ScrollPane implements Subscriber {
 	}
 
 	private void handleAddStage() {
-		int numberOfStages = sc.countStages();
+		int numberOfStages = sc.countStages(board.id());
 		String name = String.format("Stage %d", numberOfStages + 1);
 		try {
 			sc.createStage(numberOfStages + 1, board.id(), name);
