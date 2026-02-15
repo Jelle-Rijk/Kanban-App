@@ -32,6 +32,10 @@ public class StageMapper implements Mapper<Stage> {
 	private static final String DELETE_STAGE = String.format("DELETE FROM %s WHERE %s = ? AND %s = ?", TABLE,
 			COL_NUMBER, COL_BOARD);
 
+	public StageMapper() {
+		this.dbc = DBController.getInstance();
+	}
+
 	@Override
 	public int insert(Stage stage) {
 		try (Connection conn = dbc.getConnection(); PreparedStatement query = conn.prepareStatement(INSERT_STAGE)) {
