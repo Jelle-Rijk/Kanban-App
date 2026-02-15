@@ -7,8 +7,9 @@ public interface TaskRepository {
 	 * Adds a Task to the repository.
 	 * 
 	 * @param task
+	 * @return the index of the newly added task.
 	 */
-	public void addTask(Task task);
+	public int addTask(Task task);
 
 	/**
 	 * Gets a Task from the repository

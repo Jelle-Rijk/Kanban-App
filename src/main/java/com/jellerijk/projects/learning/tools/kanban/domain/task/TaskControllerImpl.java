@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.jellerijk.projects.learning.tools.kanban.logging.Logger;
 import com.jellerijk.projects.learning.tools.kanban.persistence.dto.TaskDTO;
 import com.jellerijk.projects.learning.tools.kanban.utils.PublishedMessageType;
 import com.jellerijk.projects.learning.tools.kanban.utils.Subscriber;
@@ -23,14 +22,14 @@ public class TaskControllerImpl implements TaskController {
 	}
 
 	@Override
-	public void createTask(TaskDTO data) {
+	public int createTask(TaskDTO data) {
 		try {
 			Task task = new TaskImpl(data.description(), boardId, data.stageNumber(), false);
-			taskRepo.addTask(task);
+			int id = taskRepo.addTask(task);
 			notifySubs(PublishedMessageType.REPO_UPDATE);
+			return id;
 		} catch (Exception ex) {
-			Logger.logError("Something went wrong while creating the task.");
-			Logger.logError(ex);
+			throw new RuntimeException("Something went wrong while creating a task.", ex);
 		}
 	}
 

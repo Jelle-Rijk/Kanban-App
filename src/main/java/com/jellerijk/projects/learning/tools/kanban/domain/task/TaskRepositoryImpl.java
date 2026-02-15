@@ -18,11 +18,12 @@ public class TaskRepositoryImpl implements TaskRepository {
 	}
 
 	@Override
-	public void addTask(Task task) {
+	public int addTask(Task task) {
 		try {
 			int id = mapper.insert(task);
 			task.setId(id);
 			tasks.add(task);
+			return id;
 		} catch (DatabaseInsertException ex) {
 			throw new DatabaseInsertException("Could not add task", ex);
 		}

@@ -13,7 +13,7 @@ public interface TaskController extends Publisher {
 	 * @param data
 	 * @return The id of the newly created task.
 	 */
-	public void createTask(TaskDTO data);
+	public int createTask(TaskDTO data);
 
 	/**
 	 * Moves the task from its current stage to stageNumber.
