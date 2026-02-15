@@ -3,6 +3,8 @@ package com.jellerijk.projects.learning.tools.kanban.domain.stage;
 import com.jellerijk.projects.learning.tools.kanban.utils.Publisher;
 
 public interface Stage extends Publisher {
+	public int getId();
+
 	public int getNumber();
 
 	public String getTitle();
@@ -26,4 +28,11 @@ public interface Stage extends Publisher {
 	 * @param title
 	 */
 	public void setTitle(String title);
+
+	/**
+	 * Sets the Stage id.
+	 * 
+	 * @param id
+	 */
+	public void setId(int id);
 }

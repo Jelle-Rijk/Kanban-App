@@ -10,6 +10,7 @@ import com.jellerijk.projects.learning.tools.kanban.utils.Subscriber;
 public class StageImpl implements Stage {
 	private final List<Subscriber> subs;
 
+	private int id; // 0 = not set
 	private int number;
 	private int boardId;
 	private String title;
@@ -17,16 +18,28 @@ public class StageImpl implements Stage {
 	private int limit;
 
 	public StageImpl(int number, int boardId, String title) {
-		this(number, boardId, title, null, 0);
-	}
-
-	public StageImpl(int number, int boardId, String title, String description, int limit) {
 		setNumber(number);
 		setBoardId(boardId);
 		setTitle(title);
+		this.subs = new ArrayList<Subscriber>();
+	}
+
+	public StageImpl(int id, int number, int boardId, String title) {
+		this(number, boardId, title);
+		setId(id);
+
+	}
+
+	public StageImpl(int number, int boardId, String title, String description, int limit) {
+
 		setDescription(description);
 		setLimit(limit);
 		this.subs = new ArrayList<Subscriber>();
+	}
+
+	@Override
+	public int getId() {
+		return id;
 	}
 
 	@Override
@@ -86,44 +99,17 @@ public class StageImpl implements Stage {
 		this.limit = limit;
 	}
 
-	public void rename(String title) {
-		throw new UnsupportedOperationException();
-//		try {
-//			setTitle(title);
-//			String sql = "UPDATE Stage SET title = ? WHERE Number = ? AND BoardId = ?";
-//			PreparedStatement stmt = DBController.getInstance().prepareStatement(sql);
-//			stmt.setString(1, title);
-//			stmt.setInt(2, number);
-//			stmt.setInt(3, boardId);
-//			stmt.execute();
-//			Logger.log("Trying to rename Stage.");
-//		} catch (Exception e) {
-//			Logger.logError(String.format("Encountered an error while trying to rename the stage: %s", e.getMessage()));
-//		}
-//		notifySubs();
-
-	}
+	@Override
+	public final void setId(int id) {
+		if (this.id != 0)
+			throw new IllegalArgumentException(String.format("Id was already set [this.id=%d]", this.id));
+		if (id < 1)
+			throw new IllegalArgumentException("Invalid Id, must be at least 1.");
+		this.id = id;
+	};
 
 	@Override
 	public Collection<Subscriber> getSubscribers() {
 		return subs;
 	}
-
-	public void changeNumber(int stageNumber) {
-		throw new UnsupportedOperationException();
-//		String sql = "UPDATE Stage SET Number = ? WHERE BoardId = ? AND Number = ?";
-//		PreparedStatement stmt;
-//		try {
-//			stmt = DBController.getInstance().prepareStatement(sql);
-//			stmt.setInt(1, stageNumber);
-//			stmt.setInt(2, boardId);
-//			stmt.setInt(3, number);
-//			setNumber(stageNumber);
-//			stmt.execute();
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-	}
-
 }
