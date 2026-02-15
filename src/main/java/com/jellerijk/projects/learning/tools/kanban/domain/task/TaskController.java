@@ -7,6 +7,10 @@ import com.jellerijk.projects.learning.tools.kanban.utils.Publisher;
 import com.jellerijk.projects.learning.tools.kanban.utils.Subscriber;
 
 public interface TaskController extends Publisher {
+	public static TaskController getInstance() {
+		return TaskControllerImpl.getInstance();
+	}
+
 	/**
 	 * Creates a new task.
 	 * 
@@ -51,15 +55,7 @@ public interface TaskController extends Publisher {
 	 * @param stageNumber
 	 * @return
 	 */
-	public List<TaskDTO> getTasksForStage(int stageNumber);
-
-	/**
-	 * Returns all taskIds belonging to the given stageNumber;
-	 * 
-	 * @param stageNumber
-	 * @return
-	 */
-	public List<Integer> getTaskIds(int stageNumber);
+	public List<TaskDTO> getTasksForStage(int stageNumber, int boardId);
 
 	/**
 	 * Subscribes sub to the specified task.

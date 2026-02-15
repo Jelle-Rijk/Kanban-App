@@ -10,15 +10,21 @@ import com.jellerijk.projects.learning.tools.kanban.utils.PublishedMessageType;
 import com.jellerijk.projects.learning.tools.kanban.utils.Subscriber;
 
 public class TaskControllerImpl implements TaskController {
+	private static TaskController instance;
+
 	private TaskRepository taskRepo;
 
-	private final int boardId;
 	private final List<Subscriber> subs;
 
-	public TaskControllerImpl(int boardId) {
-		this.boardId = boardId;
+	private TaskControllerImpl() {
 		this.subs = new ArrayList<Subscriber>();
 		this.taskRepo = new TaskRepositoryImpl();
+	}
+
+	public static TaskController getInstance() {
+		if (instance == null)
+			instance = new TaskControllerImpl();
+		return instance;
 	}
 
 	@Override
@@ -59,14 +65,8 @@ public class TaskControllerImpl implements TaskController {
 	}
 
 	@Override
-	public List<TaskDTO> getTasksForStage(int stageNumber) {
+	public List<TaskDTO> getTasksForStage(int stageNumber, int boardId) {
 		return taskRepo.getTasksByStage(boardId, stageNumber).stream().map(task -> TaskDTO.convert(task))
-				.collect(Collectors.toCollection(ArrayList::new));
-	}
-
-	@Override
-	public List<Integer> getTaskIds(int stageNumber) {
-		return taskRepo.getTasksByStage(boardId, stageNumber).stream().map(task -> task.getId())
 				.collect(Collectors.toCollection(ArrayList::new));
 	}
 
