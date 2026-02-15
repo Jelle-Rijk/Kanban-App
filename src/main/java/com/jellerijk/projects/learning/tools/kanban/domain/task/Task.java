@@ -9,6 +9,12 @@ public interface Task extends Publisher {
 	 * @return
 	 */
 	public int getId();
+	
+	/**
+	 * Sets the task's id. Can only be done once per task.
+	 * @param id
+	 */
+	public void setId(int id);
 
 	/**
 	 * Returns the Task's description.

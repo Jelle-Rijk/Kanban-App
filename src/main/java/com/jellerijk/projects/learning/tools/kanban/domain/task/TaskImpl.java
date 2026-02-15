@@ -10,22 +10,24 @@ import com.jellerijk.projects.learning.tools.kanban.utils.Subscriber;
 public class TaskImpl implements Task {
 	private List<Subscriber> subscribers;
 
-	private final int id;
+	private int id; // 0 = id not set yet
 	private String description;
 	private int boardId;
 	private int stageNumber;
 	private boolean completed;
 
 	public TaskImpl(int id, String description, int boardId, int stageNumber, boolean completed) {
-		if (id < 0)
-			throw new IllegalArgumentException("Task ID cannot be negative.");
-		this.id = id;
+		this(description, boardId, stageNumber, completed);
+		setId(id);
+	}
+
+	public TaskImpl(String description, int boardId, int stageNumber, boolean completed) {
 		this.subscribers = new ArrayList<Subscriber>();
 		setDescription(description);
 		setBoardId(boardId);
 		setStageNumber(stageNumber);
 		setCompleted(completed);
-	}
+	};
 
 	@Override
 	public void move(int stageNumber) {
@@ -60,6 +62,15 @@ public class TaskImpl implements Task {
 
 	private void setCompleted(boolean completed) {
 		this.completed = completed;
+	}
+
+	@Override
+	public final void setId(int id) {
+		if (id != 0)
+			throw new IllegalArgumentException("Id was already set.");
+		if (id < 0)
+			throw new IllegalArgumentException("Task ID cannot be negative.");
+		this.id = id;
 	}
 
 	/* GETTERS */
