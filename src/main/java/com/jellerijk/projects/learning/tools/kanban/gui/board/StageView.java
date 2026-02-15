@@ -31,7 +31,7 @@ public class StageView extends VBox implements Subscriber {
 		this.tc = tc;
 		tc.subscribe(this);
 
-		sc.subscribeToStage(this, data.number(), data.boardId());
+		sc.subscribeToStage(this, data.id());
 
 		buildGUI();
 		updateStageData();
@@ -65,12 +65,6 @@ public class StageView extends VBox implements Subscriber {
 		header.setTitle(title);
 	}
 
-//	private void setStageNumber(int stageNumber) {
-//		if (stageNumber < 0)
-//			throw new IllegalArgumentException("StageView cannot set the stage number. Needs to be positive.");
-//		this.stageNumber = stageNumber;
-//	}
-
 //	CONTROLLER INTERACTION
 	private void handleAddTask() {
 		TaskCard card = new TaskCard(tc, data);
@@ -79,11 +73,11 @@ public class StageView extends VBox implements Subscriber {
 
 	public void handleRename(String title) {
 		setTitle(title);
-		sc.renameStage(data.number(), data.boardId(), title);
+		sc.renameStage(data.id(), title);
 	}
 
 	public void handleDelete() {
-		sc.deleteStage(data.number(), data.boardId());
+		sc.deleteStage(data.id());
 	}
 
 	private void updateTaskList() {
@@ -95,7 +89,7 @@ public class StageView extends VBox implements Subscriber {
 	}
 
 	private void updateStageData() {
-		data = sc.getStage(data.number(), data.boardId());
+		data = sc.getStage(data.id());
 		setTitle(data.title());
 	}
 
