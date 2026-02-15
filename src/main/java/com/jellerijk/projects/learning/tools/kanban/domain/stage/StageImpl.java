@@ -16,6 +16,10 @@ public class StageImpl implements Stage {
 	private String description;
 	private int limit;
 
+	public StageImpl(int number, int boardId, String title) {
+		this(number, boardId, title, null, 0);
+	}
+
 	public StageImpl(int number, int boardId, String title, String description, int limit) {
 		setNumber(number);
 		setBoardId(boardId);
@@ -110,7 +114,7 @@ public class StageImpl implements Stage {
 //		String sql = String.format("DELETE FROM Stage WHERE BoardId = %d AND Number = %d", boardId, number);
 //		DBController.getInstance().update(sql);
 	}
-	
+
 	public void changeNumber(int stageNumber) {
 		throw new UnsupportedOperationException();
 //		String sql = "UPDATE Stage SET Number = ? WHERE BoardId = ? AND Number = ?";
