@@ -1,9 +1,10 @@
 CREATE TABLE IF NOT EXISTS "Stage" (
-	"Number" INTEGER,
-	"BoardId" INTEGER,
+	"StageId", INTEGER
+	"Number" INTEGER NOT NULL,
+	"BoardId" INTEGER NOT NULL,
 	"Title" TEXT NOT NULL,
 	"Description" TEXT,
 	"TaskLimit" INTEGER,
-	PRIMARY KEY("Number","BoardId"),
+	PRIMARY KEY("StageId" AUTOINCREMENT),
 	FOREIGN KEY("BoardId") REFERENCES "Board"("BoardId")
 );
