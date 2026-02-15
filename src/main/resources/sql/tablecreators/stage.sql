@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS "Stage" (
-	"StageId", INTEGER
+	"StageId" INTEGER,
 	"Number" INTEGER NOT NULL,
 	"BoardId" INTEGER NOT NULL,
 	"Title" TEXT NOT NULL,
