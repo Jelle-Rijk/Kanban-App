@@ -73,13 +73,14 @@ public class StageMapper implements Mapper<Stage> {
 	private Collection<Stage> mapResults(ResultSet results) throws SQLException {
 		List<Stage> stages = new ArrayList<>();
 		while (results.next()) {
+			int id = results.getInt(COL_ID);
 			int number = results.getInt(COL_NUMBER);
 			int board = results.getInt(COL_BOARD);
 			String title = results.getString(COL_TITLE);
 			String description = results.getString(COL_DESCRIPTION);
 			int limit = results.getInt(COL_TASKLIMIT);
 
-			Stage stage = new StageImpl(number, board, title, description, limit);
+			Stage stage = new StageImpl(id, number, board, title, description, limit);
 			stages.add(stage);
 		}
 		return stages;
