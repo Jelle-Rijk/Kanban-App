@@ -1,16 +1,12 @@
 package com.jellerijk.projects.learning.tools.kanban.domain.task;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import com.jellerijk.projects.learning.tools.kanban.logging.Logger;
-import com.jellerijk.projects.learning.tools.kanban.persistence.database.DBController;
 import com.jellerijk.projects.learning.tools.kanban.persistence.dto.TaskDTO;
-import com.jellerijk.projects.learning.tools.kanban.persistence.inserters.TaskInserter;
-import com.jellerijk.projects.learning.tools.kanban.persistence.loaders.TaskLoader;
 import com.jellerijk.projects.learning.tools.kanban.utils.PublishedMessageType;
 import com.jellerijk.projects.learning.tools.kanban.utils.Subscriber;
 
@@ -23,25 +19,19 @@ public class TaskControllerImpl implements TaskController {
 	public TaskControllerImpl(int boardId) {
 		this.boardId = boardId;
 		this.subs = new ArrayList<Subscriber>();
-		List<Task> tasks = TaskLoader.loadTasksForBoard(boardId).stream().map(dto -> new TaskImpl(dto))
-				.collect(Collectors.toCollection(ArrayList::new));
-		this.taskRepo = new TaskRepositoryImpl(tasks);
+		this.taskRepo = new TaskRepositoryImpl();
 	}
 
 	@Override
-	public int createTask(TaskDTO data) {
+	public void createTask(TaskDTO data) {
 		try {
-			data = TaskDTO.create(-1, data.description(), boardId, data.stageNumber(), false);
-			TaskInserter.insert(data);
-			int id = DBController.getInstance().getLastInserted("Task");
-			addTask(TaskLoader.get(id));
+			Task task = new TaskImpl(data.description(), boardId, data.stageNumber(), false);
+			taskRepo.addTask(task);
 			notifySubs(PublishedMessageType.REPO_UPDATE);
-			return id;
-		} catch (SQLException ex) {
+		} catch (Exception ex) {
 			Logger.logError("Something went wrong while creating the task.");
 			Logger.logError(ex);
 		}
-		throw new IllegalArgumentException("Something went wrong while creating the new task.");
 	}
 
 	@Override
@@ -49,12 +39,6 @@ public class TaskControllerImpl implements TaskController {
 		Task task = taskRepo.getTask(id);
 		task.move(stageNumber);
 		notifySubs(PublishedMessageType.REPO_UPDATE);
-	}
-
-	@Override
-	public void updateTask(int id, TaskDTO data) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -88,16 +72,6 @@ public class TaskControllerImpl implements TaskController {
 	}
 
 //	HELPER METHODS
-
-	/**
-	 * Adds a Task to the repo.
-	 * 
-	 * @param data
-	 */
-	private void addTask(TaskDTO data) {
-		Task task = new TaskImpl(data);
-		taskRepo.addTask(task);
-	}
 
 	@Override
 	public Collection<Subscriber> getSubscribers() {
