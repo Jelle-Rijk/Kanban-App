@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.jellerijk.projects.learning.tools.kanban.logging.Logger;
 import com.jellerijk.projects.learning.tools.kanban.utils.PublishedMessageType;
 import com.jellerijk.projects.learning.tools.kanban.utils.Subscriber;
 
@@ -66,7 +67,7 @@ public class TaskImpl implements Task {
 
 	@Override
 	public final void setId(int id) {
-		if (id != 0)
+		if (this.id != 0)
 			throw new IllegalArgumentException("Id was already set.");
 		if (id < 0)
 			throw new IllegalArgumentException("Task ID cannot be negative.");
