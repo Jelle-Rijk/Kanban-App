@@ -29,8 +29,8 @@ public class StageControllerImpl implements StageController {
 	}
 
 	@Override
-	public void createStage(StageDTO data) throws SQLException {
-		Stage stage = new StageImpl(data.number(), data.boardId(), data.title(), data.description(), data.limit());
+	public void createStage(int number, int boardId, String title) throws SQLException {
+		Stage stage = new StageImpl(number, boardId, title);
 		stageRepo.add(stage);
 		notifySubs();
 	}

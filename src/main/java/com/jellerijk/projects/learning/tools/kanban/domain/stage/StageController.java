@@ -20,7 +20,7 @@ public interface StageController extends Publisher {
 	 * 
 	 * @param Stage data
 	 */
-	public void createStage(StageDTO data) throws SQLException;
+	public void createStage(int number, int boardId, String title) throws SQLException;
 
 	/**
 	 * Deletes the stage from the Board.
@@ -50,17 +50,19 @@ public interface StageController extends Publisher {
 	 * @param stageNumber - The stage to rename.
 	 * @param title       - The new stage title.
 	 */
-	
+
 	/**
 	 * Returns the number of stages in this StageController's repository.
+	 * 
 	 * @return
 	 */
 	public int countStages();
-	
+
 	public void renameStage(int stageNumber, String title);
 
 	/**
 	 * Subscribes to the specified Stage.
+	 * 
 	 * @param sub
 	 * @param stageNumber
 	 */
