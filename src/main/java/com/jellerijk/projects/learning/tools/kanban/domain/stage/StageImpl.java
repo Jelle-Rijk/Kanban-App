@@ -30,11 +30,10 @@ public class StageImpl implements Stage {
 
 	}
 
-	public StageImpl(int number, int boardId, String title, String description, int limit) {
-
+	public StageImpl(int id, int number, int boardId, String title, String description, int limit) {
+		this(id, number, boardId, title);
 		setDescription(description);
 		setLimit(limit);
-		this.subs = new ArrayList<Subscriber>();
 	}
 
 	@Override
