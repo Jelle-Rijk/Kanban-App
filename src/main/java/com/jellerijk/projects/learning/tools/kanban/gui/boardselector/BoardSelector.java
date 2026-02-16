@@ -59,7 +59,7 @@ public class BoardSelector extends AnchorPane implements Subscriber {
 	private void openBoardCreator(ActionEvent event) {
 		Logger.log("Opening boardCreator");
 
-		BoardCreator root = new BoardCreator();
+		BoardCreator root = new BoardCreator(controller);
 		Scene scene = new Scene(root);
 		scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
 
