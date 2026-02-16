@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.jellerijk.projects.learning.tools.kanban.exceptions.DatabaseInsertException;
 import com.jellerijk.projects.learning.tools.kanban.exceptions.DatabaseReadException;
+import com.jellerijk.projects.learning.tools.kanban.exceptions.DatabaseUpdateException;
 
 public interface Mapper<T> {
 	/**
@@ -23,6 +24,13 @@ public interface Mapper<T> {
 	 *         datatype.
 	 */
 	public List<T> getAll() throws DatabaseReadException;
+	
+	/**
+	 * Updates the entry associated to this object from the database. This will update every field.
+	 * @param object
+	 * @throws DatabaseUpdateException
+	 */
+	public void update(T object) throws DatabaseUpdateException;
 
 	/**
 	 * Removes the entry associated to this object from the database.

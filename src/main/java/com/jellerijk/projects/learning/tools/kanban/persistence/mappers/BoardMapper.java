@@ -6,11 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 import com.jellerijk.projects.learning.tools.kanban.domain.Board;
 import com.jellerijk.projects.learning.tools.kanban.exceptions.DatabaseInsertException;
 import com.jellerijk.projects.learning.tools.kanban.exceptions.DatabaseReadException;
+import com.jellerijk.projects.learning.tools.kanban.exceptions.DatabaseUpdateException;
 import com.jellerijk.projects.learning.tools.kanban.logging.Logger;
 import com.jellerijk.projects.learning.tools.kanban.persistence.database.DBController;
 
@@ -50,7 +51,7 @@ public class BoardMapper implements Mapper<Board> {
 //	READ
 	@Override
 	public List<Board> getAll() {
-		Collection<Board> boards = new ArrayList<>();
+		List<Board> boards = new ArrayList<>();
 		try (Connection conn = dbc.getConnection(); PreparedStatement query = conn.prepareStatement(QUERY_ALL)) {
 			ResultSet results = query.executeQuery();
 			boards = mapResults(results);
@@ -63,8 +64,8 @@ public class BoardMapper implements Mapper<Board> {
 	}
 
 	// HELPER METHODS
-	private Collection<Board> mapResults(ResultSet results) throws SQLException {
-		Collection<Board> boards = new ArrayList<>();
+	private List<Board> mapResults(ResultSet results) throws SQLException {
+		List<Board> boards = new ArrayList<>();
 		while (results.next()) {
 			String id = results.getString(COL_ID);
 			String name = results.getString(COL_TITLE);
@@ -88,6 +89,22 @@ public class BoardMapper implements Mapper<Board> {
 		} catch (SQLException e) {
 			Logger.logError("Something went wrong while deleting Board from database.");
 			Logger.logError(e);
+		}
+	}
+
+	private static final String UPDATE_BOARD = String.format("UPDATE %s SET %s = ?, %s = ? WHERE %s = ?", TABLE,
+			COL_TITLE, COL_DESCRIPTION, COL_ID);
+
+	@Override
+	public void update(Board board) throws DatabaseUpdateException {
+		try (Connection conn = dbc.getConnection(); PreparedStatement query = conn.prepareStatement(UPDATE_BOARD)) {
+			query.setString(1, board.getTitle());
+			query.setString(2, board.getDescription());
+			query.setString(3, board.getId());
+			query.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new DatabaseUpdateException("Failed to insert Board", e);
 		}
 	}
 
