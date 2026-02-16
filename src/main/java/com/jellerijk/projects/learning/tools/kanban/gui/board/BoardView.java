@@ -1,14 +1,7 @@
 package com.jellerijk.projects.learning.tools.kanban.gui.board;
 
-import java.sql.SQLException;
-import java.util.List;
-
-import com.jellerijk.projects.learning.tools.kanban.domain.board.BoardController;
-import com.jellerijk.projects.learning.tools.kanban.domain.stage.StageController;
-import com.jellerijk.projects.learning.tools.kanban.domain.task.TaskController;
-import com.jellerijk.projects.learning.tools.kanban.logging.Logger;
+import com.jellerijk.projects.learning.tools.kanban.domain.DomainController;
 import com.jellerijk.projects.learning.tools.kanban.persistence.dto.BoardDTO;
-import com.jellerijk.projects.learning.tools.kanban.persistence.dto.StageDTO;
 import com.jellerijk.projects.learning.tools.kanban.utils.PublishedMessageType;
 import com.jellerijk.projects.learning.tools.kanban.utils.Subscriber;
 
@@ -24,20 +17,17 @@ import javafx.scene.paint.Paint;
 
 public class BoardView extends ScrollPane implements Subscriber {
 
+	private final DomainController controller;
 	private HBox stages;
 	private BoardDTO board;
-	private final StageController sc;
-	private final TaskController tc;
 
 	private Node addStageButton;
 
 	private BorderPane bp;
 
-	public BoardView(int boardId) {
-		board = BoardController.getInstance().getBoard(boardId);
-		sc = StageController.getInstance();
-		tc = TaskController.getInstance();
-		sc.subscribe(this);
+	public BoardView(DomainController controller) {
+		this.controller = controller;
+		board = controller.getSelectedBoard();
 		buildGUI();
 		update();
 	}
@@ -60,7 +50,7 @@ public class BoardView extends ScrollPane implements Subscriber {
 	private Node buildHeader() {
 		VBox header = new VBox();
 
-		Label boardName = new Label(board.name());
+		Label boardName = new Label(board.title());
 		boardName.getStyleClass().add("h1");
 		boardName.setTooltip(new Tooltip(String.format("Board #%d", board.id())));
 
@@ -112,29 +102,31 @@ public class BoardView extends ScrollPane implements Subscriber {
 	}
 
 	private void handleAddStage() {
-		int numberOfStages = sc.countStages(board.id());
-		String name = String.format("Stage %d", numberOfStages + 1);
-		try {
-			sc.createStage(numberOfStages + 1, board.id(), name);
-		} catch (SQLException e) {
-			Logger.logError("Exception while adding stage");
-			e.printStackTrace();
-		}
-		update();
+		throw new UnsupportedOperationException("This needs to be reimplemented.");
+//		int numberOfStages = sc.countStages(board.id());
+//		String name = String.format("Stage %d", numberOfStages + 1);
+//		try {
+//			sc.createStage(numberOfStages + 1, board.id(), name);
+//		} catch (SQLException e) {
+//			Logger.logError("Exception while adding stage");
+//			e.printStackTrace();
+//		}
+//		update();
 	}
 
 	@Override
 	public void update(PublishedMessageType messageType) {
-		stages.getChildren().clear();
-		List<StageDTO> stageList = sc.getStages();
-		if (stageList.size() == 0) {
-			bp.setCenter(buildEmptyStageList());
-			return;
-		}
-		bp.setCenter(stages);
-		for (StageDTO stage : stageList) {
-			stages.getChildren().add(new StageView(stage, sc, tc));
-		}
-		stages.getChildren().add(addStageButton);
+		throw new UnsupportedOperationException("This needs to be reimplemented.");
+//		stages.getChildren().clear();
+//		List<StageDTO> stageList = sc.getStages();
+//		if (stageList.size() == 0) {
+//			bp.setCenter(buildEmptyStageList());
+//			return;
+//		}
+//		bp.setCenter(stages);
+//		for (StageDTO stage : stageList) {
+//			stages.getChildren().add(new StageView(stage, sc, tc));
+//		}
+//		stages.getChildren().add(addStageButton);
 	}
 }

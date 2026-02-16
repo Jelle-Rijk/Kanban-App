@@ -2,7 +2,7 @@ package com.jellerijk.projects.learning.tools.kanban.gui.boardselector;
 
 import java.util.List;
 
-import com.jellerijk.projects.learning.tools.kanban.domain.board.BoardController;
+import com.jellerijk.projects.learning.tools.kanban.domain.DomainController;
 import com.jellerijk.projects.learning.tools.kanban.logging.Logger;
 import com.jellerijk.projects.learning.tools.kanban.persistence.dto.BoardDTO;
 import com.jellerijk.projects.learning.tools.kanban.utils.PublishedMessageType;
@@ -19,13 +19,12 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class BoardSelector extends AnchorPane implements Subscriber {
-	private final BoardController bc;
+	private final DomainController controller;
 
 	private VBox boardCards;
 
 	public BoardSelector() {
-		bc = BoardController.getInstance();
-		bc.subscribe(this);
+		controller = DomainController.getInstance();
 		buildGUI();
 	}
 
@@ -53,8 +52,8 @@ public class BoardSelector extends AnchorPane implements Subscriber {
 	@Override
 	public void update(PublishedMessageType messageType) {
 		boardCards.getChildren().clear();
-		List<BoardDTO> boards = bc.getBoards();
-		boards.forEach(board -> boardCards.getChildren().add(new BoardCard(bc, board.id())));
+		List<BoardDTO> boards = controller.getAllBoards();
+		boards.forEach(board -> boardCards.getChildren().add(new BoardCard(controller, board.id())));
 	}
 
 	private void openBoardCreator(ActionEvent event) {

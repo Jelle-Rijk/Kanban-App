@@ -3,17 +3,25 @@ package com.jellerijk.projects.learning.tools.kanban.domain;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import com.jellerijk.projects.learning.tools.kanban.exceptions.DatabaseInsertException;
+import com.jellerijk.projects.learning.tools.kanban.exceptions.DatabaseReadException;
+import com.jellerijk.projects.learning.tools.kanban.exceptions.DatabaseUpdateException;
+
 public interface Repository<T extends Identifiable> {
-	public String add(T object);
+	public void add(T object) throws DatabaseInsertException;
 
-	public List<T> getAll();
+	/**
+	 * Returns a List<T> containing all the elements stored in the repository.
+	 * 
+	 * @return
+	 * @throws DatabaseReadException
+	 */
+	public List<T> getAsList() throws DatabaseReadException;
 
-	public default T getById(String id) throws NoSuchElementException {
-		return getAll().stream().filter(element -> element.getId().equals(id)).findFirst().orElseThrow();
-	}
+	public T getById(String id) throws NoSuchElementException;
 
-	public void update(T object);
+	public void update(T object) throws DatabaseUpdateException;
 
-	public void delete(String id) throws IllegalArgumentException;
+	public void delete(String id) throws DatabaseUpdateException;
 
 }

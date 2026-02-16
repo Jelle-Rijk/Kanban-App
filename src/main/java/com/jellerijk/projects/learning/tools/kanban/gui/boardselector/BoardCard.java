@@ -2,7 +2,7 @@ package com.jellerijk.projects.learning.tools.kanban.gui.boardselector;
 
 import java.util.Optional;
 
-import com.jellerijk.projects.learning.tools.kanban.domain.board.BoardController;
+import com.jellerijk.projects.learning.tools.kanban.domain.DomainController;
 import com.jellerijk.projects.learning.tools.kanban.gui.board.BoardView;
 import com.jellerijk.projects.learning.tools.kanban.persistence.dto.BoardDTO;
 import com.jellerijk.projects.learning.tools.kanban.utils.PublishedMessageType;
@@ -19,20 +19,18 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class BoardCard extends VBox implements Subscriber {
-	private final BoardController boardController;
+	private final DomainController controller;
 
-	private final int boardId;
-	private String boardName;
-	private String boardDescription;
+	private final String boardId;
+	private BoardDTO data;
 
 	private TextField txfName;
 	private Label lblDescription;
 	private Label lblRename;
 	private Label lblDelete;
 
-	public BoardCard(BoardController boardController, int boardId) {
-		this.boardController = boardController;
-		boardController.subscribe(this, boardId);
+	public BoardCard(DomainController controller, String boardId) {
+		this.controller = controller;
 		this.boardId = boardId;
 		buildGUI();
 	}
@@ -63,13 +61,11 @@ public class BoardCard extends VBox implements Subscriber {
 	}
 
 	private void setBoardName(String boardName) {
-		this.boardName = boardName;
-		txfName.setText(this.boardName);
+		txfName.setText(boardName);
 	}
 
 	private void setBoardDescription(String boardDescription) {
-		this.boardDescription = boardDescription == null ? "" : boardDescription;
-		lblDescription.setText(this.boardDescription);
+		lblDescription.setText(boardDescription == null ? "" : boardDescription);
 	}
 
 	private void enableEditing() {
@@ -96,7 +92,7 @@ public class BoardCard extends VBox implements Subscriber {
 			disableEditing();
 			if (isHover())
 				lblDelete.setVisible(true);
-			txfName.setText(boardName);
+			txfName.setText(data.title());
 		});
 	};
 
@@ -129,17 +125,17 @@ public class BoardCard extends VBox implements Subscriber {
 
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Delete board");
-		alert.setHeaderText(String.format("You are about to delete %s.", boardName));
+		alert.setHeaderText(String.format("You are about to delete %s.", data.title()));
 		alert.setContentText("Are you sure you want to delete this board?\nThis action cannot be undone.");
 		Optional<ButtonType> result = alert.showAndWait();
 
 		if (result.isPresent() && result.get() == ButtonType.OK)
-			boardController.deleteBoard(boardId);
+			controller.deleteBoard(boardId);
 	}
 
 	private void handleSelect(MouseEvent event) {
 		event.consume();
-		BoardView bv = new BoardView(boardId);
+		BoardView bv = new BoardView(controller);
 		Stage stage = (Stage) getScene().getWindow();
 		getScene().setRoot(bv);
 		stage.sizeToScene();
@@ -147,19 +143,20 @@ public class BoardCard extends VBox implements Subscriber {
 
 	@Override
 	public void update(PublishedMessageType messageType) {
-		BoardDTO board = boardController.getBoard(boardId);
-		setBoardName(board.name());
+		BoardDTO board = controller.getBoard(boardId);
+		setBoardName(data.title());
 		setBoardDescription(board.description());
 	}
 
 	private void updateName() {
 		if (!txfName.getText().isBlank()) {
-			boardController.updateBoard(boardId, new BoardDTO(boardId, txfName.getText(), boardDescription));
+			controller.updateBoard(boardId, txfName.getText(), data.description());
 		}
 		disableEditing();
 		if (isHover())
 			lblDelete.setVisible(true);
-		txfName.setText(boardName);
+		data = controller.getBoard(boardId);
+		txfName.setText(data.title());
 	}
 
 }
