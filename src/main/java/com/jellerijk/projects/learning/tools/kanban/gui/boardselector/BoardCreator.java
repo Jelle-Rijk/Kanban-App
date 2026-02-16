@@ -1,6 +1,7 @@
 package com.jellerijk.projects.learning.tools.kanban.gui.boardselector;
 
 import com.jellerijk.projects.learning.tools.kanban.domain.DomainController;
+import com.jellerijk.projects.learning.tools.kanban.persistence.dto.BoardDTO;
 
 import javafx.event.Event;
 import javafx.geometry.HPos;
@@ -20,6 +21,8 @@ import javafx.stage.Stage;
 
 public class BoardCreator extends ScrollPane {
 	private final DomainController controller;
+
+	private BoardDTO submittedData;
 
 	private TextField txfName;
 	private Label lblNameError;
@@ -118,8 +121,12 @@ public class BoardCreator extends ScrollPane {
 	private void createBoard() {
 		String name = txfName.getText();
 		String description = txaDescription.getText();
-		controller.createBoard(name, description);
+		this.submittedData = BoardDTO.create("", name, description);
 		closeCreator();
+	}
+
+	public BoardDTO getSubmittedData() {
+		return this.submittedData;
 	}
 
 	private void closeCreator() {

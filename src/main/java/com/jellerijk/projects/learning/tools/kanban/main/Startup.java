@@ -3,7 +3,7 @@ package com.jellerijk.projects.learning.tools.kanban.main;
 import java.io.IOException;
 import java.util.Optional;
 
-import com.jellerijk.projects.learning.tools.kanban.gui.boardselector.BoardSelector;
+import com.jellerijk.projects.learning.tools.kanban.gui.boardselector.BoardSelectorScreen;
 import com.jellerijk.projects.learning.tools.kanban.logging.Logger;
 import com.jellerijk.projects.learning.tools.kanban.persistence.database.DBController;
 import com.jellerijk.projects.learning.tools.kanban.persistence.database.DBControllerImpl;
@@ -26,7 +26,7 @@ public class Startup extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		verifyDatabase();
 
-		BoardSelector root = new BoardSelector();
+		BoardSelectorScreen root = new BoardSelectorScreen();
 
 		Scene scene = new Scene(root, 1200, 600);
 		scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
