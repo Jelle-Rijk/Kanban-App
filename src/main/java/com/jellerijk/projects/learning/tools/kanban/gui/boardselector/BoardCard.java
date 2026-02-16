@@ -143,9 +143,9 @@ public class BoardCard extends VBox implements Subscriber {
 
 	@Override
 	public void update(PublishedMessageType messageType) {
-		BoardDTO board = controller.getBoard(boardId);
+		data = controller.getBoard(boardId);
 		setBoardName(data.title());
-		setBoardDescription(board.description());
+		setBoardDescription(data.description());
 	}
 
 	private void updateName() {

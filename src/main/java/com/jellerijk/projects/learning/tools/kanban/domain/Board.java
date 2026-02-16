@@ -22,7 +22,7 @@ public class Board implements Identifiable {
 	 */
 	private void verifyId(String id) {
 		if (id == null || id.isBlank())
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("Id cannot be blank.");
 	}
 
 	/*

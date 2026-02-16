@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,11 +22,6 @@ public class BoardMapper implements Mapper<Board> {
 	private static final String COL_TITLE = "Title";
 	private static final String COL_DESCRIPTION = "Description";
 
-	private static final String INSERT_BOARD = String.format("INSERT INTO %s (%s, %s) VALUES (?,?)", TABLE, COL_TITLE,
-			COL_DESCRIPTION);
-
-	private static final String QUERY_ALL = String.format("SELECT * FROM %s", TABLE);
-
 	private static final String DELETE_BOARD = String.format("DELETE FROM %s WHERE %s = ?", TABLE, COL_ID);
 
 	public BoardMapper() {
@@ -35,12 +29,15 @@ public class BoardMapper implements Mapper<Board> {
 	}
 
 //	CREATE
+	private static final String INSERT_BOARD = String.format("INSERT INTO %s (%s, %s, %s) VALUES (?,?)", TABLE, COL_ID,
+			COL_TITLE, COL_DESCRIPTION);
+
 	@Override
 	public void insert(Board board) throws DatabaseInsertException {
-		try (Connection conn = dbc.getConnection();
-				PreparedStatement query = conn.prepareStatement(INSERT_BOARD, Statement.RETURN_GENERATED_KEYS)) {
-			query.setString(1, board.getTitle());
-			query.setString(2, board.getDescription());
+		try (Connection conn = dbc.getConnection(); PreparedStatement query = conn.prepareStatement(INSERT_BOARD)) {
+			query.setString(1, board.getId());
+			query.setString(2, board.getTitle());
+			query.setString(3, board.getDescription());
 			query.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -49,6 +46,8 @@ public class BoardMapper implements Mapper<Board> {
 	}
 
 //	READ
+	private static final String QUERY_ALL = String.format("SELECT * FROM %s", TABLE);
+
 	@Override
 	public List<Board> getAll() {
 		List<Board> boards = new ArrayList<>();
@@ -68,10 +67,10 @@ public class BoardMapper implements Mapper<Board> {
 		List<Board> boards = new ArrayList<>();
 		while (results.next()) {
 			String id = results.getString(COL_ID);
-			String name = results.getString(COL_TITLE);
+			String title = results.getString(COL_TITLE);
 			String description = results.getString(COL_DESCRIPTION);
 
-			Board board = new Board(id, name, description);
+			Board board = new Board(id, title, description);
 			boards.add(board);
 		}
 		return boards;

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import com.jellerijk.projects.learning.tools.kanban.logging.Logger;
 import com.jellerijk.projects.learning.tools.kanban.persistence.dto.BoardDTO;
 
 public class DomainController {
@@ -34,6 +35,7 @@ public class DomainController {
 	public String createBoard(String title, String description) {
 		String id = UUID.randomUUID().toString();
 		Board board = new Board(id, title, description);
+		Logger.logDebug(String.format("Generated id: %s", board.getId()));
 		boardRepo.add(board);
 		return id;
 	}
