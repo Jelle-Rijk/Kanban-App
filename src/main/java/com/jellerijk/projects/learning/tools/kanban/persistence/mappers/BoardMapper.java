@@ -8,8 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import com.jellerijk.projects.learning.tools.kanban.domain.board.Board;
-import com.jellerijk.projects.learning.tools.kanban.domain.board.BoardImpl;
+import com.jellerijk.projects.learning.tools.kanban.domain.Board;
 import com.jellerijk.projects.learning.tools.kanban.exceptions.DatabaseInsertException;
 import com.jellerijk.projects.learning.tools.kanban.exceptions.DatabaseReadException;
 import com.jellerijk.projects.learning.tools.kanban.logging.Logger;
@@ -36,11 +35,11 @@ public class BoardMapper implements Mapper<Board> {
 
 //	CREATE
 	@Override
-	public int insert(Board board) throws DatabaseInsertException {
+	public void insert(Board board) throws DatabaseInsertException {
 		int lastInsertedId = -1;
 		try (Connection conn = dbc.getConnection();
 				PreparedStatement query = conn.prepareStatement(INSERT_BOARD, Statement.RETURN_GENERATED_KEYS)) {
-			query.setString(1, board.getName());
+			query.setString(1, board.getTitle());
 			query.setString(2, board.getDescription());
 			query.executeUpdate();
 			ResultSet keys = query.getGeneratedKeys();
@@ -76,7 +75,7 @@ public class BoardMapper implements Mapper<Board> {
 			String name = results.getString(COL_NAME);
 			String description = results.getString(COL_DESCRIPTION);
 
-			Board board = new BoardImpl(id, name, description);
+			Board board = new Board(id, name, description);
 			boards.add(board);
 		}
 		return boards;

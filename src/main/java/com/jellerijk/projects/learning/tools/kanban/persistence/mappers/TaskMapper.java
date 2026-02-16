@@ -35,7 +35,7 @@ public class TaskMapper implements Mapper<Task> {
 	}
 
 	@Override
-	public int insert(Task task) throws DatabaseInsertException {
+	public void insert(Task task) throws DatabaseInsertException {
 		int lastInsertedId = -1;
 		try (Connection conn = dbc.getConnection();
 				PreparedStatement query = conn.prepareStatement(INSERT_TASK, Statement.RETURN_GENERATED_KEYS)) {

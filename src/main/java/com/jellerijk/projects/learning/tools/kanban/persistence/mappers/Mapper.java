@@ -13,7 +13,7 @@ public interface Mapper<T> {
 	 * @return Returns the object's autoincrement id or -1 if the object's table is
 	 *         not auto-incremented.
 	 */
-	public int insert(T object) throws DatabaseInsertException;
+	public void insert(T object) throws DatabaseInsertException;
 
 	/**
 	 * Returns a Collection of all entries associated with this datatype in the

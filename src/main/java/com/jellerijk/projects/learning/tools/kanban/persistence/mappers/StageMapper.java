@@ -35,7 +35,7 @@ public class StageMapper implements Mapper<Stage> {
 			COL_NUMBER, COL_BOARD, COL_TITLE);
 
 	@Override
-	public int insert(Stage stage) {
+	public void insert(Stage stage) {
 		int lastInsertedId = -1;
 		try (Connection conn = dbc.getConnection(); PreparedStatement query = conn.prepareStatement(INSERT_STAGE)) {
 			query.setInt(1, stage.getNumber());
