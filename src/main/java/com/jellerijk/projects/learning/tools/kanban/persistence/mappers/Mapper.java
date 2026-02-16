@@ -1,6 +1,6 @@
 package com.jellerijk.projects.learning.tools.kanban.persistence.mappers;
 
-import java.util.Collection;
+import java.util.List;
 
 import com.jellerijk.projects.learning.tools.kanban.exceptions.DatabaseInsertException;
 import com.jellerijk.projects.learning.tools.kanban.exceptions.DatabaseReadException;
@@ -22,7 +22,7 @@ public interface Mapper<T> {
 	 * @return Collection of all entries in the database associated with this
 	 *         datatype.
 	 */
-	public Collection<T> getAll() throws DatabaseReadException;
+	public List<T> getAll() throws DatabaseReadException;
 
 	/**
 	 * Removes the entry associated to this object from the database.

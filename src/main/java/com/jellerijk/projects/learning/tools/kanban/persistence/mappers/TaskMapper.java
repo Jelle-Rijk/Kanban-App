@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import com.jellerijk.projects.learning.tools.kanban.domain.task.Task;
 import com.jellerijk.projects.learning.tools.kanban.domain.task.TaskImpl;
@@ -25,8 +26,8 @@ public class TaskMapper implements Mapper<Task> {
 	private static final String COL_BOARD = "BoardId";
 	private static final String COL_COMPLETED = "Completed";
 
-	private static final String INSERT_TASK = String.format("INSERT INTO %s (%s, %s, %s, %s) VALUES (?,?,?,?)",
-			TABLE, COL_DESCRIPTION, COL_STAGE, COL_BOARD, COL_COMPLETED);
+	private static final String INSERT_TASK = String.format("INSERT INTO %s (%s, %s, %s, %s) VALUES (?,?,?,?)", TABLE,
+			COL_DESCRIPTION, COL_STAGE, COL_BOARD, COL_COMPLETED);
 	private static final String QUERY_ALL = String.format("SELECT * FROM %s", TABLE);
 	private static final String DELETE_TASK = String.format("DELETE FROM %s WHERE %s = ?", TABLE, COL_ID);
 
@@ -36,7 +37,6 @@ public class TaskMapper implements Mapper<Task> {
 
 	@Override
 	public void insert(Task task) throws DatabaseInsertException {
-		int lastInsertedId = -1;
 		try (Connection conn = dbc.getConnection();
 				PreparedStatement query = conn.prepareStatement(INSERT_TASK, Statement.RETURN_GENERATED_KEYS)) {
 
@@ -46,18 +46,14 @@ public class TaskMapper implements Mapper<Task> {
 			query.setInt(4, task.isCompleted() ? 1 : 0);
 
 			query.executeUpdate();
-			ResultSet keys = query.getGeneratedKeys();
-			if (keys.next())
-				lastInsertedId = keys.getInt(1);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseInsertException("Failed to insert Task", e);
 		}
-		return lastInsertedId;
 	}
 
 	@Override
-	public Collection<Task> getAll() throws DatabaseReadException {
+	public List<Task> getAll() throws DatabaseReadException {
 		Collection<Task> tasks = new ArrayList<>();
 		try (Connection conn = dbc.getConnection(); PreparedStatement query = conn.prepareStatement(QUERY_ALL)) {
 			ResultSet results = query.executeQuery();

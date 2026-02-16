@@ -49,7 +49,7 @@ public class BoardMapper implements Mapper<Board> {
 
 //	READ
 	@Override
-	public Collection<Board> getAll() {
+	public List<Board> getAll() {
 		Collection<Board> boards = new ArrayList<>();
 		try (Connection conn = dbc.getConnection(); PreparedStatement query = conn.prepareStatement(QUERY_ALL)) {
 			ResultSet results = query.executeQuery();

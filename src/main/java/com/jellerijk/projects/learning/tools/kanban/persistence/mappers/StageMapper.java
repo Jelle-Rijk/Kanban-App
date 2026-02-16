@@ -36,26 +36,21 @@ public class StageMapper implements Mapper<Stage> {
 
 	@Override
 	public void insert(Stage stage) {
-		int lastInsertedId = -1;
 		try (Connection conn = dbc.getConnection(); PreparedStatement query = conn.prepareStatement(INSERT_STAGE)) {
 			query.setInt(1, stage.getNumber());
 			query.setInt(2, stage.getBoardId());
 			query.setString(3, stage.getTitle());
 			query.executeUpdate();
-			ResultSet keys = query.getGeneratedKeys();
-			if (keys.next())
-				lastInsertedId = keys.getInt(1);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseInsertException("Failed to insert Stage", e);
 		}
-		return lastInsertedId;
 	}
 
 	private static final String QUERY_ALL = String.format("SELECT * FROM %s", TABLE);
 
 	@Override
-	public Collection<Stage> getAll() {
+	public List<Stage> getAll() {
 		Collection<Stage> stages = new ArrayList<>();
 		try (Connection conn = dbc.getConnection(); PreparedStatement query = conn.prepareStatement(QUERY_ALL)) {
 			ResultSet results = query.executeQuery();
