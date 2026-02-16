@@ -37,7 +37,7 @@ public class Board implements Identifiable {
 		return title;
 	}
 
-	private void setTitle(String title) {
+	public final void setTitle(String title) {
 		if (title == null || title.isBlank())
 			throw new IllegalArgumentException("Every Board needs a title.");
 		this.title = title;
@@ -47,7 +47,7 @@ public class Board implements Identifiable {
 		return description;
 	}
 
-	private void setDescription(String description) {
+	public final void setDescription(String description) {
 		if (title.isBlank())
 			throw new IllegalArgumentException("Description cannot be an empty String.");
 		this.description = description;
