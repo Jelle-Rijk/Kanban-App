@@ -28,7 +28,7 @@ public class Task implements Identifiable {
 		return id;
 	}
 
-	private String getDescription() {
+	public String getDescription() {
 		return description;
 	}
 
@@ -36,7 +36,7 @@ public class Task implements Identifiable {
 		this.description = description;
 	}
 
-	private String getDetails() {
+	public String getDetails() {
 		return details;
 	}
 
