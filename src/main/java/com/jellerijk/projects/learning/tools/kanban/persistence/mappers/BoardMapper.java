@@ -29,8 +29,8 @@ public class BoardMapper implements Mapper<Board> {
 	}
 
 //	CREATE
-	private static final String INSERT_BOARD = String.format("INSERT INTO %s (%s, %s, %s) VALUES (?,?)", TABLE, COL_ID,
-			COL_TITLE, COL_DESCRIPTION);
+	private static final String INSERT_BOARD = String.format("INSERT INTO %s (%s, %s, %s) VALUES (?,?,?)", TABLE,
+			COL_ID, COL_TITLE, COL_DESCRIPTION);
 
 	@Override
 	public void insert(Board board) throws DatabaseInsertException {
@@ -82,8 +82,8 @@ public class BoardMapper implements Mapper<Board> {
 		try (Connection conn = dbc.getConnection(); PreparedStatement query = conn.prepareStatement(DELETE_BOARD)) {
 			query.setString(1, board.getId());
 			int rows = query.executeUpdate();
-			String log = rows == 0 ? String.format("No board found with id %d", board.getId())
-					: String.format("Removed board %d from database", board.getId());
+			String log = rows == 0 ? String.format("No board found with id %s", board.getId())
+					: String.format("Removed board %s from database", board.getId());
 			Logger.log(log);
 		} catch (SQLException e) {
 			Logger.logError("Something went wrong while deleting Board from database.");
