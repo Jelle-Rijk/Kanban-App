@@ -1,14 +1,13 @@
 package com.jellerijk.projects.learning.tools.kanban.persistence.dto;
 
-import com.jellerijk.projects.learning.tools.kanban.domain.task.Task;
+import com.jellerijk.projects.learning.tools.kanban.domain.Task;
 
-public record TaskDTO(int id, String description, int boardId, int stageNumber, boolean completed) {
+public record TaskDTO(String id, String description, String details) {
 	public static TaskDTO convert(Task task) {
-		return new TaskDTO(task.getId(), task.getDescription(), task.getBoardId(), task.getStageNumber(),
-				task.isCompleted());
+		return new TaskDTO(task.getId(), task.getDescription(), task.getDetails());
 	}
 
-	public static TaskDTO create(int id, String description, int board, int stage, boolean completed) {
-		return new TaskDTO(id, description, board, stage, completed);
+	public static TaskDTO create(String id, String description, String details) {
+		return new TaskDTO(id, description, details);
 	}
 }
