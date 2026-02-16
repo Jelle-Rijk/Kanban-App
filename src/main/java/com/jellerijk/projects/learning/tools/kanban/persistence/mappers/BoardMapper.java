@@ -19,10 +19,10 @@ public class BoardMapper implements Mapper<Board> {
 
 	private static final String TABLE = "Board";
 	private static final String COL_ID = "BoardId";
-	private static final String COL_NAME = "Name";
+	private static final String COL_TITLE = "Title";
 	private static final String COL_DESCRIPTION = "Description";
 
-	private static final String INSERT_BOARD = String.format("INSERT INTO %s (%s, %s) VALUES (?,?)", TABLE, COL_NAME,
+	private static final String INSERT_BOARD = String.format("INSERT INTO %s (%s, %s) VALUES (?,?)", TABLE, COL_TITLE,
 			COL_DESCRIPTION);
 
 	private static final String QUERY_ALL = String.format("SELECT * FROM %s", TABLE);
@@ -36,20 +36,15 @@ public class BoardMapper implements Mapper<Board> {
 //	CREATE
 	@Override
 	public void insert(Board board) throws DatabaseInsertException {
-		int lastInsertedId = -1;
 		try (Connection conn = dbc.getConnection();
 				PreparedStatement query = conn.prepareStatement(INSERT_BOARD, Statement.RETURN_GENERATED_KEYS)) {
 			query.setString(1, board.getTitle());
 			query.setString(2, board.getDescription());
 			query.executeUpdate();
-			ResultSet keys = query.getGeneratedKeys();
-			if (keys.next())
-				lastInsertedId = keys.getInt(1);
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new DatabaseInsertException("Failed to insert Board", e);
 		}
-		return lastInsertedId;
 	}
 
 //	READ
@@ -71,8 +66,8 @@ public class BoardMapper implements Mapper<Board> {
 	private Collection<Board> mapResults(ResultSet results) throws SQLException {
 		Collection<Board> boards = new ArrayList<>();
 		while (results.next()) {
-			int id = results.getInt(COL_ID);
-			String name = results.getString(COL_NAME);
+			String id = results.getString(COL_ID);
+			String name = results.getString(COL_TITLE);
 			String description = results.getString(COL_DESCRIPTION);
 
 			Board board = new Board(id, name, description);
@@ -85,7 +80,7 @@ public class BoardMapper implements Mapper<Board> {
 	@Override
 	public void delete(Board board) {
 		try (Connection conn = dbc.getConnection(); PreparedStatement query = conn.prepareStatement(DELETE_BOARD)) {
-			query.setInt(1, board.getId());
+			query.setString(1, board.getId());
 			int rows = query.executeUpdate();
 			String log = rows == 0 ? String.format("No board found with id %d", board.getId())
 					: String.format("Removed board %d from database", board.getId());
