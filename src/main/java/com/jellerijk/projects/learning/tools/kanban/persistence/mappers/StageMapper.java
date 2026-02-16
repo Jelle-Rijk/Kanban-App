@@ -1,19 +1,12 @@
 package com.jellerijk.projects.learning.tools.kanban.persistence.mappers;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.jellerijk.projects.learning.tools.kanban.domain.stage.Stage;
-import com.jellerijk.projects.learning.tools.kanban.domain.stage.StageImpl;
-import com.jellerijk.projects.learning.tools.kanban.exceptions.DatabaseInsertException;
-import com.jellerijk.projects.learning.tools.kanban.exceptions.DatabaseReadException;
+import com.jellerijk.projects.learning.tools.kanban.domain.Stage;
 import com.jellerijk.projects.learning.tools.kanban.exceptions.DatabaseUpdateException;
-import com.jellerijk.projects.learning.tools.kanban.logging.Logger;
 import com.jellerijk.projects.learning.tools.kanban.persistence.database.DBController;
 
 public class StageMapper implements Mapper<Stage> {
@@ -36,47 +29,50 @@ public class StageMapper implements Mapper<Stage> {
 
 	@Override
 	public void insert(Stage stage) {
-		try (Connection conn = dbc.getConnection(); PreparedStatement query = conn.prepareStatement(INSERT_STAGE)) {
-			query.setInt(1, stage.getNumber());
-			query.setInt(2, stage.getBoardId());
-			query.setString(3, stage.getTitle());
-			query.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw new DatabaseInsertException("Failed to insert Stage", e);
-		}
+		throw new UnsupportedOperationException("Needs to be reimplemented.");
+//		try (Connection conn = dbc.getConnection(); PreparedStatement query = conn.prepareStatement(INSERT_STAGE)) {
+//			query.setInt(1, stage.getNumber());
+//			query.setInt(2, stage.getBoardId());
+//			query.setString(3, stage.getTitle());
+//			query.executeUpdate();
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//			throw new DatabaseInsertException("Failed to insert Stage", e);
+//		}
 	}
 
 	private static final String QUERY_ALL = String.format("SELECT * FROM %s", TABLE);
 
 	@Override
 	public List<Stage> getAll() {
-		Collection<Stage> stages = new ArrayList<>();
-		try (Connection conn = dbc.getConnection(); PreparedStatement query = conn.prepareStatement(QUERY_ALL)) {
-			ResultSet results = query.executeQuery();
-			stages = mapResults(results);
-			return stages;
-		} catch (SQLException e) {
-			Logger.logError("Something went wrong while retrieving all Stages from database.");
-			Logger.logError(e);
-		}
-		throw new DatabaseReadException();
+		throw new UnsupportedOperationException("Needs to be reimplemented.");
+//		Collection<Stage> stages = new ArrayList<>();
+//		try (Connection conn = dbc.getConnection(); PreparedStatement query = conn.prepareStatement(QUERY_ALL)) {
+//			ResultSet results = query.executeQuery();
+//			stages = mapResults(results);
+//			return stages;
+//		} catch (SQLException e) {
+//			Logger.logError("Something went wrong while retrieving all Stages from database.");
+//			Logger.logError(e);
+//		}
+//		throw new DatabaseReadException();
 	}
 
 	private Collection<Stage> mapResults(ResultSet results) throws SQLException {
-		List<Stage> stages = new ArrayList<>();
-		while (results.next()) {
-			int id = results.getInt(COL_ID);
-			int number = results.getInt(COL_NUMBER);
-			int board = results.getInt(COL_BOARD);
-			String title = results.getString(COL_TITLE);
-			String description = results.getString(COL_DESCRIPTION);
-			int limit = results.getInt(COL_TASKLIMIT);
-
-			Stage stage = new StageImpl(id, number, board, title, description, limit);
-			stages.add(stage);
-		}
-		return stages;
+		throw new UnsupportedOperationException("Needs to be reimplemented.");
+//		List<Stage> stages = new ArrayList<>();
+//		while (results.next()) {
+//			int id = results.getInt(COL_ID);
+//			int number = results.getInt(COL_NUMBER);
+//			int board = results.getInt(COL_BOARD);
+//			String title = results.getString(COL_TITLE);
+//			String description = results.getString(COL_DESCRIPTION);
+//			int limit = results.getInt(COL_TASKLIMIT);
+//
+//			Stage stage = new StageImpl(id, number, board, title, description, limit);
+//			stages.add(stage);
+//		}
+//		return stages;
 	}
 
 	// UPDATE
@@ -84,14 +80,15 @@ public class StageMapper implements Mapper<Stage> {
 			COL_ID);
 
 	public void updateTitle(Stage stage, String newTitle) {
-		try (Connection conn = dbc.getConnection(); PreparedStatement query = conn.prepareStatement(UPDATE_TITLE)) {
-			query.setString(1, newTitle);
-			query.setInt(2, stage.getId());
-			query.executeUpdate();
-			Logger.log("Stage name updated.");
-		} catch (SQLException e) {
-			throw new DatabaseUpdateException("Something went wrong while updating a Stage title", e);
-		}
+		throw new UnsupportedOperationException("Refactor needed.");
+//		try (Connection conn = dbc.getConnection(); PreparedStatement query = conn.prepareStatement(UPDATE_TITLE)) {
+//			query.setString(1, newTitle);
+//			query.setInt(2, stage.getId());
+//			query.executeUpdate();
+//			Logger.log("Stage name updated.");
+//		} catch (SQLException e) {
+//			throw new DatabaseUpdateException("Something went wrong while updating a Stage title", e);
+//		}
 	}
 
 	// DELETE
@@ -99,17 +96,24 @@ public class StageMapper implements Mapper<Stage> {
 
 	@Override
 	public void delete(Stage stage) {
-		try (Connection conn = dbc.getConnection(); PreparedStatement query = conn.prepareStatement(DELETE_STAGE)) {
-			query.setInt(1, stage.getId());
-			int rows = query.executeUpdate();
-			String log = rows == 0
-					? String.format("No stage found with number %d on board %d", stage.getNumber(), stage.getBoardId())
-					: String.format("Removed stage %d from database", stage.getNumber());
-			Logger.log(log);
-		} catch (SQLException e) {
-			Logger.logError("Something went wrong while deleting Stage from database.");
-			Logger.logError(e);
-		}
+		throw new UnsupportedOperationException("Needs to be reimplemented.");
+//		try (Connection conn = dbc.getConnection(); PreparedStatement query = conn.prepareStatement(DELETE_STAGE)) {
+//			query.setInt(1, stage.getId());
+//			int rows = query.executeUpdate();
+//			String log = rows == 0
+//					? String.format("No stage found with number %d on board %d", stage.getNumber(), stage.getBoardId())
+//					: String.format("Removed stage %d from database", stage.getNumber());
+//			Logger.log(log);
+//		} catch (SQLException e) {
+//			Logger.logError("Something went wrong while deleting Stage from database.");
+//			Logger.logError(e);
+//		}
+	}
+
+	@Override
+	public void update(Stage object) throws DatabaseUpdateException {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Not implemented yet.");
 	}
 
 }
