@@ -1,6 +1,6 @@
 package com.jellerijk.projects.learning.tools.kanban.gui.boardselector;
 
-import com.jellerijk.projects.learning.tools.kanban.domain.board.BoardController;
+import com.jellerijk.projects.learning.tools.kanban.domain.DomainController;
 
 import javafx.event.Event;
 import javafx.geometry.HPos;
@@ -19,13 +19,16 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class BoardCreator extends ScrollPane {
-	TextField txfName;
-	Label lblNameError;
-	TextArea txaDescription;
-	Label lblDescriptionError;
-	Button btnCreate;
+	private final DomainController controller;
 
-	public BoardCreator() {
+	private TextField txfName;
+	private Label lblNameError;
+	private TextArea txaDescription;
+	private Label lblDescriptionError;
+	private Button btnCreate;
+
+	public BoardCreator(DomainController controller) {
+		this.controller = controller;
 		buildGUI();
 	}
 
@@ -115,7 +118,7 @@ public class BoardCreator extends ScrollPane {
 	private void createBoard() {
 		String name = txfName.getText();
 		String description = txaDescription.getText();
-		BoardController.getInstance().createBoard(name, description);
+		controller.createBoard(name, description);
 		closeCreator();
 	}
 
@@ -131,7 +134,6 @@ public class BoardCreator extends ScrollPane {
 			lblNameError.setText("Name cannot be empty.");
 			return;
 		}
-		// TODO: check input for SQL injection
 		btnCreate.setDisable(false);
 	}
 }
